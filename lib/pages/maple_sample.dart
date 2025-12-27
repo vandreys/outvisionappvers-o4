@@ -17,45 +17,93 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   LatLng? _currentPosition;
   final Set<Marker> _markers = <Marker>{};
-
-  static const CameraPosition _fallbackLocation = CameraPosition(
-    target: LatLng(-25.4268, -49.2721),
-    zoom: 15.0,
-  );
+  StreamSubscription<Position>? _positionStream; // ESSENCIAL: Variável para o stream do GPS
+  
+  // ESSENCIAL: Variável para controlar o estado de carregamento
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _determinePosition();
+    _initLocationService(); // NOVO MÉTODO: Inicializa e monitora a localização
     _addBienalMarkers();
   }
 
-  Future<void> _determinePosition() async {
+  @override
+  void dispose() {
+    _positionStream?.cancel(); // ESSENCIAL: Cancela a escuta do GPS quando a tela é fechada
+    super.dispose();
+  }
+
+  // NOVO MÉTODO: Lógica robusta de inicialização e monitoramento contínuo
+  Future<void> _initLocationService() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
+    if (!serviceEnabled) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false; 
+        });
+      }
+      return;
+    }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
+      if (permission == LocationPermission.denied) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false; 
+          });
+        }
+        return;
+      }
     }
-    
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+
+    // 1. Pega a posição IMEDIATA para tirar o app do estado de carregamento
+    Position initialPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high
+    );
 
     if (mounted) {
       setState(() {
-        _currentPosition = LatLng(position.latitude, position.longitude);
+        _currentPosition = LatLng(initialPosition.latitude, initialPosition.longitude);
+        _isLoading = false; // Libera o mapa, pois já temos uma posição inicial
       });
-
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(
-        CameraUpdate.newLatLngZoom(_currentPosition!, 17.0),
-      );
+      
+      _moveCameraToPosition(_currentPosition!);
     }
+
+    // 2. Inicia o monitoramento contínuo para atualizações em tempo real
+    _startTracking();
+  }
+
+  // NOVO MÉTODO: Configura a escuta contínua do GPS
+  void _startTracking() {
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 2, // Atualiza a cada 2 metros de movimento
+    );
+
+    _positionStream = Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      if (mounted) {
+        setState(() {
+          _currentPosition = LatLng(position.latitude, position.longitude);
+        });
+        _moveCameraToPosition(_currentPosition!); // Move a câmera para a nova posição
+      }
+    });
+  }
+
+  Future<void> _moveCameraToPosition(LatLng position) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newLatLngZoom(position, 17.0),
+    );
   }
 
   void _addBienalMarkers() {
@@ -79,43 +127,57 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
         icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
     ]);
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _currentPosition != null 
-                ? CameraPosition(target: _currentPosition!, zoom: 17)
-                : _fallbackLocation,
-            onMapCreated: (controller) {
-              _controller.complete(controller);
-              controller.setMapStyle(_grayMapStyle);
-            },
-            markers: _markers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            compassEnabled: false,
-            mapToolbarEnabled: false,
+      // Se estiver carregando, mostra um indicador de progresso
+      body: _isLoading 
+        ? const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: Colors.black),
+                SizedBox(height: 20),
+                Text("Buscando sinal de GPS...", 
+                  style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
+                ),
+              ],
+            ),
+          )
+        : Stack(
+            children: [
+              GoogleMap(
+                mapType: MapType.normal,
+                // A posição inicial do mapa será sempre a sua posição atual
+                initialCameraPosition: CameraPosition(target: _currentPosition!, zoom: 17),
+                onMapCreated: (controller) {
+                  _controller.complete(controller);
+                  controller.setMapStyle(_grayMapStyle);
+                },
+                markers: _markers,
+                myLocationEnabled: true, // Mostra o ponto azul da sua localização
+                myLocationButtonEnabled: false, 
+                zoomControlsEnabled: false,
+                compassEnabled: false,
+                mapToolbarEnabled: false,
+              ),
+              Positioned(
+                top: 60,
+                left: 20,
+                child: roundedSquareButton(Icons.help_outline, Colors.black, (){}),
+              ),
+              Positioned(
+                top: 60,
+                right: 20,
+                child: roundedSquareButton(Icons.navigation, Colors.black, (){
+                  if(_currentPosition != null) _moveCameraToPosition(_currentPosition!);
+                }),
+              ),
+            ],
           ),
-          Positioned(
-            top: 60,
-            left: 20,
-            child: roundedSquareButton(Icons.help_outline, Colors.black, (){}),
-          ),
-          Positioned(
-            top: 60,
-            right: 20,
-            child: roundedSquareButton(Icons.navigation, Colors.black, (){}),
-          ),
-        ],
-      ),
-      bottomNavigationBar: bottomNavBar(context),
+      bottomNavigationBar: bottomNavBar(context, 0), 
     );
   }
 
@@ -124,4 +186,3 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
     {"featureType": "poi", "stylers": [{"visibility": "off"}]}
   ]);
 }
-
