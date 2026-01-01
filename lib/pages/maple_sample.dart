@@ -65,7 +65,7 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
 
     // 1. Pega a posição IMEDIATA para tirar o app do estado de carregamento
     Position initialPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high
+      desiredAccuracy: LocationAccuracy.best
     );
 
     if (mounted) {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/pages/maple_sample.dart'; // Mantido conforme seu código
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_localizations/flutter_localizations.dart'; // Import existente
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // IMPORT CRÍTICO (agora deve funcionar)
 import 'package:provider/provider.dart'; // Import do pacote provider
 import 'package:outvisionxr/utils/language_provider.dart'; // Import do seu LanguageProvider
 
@@ -20,9 +18,6 @@ class OutvisionApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    // Escuta as mudanças no LanguageProvider
-    final languageProvider = Provider.of<LanguageProvider>(context);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Out Vision XR App', // Mantido
@@ -48,21 +43,7 @@ class OutvisionApp extends StatelessWidget {
         ), // Mantido
       ),
       // Certifique-se de que a MapSample() aponta para o seu mapa ou tela inicial
-      home: const MapSample(), // Mantido
-
-      // CONFIGURAÇÕES DE INTERNACIONALIZAÇÃO (Adicionado aqui)
-      localizationsDelegates: const [
-        AppLocalizations.delegate, // Delegado gerado automaticamente
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('pt', 'BR'), // Português (Brasil)
-        Locale('en', 'US'), // Inglês (Estados Unidos)
-        Locale('es', 'ES'), // Espanhol (Espanha)
-      ],
-      locale: languageProvider.appLocale, // O idioma atual do app
+      home: const MapSample(),
     );
   }
 }

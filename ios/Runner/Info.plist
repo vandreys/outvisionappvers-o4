@@ -30,6 +30,8 @@
 	<string>Este app precisa da localização para mostrar obras próximas na Bienal.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Este app precisa da localização para navegação AR em tempo real.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to show nearby experiences.</string>
 	<!-- FIM DAS CHAVES DE LOCALIZAÇÃO ADICIONADAS AQUI -->
 
 	<key>UILaunchStoryboardName</key>
