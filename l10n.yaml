@@ -1,0 +1,4 @@
+        # l10n.yaml
+        arb-dir: l10n
+        template-arb-file: app_pt.arb # Certifique-se que este arquivo existe e é o seu template principal
+        output-localization-file: app_localizations.dart

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/pages/settings_language.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
+import 'package:outvisionxr/pages/settings_about.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -47,7 +49,11 @@ class SettingsPage extends StatelessWidget {
           _buildSettingsTile(
             title: 'Language',
             onTap: () {
-              // Ação para troca de idioma
+              // NAVEGAÇÃO PARA A PÁGINA DE SELEÇÃO DE IDIOMA
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LanguagePage()),
+              );
             },
           ),
           
@@ -56,7 +62,11 @@ class SettingsPage extends StatelessWidget {
           _buildSettingsTile(
             title: 'About Out Vision',
             onTap: () {
-              // Ação para informações sobre o app
+                  // NAVEGAÇÃO PARA A PÁGINA "ABOUT OUTVISION"
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AboutPage()),
+                  );
             },
           ),
           
