@@ -5,25 +5,35 @@
     version: 1.0.0+1
 
     environment:
-      sdk: ^3.10.3
+      sdk: ^3.2.0 # <<< CORRIJA ESTA LINHA para a versão correta do seu Dart SDK
+
+    # pubspec.yaml
 
     dependencies:
       flutter:
         sdk: flutter
-      geolocator: ^14.0.2
-      google_maps_flutter: ^2.14.0
-      google_fonts: ^6.2.1
-      cupertino_icons: ^1.0.8
-      shared_preferences: ^2.2.2
+      flutter_localizations: # &lt;&lt;&lt; ADICIONE ESTA LINHA
+        sdk: flutter         # &lt;&lt;&lt; ADICIONE ESTA LINHA
+      
+      # Seus pacotes existentes
+      google_fonts: ^6.1.0
       provider: ^6.0.5
+      shared_preferences: ^2.2.2
+      google_maps_flutter: ^2.5.3
+      geolocator: ^11.0.0
+
+      # NOVAS DEPENDÊNCIAS DO SLANG
+      slang: ^3.29.0 # Biblioteca principal do slang
+      slang_flutter: ^3.29.0 # Integração do slang com Flutter (para TranslationProvider, etc.)
 
     dev_dependencies:
       flutter_test:
         sdk: flutter
-      flutter_lints: ^6.0.0
+      flutter_lints: ^3.0.1
+
+      # NOVAS DEPENDÊNCIAS DE DESENVOLVIMENTO PARA O SLANG
+      build_runner: ^2.4.8 # Ferramenta para gerar código automaticamente
+      slang_build_runner: ^3.29.0 # Plugin do slang para o build_runner
 
     flutter:
-      generate: true # &lt;--- DEVE ESTAR AQUI
       uses-material-design: true
-      assets:
-        - assets/images/

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:outvisionxr/pages/maple_sample.dart'; // Mantido conforme seu código
+import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/pages/explore_page.dart'; // Mantido conforme seu código
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart'; // Import do pacote provider
 import 'package:outvisionxr/utils/language_provider.dart'; // Import do seu LanguageProvider
 
-void main() {
-  runApp(
-    ChangeNotifierProvider( // Envolve o app com o provedor de idioma
-      create: (context) => LanguageProvider(),
-      child: const OutvisionApp(),
-    ),
-  );
+void main() async {
+  var languageProvider = LanguageProvider();
+  LocaleSettings.setLocale(AppLocale.pt);
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: languageProvider),
+    ],
+    child: TranslationProvider(child: const OutvisionApp()),
+  ));
 }
 
 class OutvisionApp extends StatelessWidget {
@@ -19,6 +23,7 @@ class OutvisionApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: TranslationProvider.of(context).flutterLocale,
       debugShowCheckedModeBanner: false,
       title: 'Out Vision XR App', // Mantido
       theme: ThemeData(
@@ -43,7 +48,7 @@ class OutvisionApp extends StatelessWidget {
         ), // Mantido
       ),
       // Certifique-se de que a MapSample() aponta para o seu mapa ou tela inicial
-      home: const MapSample(),
+      home: const ExplorePage(),
     );
   }
 }

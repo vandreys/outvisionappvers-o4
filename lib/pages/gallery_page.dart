@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 
 class GalleryPage extends StatelessWidget {
@@ -15,7 +16,7 @@ class GalleryPage extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Gallery',
+            t.gallery.title,
             style: GoogleFonts.montserrat(
               fontWeight: FontWeight.bold,
               fontSize: 24,
@@ -32,9 +33,9 @@ class GalleryPage extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 16,
             ),
-            tabs: const [
-              Tab(text: 'Artwork'),
-              Tab(text: 'Artists'),
+            tabs: [
+              Tab(text: t.gallery.tabArtwork),
+              Tab(text: t.gallery.tabArtists),
             ],
           ),
         ),
@@ -87,8 +88,7 @@ class ArtworksList extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'The Garden of Earthly Delights',
+                        Text( t.gallery.artworkTitle,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -97,7 +97,7 @@ class ArtworksList extends StatelessWidget {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          'Hieronymus Bosch',
+                          t.gallery.artworkArtist,
                           style: GoogleFonts.montserrat(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -153,11 +153,11 @@ class ArtistsList extends StatelessWidget {
               backgroundColor: Colors.grey,
               child: Icon(Icons.person, color: Colors.white),
             ),
-            title: Text(
-              'Artist Name ${index + 1}',
+            title: Text(t.gallery.tabArtists,
               style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
             ),
-            subtitle: const Text('Curitiba Biennial 2025'),
+            subtitle: const Text('colocar o numero de obras'), 
+            // meu atributo vai trazer um jason artista nome e quantas obras
             trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
             onTap: () {},
           ),

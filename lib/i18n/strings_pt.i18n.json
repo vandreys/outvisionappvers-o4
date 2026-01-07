@@ -1,0 +1,53 @@
+    {
+  "gallery": {
+    "title": "Obras",
+    "tabArtwork": "Exibições",
+    "tabArtists": "Artistas",
+    "artworkTitle": "O Jardim das Delícias Terrenas",
+    "artworkArtist": "Hieronymus Bosch",
+    "artistSubtitle": "Bienal de Curitiba 2025"
+  },
+  "settings": {
+    "title": "Configurações",
+    "getHelp": "Obter Ajuda com o App",
+    "appSettings": "Configurações do App",
+    "language": "Idioma",
+    "about": "Sobre Out Vision",
+    "imprint": "Impressão",
+    "privacyPolicy": "Política de Privacidade",
+    "termsOfUse": "Termos de Uso"
+  },
+  "about": {
+    "pageTitle": "Sobre Outvision",
+    "mainTitle": "Outvision XR: Arte e Realidade Aumentada",
+    "description": "Outvision XR é uma plataforma inovadora que redefine a experiência da arte, combinando o mundo físico com a imersão da Realidade Aumentada (RA). Desenvolvido para entusiastas da arte e visitantes de exposições como a Bienal de Curitiba, nosso aplicativo transforma a maneira como você interage com obras e artistas.",
+    "missionTitle": "Nossa Missão",
+    "missionText": "Conectar pessoas à arte de maneiras inéditas, utilizando a tecnologia para enriquecer a compreensão e o engajamento com expressões culturais contemporâneas. Acreditamos que a RA pode quebrar barreiras e tornar a arte mais acessível e interativa para todos.",
+    "visionTitle": "Nossa Visão",
+    "visionText": "Ser a plataforma líder em curadoria de arte com Realidade Aumentada, reconhecida por sua inovação, acessibilidade e pela capacidade de criar experiências memoráveis que transcendem os limites tradicionais das galerias e museus.",
+    "connectTitle": "Conecte-se Conosco",
+    "website": "Website",
+    "email": "Email",
+    "instagram": "Instagram",
+    "share": "Compartilhar",
+    "copyright": "Outvision XR © 2025. Todos os direitos reservados."
+  },
+  "languagePage": {
+    "title": "Idioma",
+    "portuguese": "Português (Brasil)",
+    "english": "Inglês (EUA)",
+    "spanish": "Espanhol (Espanha)"
+  },
+  "map": {
+    "loadingGps": "Buscando sinal de GPS...",
+    "artworkLargo": "Obra AR: Largo da Ordem",
+    "artworkMon": "Obra AR: MON",
+    "artworkOpera": "Obra AR: Ópera de Arame"
+  },
+  "bottomNav": {
+    "explore": "Explorar",
+    "gallery": "Obras",
+    "captured": "Obra AR: MON",
+    "settings": "Obra AR: Ópera de Arame"
+  }
+}

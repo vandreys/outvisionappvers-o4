@@ -1,0 +1,50 @@
+    {
+  "gallery": {
+    "title": "Obras",
+    "tabArtwork": "Exposiciones",
+    "tabArtists": "Artistas",
+    "artworkTitle": "El Jardín de las Delicias Terrenales",
+    "artworkArtist": "El Bosco",
+    "artistSubtitle": "Bienal de Curitiba 2025"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "getHelp": "Obtener Ayuda con la App",
+    "appSettings": "Configuración de la Aplicación",
+    "language": "Idioma",
+    "about": "Acerca de Out Vision",
+    "imprint": "Impresión",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfUse": "Términos de Uso"
+  },
+  "about": {
+    "pageTitle": "Acerca de Outvision",
+    "mainTitle": "Outvision XR: Arte y Realidad Aumentada",
+    "description": "Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras de arte y artistas.",
+    "missionTitle": "Nuestra Misión",
+    "missionText": "Conectar a las personas con el arte de maneras sin precedentes, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer el arte más accesible e interactivo para todos.",
+    "visionTitle": "Nuestra Visión",
+    "visionText": "Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y los museos.",
+    "connectTitle": "Conéctate con Nosotros",
+    "website": "Sitio Web",
+    "email": "Correo Electrónico",
+    "instagram": "Instagram",
+    "share": "Compartir",
+    "copyright": "Outvision XR © 2025. Todos los derechos reservados."
+  },
+  "languagePage": {
+    "title": "Idioma",
+    "portuguese": "Português (Brasil)",
+    "english": "Inglés (EE. UU.)",
+    "spanish": "Español (España)",
+    "french": "Francés (Francia)",
+    "german": "Alemán (Alemania)",
+    "chinese": "Chino (Simplificado)"
+  },
+  "map": {
+    "loadingGps": "Buscando señal de GPS...",
+    "artworkLargo": "Obra RA: Largo da Ordem",
+    "artworkMon": "Obra RA: MON",
+    "artworkOpera": "Obra RA: Ópera de Arame"
+  }
+}

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:outvisionxr/pages/settings_language.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
-import 'package:outvisionxr/pages/settings_about.dart';
+import 'package:outvisionxr/pages/settings/settings_about.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -29,7 +30,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           // Começamos direto com as opções de suporte e ajustes
           _buildSettingsTile(
-            title: 'Get Help with the App',
+            title: t.settings.getHelp,
             onTap: () {
               // Ação para ajuda
             },
@@ -38,7 +39,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: 'App Settings',
+            title: t.settings.appSettings,
             onTap: () {
               // Ação para configurações internas
             },
@@ -47,7 +48,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: 'Language',
+            title: t.settings.language,
             onTap: () {
               // NAVEGAÇÃO PARA A PÁGINA DE SELEÇÃO DE IDIOMA
               Navigator.push(
@@ -60,7 +61,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: 'About Out Vision',
+            title: t.settings.about,
             onTap: () {
                   // NAVEGAÇÃO PARA A PÁGINA "ABOUT OUTVISION"
                   Navigator.push(
@@ -74,7 +75,7 @@ class SettingsPage extends StatelessWidget {
           
           // Itens com ícone de link externo (Imprint, Privacy, Terms)
           _buildSettingsTile(
-            title: 'Imprint',
+            title: t.settings.imprint,
             isExternal: true,
             onTap: () {
               // Abrir link externo
@@ -84,7 +85,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: 'Privacy Policy',
+            title: t.settings.privacyPolicy,
             isExternal: true,
             onTap: () {
               // Abrir link externo
@@ -94,7 +95,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: 'Terms of Use',
+            title: t.settings.termsOfUse,
             isExternal: true,
             onTap: () {
               // Abrir link externo

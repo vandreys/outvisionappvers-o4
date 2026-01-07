@@ -3,17 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart'; 
 
-class MapSample extends StatefulWidget {
-  const MapSample({super.key});
+class ExplorePage extends StatefulWidget {
+  const ExplorePage({super.key});
 
   @override
-  State<MapSample> createState() => _MapSampleState();
+  State<ExplorePage> createState() => _ExplorePageState();
 }
 
-class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
+class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   LatLng? _currentPosition;
   final Set<Marker> _markers = <Marker>{};
@@ -63,9 +64,18 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
       }
     }
 
-    // 1. Pega a posição IMEDIATA para tirar o app do estado de carregamento
-    Position initialPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best
+    // Define a posição inicial para o MON de Curitiba
+    Position initialPosition = Position(
+      latitude: -25.4095, // Latitude do Museu Oscar Niemeyer (MON) em Curitiba
+      longitude: -49.2667, // Longitude do Museu Oscar Niemeyer (MON) em Curitiba
+      timestamp: DateTime.now(),
+      accuracy: 0.0, 
+      altitude: 0.0, 
+      heading: 0.0, 
+      speed: 0.0, 
+      speedAccuracy: 0.0, 
+      altitudeAccuracy: 0.0,
+      headingAccuracy: 0.0,
     );
 
     if (mounted) {
@@ -78,14 +88,15 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
     }
 
     // 2. Inicia o monitoramento contínuo para atualizações em tempo real
-    _startTracking();
+    // Comentado para fins de teste!
+    //_startTracking();
   }
 
   // NOVO MÉTODO: Configura a escuta contínua do GPS
   void _startTracking() {
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 2, // Atualiza a cada 2 metros de movimento
+      distanceFilter: 1, // Atualiza a cada 1 metro de movimento
     );
 
     _positionStream = Geolocator.getPositionStream(locationSettings: locationSettings)
@@ -110,20 +121,20 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
     _markers.addAll([
       Marker(
         markerId: const MarkerId('obra_largo'),
-        position: const LatLng(-25.4268, -49.2721),
-        infoWindow: const InfoWindow(title: 'Obra AR: Largo da Ordem'),
+        position: const LatLng(-25.42776745339319, -49.2722254193995),
+        infoWindow: InfoWindow(title: t.map.artworkLargo),
         icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
       Marker(
         markerId: const MarkerId('obra_mon'),
-        position: const LatLng(-25.4361, -49.2703),
-        infoWindow: const InfoWindow(title: 'Obra AR: MON'),
+        position: const LatLng(-25.40967648572163, -49.267092090902416),
+        infoWindow: InfoWindow(title: t.map.artworkMon),
         icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
       Marker(
         markerId: const MarkerId('obra_opera'),
-        position: const LatLng(-25.4425, -49.2830),
-        infoWindow: const InfoWindow(title: 'Obra AR: Ópera de Arame'),
+        position: const LatLng(-25.384375553058913, -49.27629471973898),
+        infoWindow: InfoWindow(title: t.map.artworkOpera),
         icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
     ]);
@@ -134,13 +145,13 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
     return Scaffold(
       // Se estiver carregando, mostra um indicador de progresso
       body: _isLoading 
-        ? const Center(
+        ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularProgressIndicator(color: Colors.black),
                 SizedBox(height: 20),
-                Text("Buscando sinal de GPS...", 
+                Text(t.map.loadingGps, 
                   style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                 ),
               ],
@@ -159,7 +170,7 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
                 markers: _markers,
                 myLocationEnabled: true, // Mostra o ponto azul da sua localização
                 myLocationButtonEnabled: false, 
-                zoomControlsEnabled: false,
+                zoomControlsEnabled: false, // Desabilitamos os controles padrão para usar os nossos
                 compassEnabled: false,
                 mapToolbarEnabled: false,
               ),
@@ -168,12 +179,27 @@ class _MapSampleState extends State<MapSample> with TickerProviderStateMixin {
                 left: 20,
                 child: roundedSquareButton(Icons.help_outline, Colors.black, (){}),
               ),
+              // Botões de Zoom e Navegação agrupados em uma Column
               Positioned(
                 top: 60,
                 right: 20,
-                child: roundedSquareButton(Icons.navigation, Colors.black, (){
-                  if(_currentPosition != null) _moveCameraToPosition(_currentPosition!);
-                }),
+                child: Column(
+                  children: [
+                    roundedSquareButton(Icons.add, Colors.black, () async {
+                      final GoogleMapController controller = await _controller.future;
+                      controller.animateCamera(CameraUpdate.zoomIn());
+                    }),
+                    const SizedBox(height: 10), // Espaçamento entre os botões
+                    roundedSquareButton(Icons.remove, Colors.black, () async {
+                      final GoogleMapController controller = await _controller.future;
+                      controller.animateCamera(CameraUpdate.zoomOut());
+                    }),
+                    const SizedBox(height: 10), // Espaçamento entre os botões
+                    roundedSquareButton(Icons.navigation, Colors.black, (){
+                      if(_currentPosition != null) _moveCameraToPosition(_currentPosition!);
+                    }),
+                  ],
+                ),
               ),
             ],
           ),

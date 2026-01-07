@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Para usar a fonte Montserrat
+import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/i18n/strings.g.dart'; // Para usar a fonte Montserrat
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -8,8 +9,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Sobre Outvision',
+        title: Text(t.about.pageTitle,
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -36,8 +36,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 32),
 
             // 2. Título Principal
-            Text(
-              'Outvision XR: Arte e Realidade Aumentada',
+            Text(t.about.mainTitle,
               style: GoogleFonts.montserrat(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -47,8 +46,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 16),
 
             // 3. Descrição Geral
-            Text(
-              'Outvision XR é uma plataforma inovadora que redefine a experiência da arte, combinando o mundo físico com a imersão da Realidade Aumentada (RA). Desenvolvido para entusiastas da arte e visitantes de exposições como a Bienal de Curitiba, nosso aplicativo transforma a maneira como você interage com obras e artistas.',
+            Text(t.about.pageTitle,
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 height: 1.5,
@@ -58,8 +56,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // 4. Seção: Nossa Missão
-            Text(
-              'Nossa Missão',
+            Text(t.about.missionTitle,
               style: GoogleFonts.montserrat(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -67,8 +64,7 @@ class AboutPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Conectar pessoas à arte de maneiras inéditas, utilizando a tecnologia para enriquecer a compreensão e o engajamento com expressões culturais contemporâneas. Acreditamos que a RA pode quebrar barreiras e tornar a arte mais acessível e interativa para todos.',
+            Text(t.about.missionText,
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 height: 1.5,
@@ -78,8 +74,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // 5. Seção: Nossa Visão
-            Text(
-              'Nossa Visão',
+            Text(t.about.visionTitle,
               style: GoogleFonts.montserrat(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -87,8 +82,7 @@ class AboutPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Ser a plataforma líder em curadoria de arte com Realidade Aumentada, reconhecida por sua inovação, acessibilidade e pela capacidade de criar experiências memoráveis que transcendem os limites tradicionais das galerias e museus.',
+            Text(t.about.visionText,
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 height: 1.5,
@@ -98,8 +92,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: 32),
 
             // 6. Seção: Conecte-se Conosco (Exemplo de ícones sociais)
-            Text(
-              'Conecte-se Conosco',
+            Text(t.about.connectTitle,
               style: GoogleFonts.montserrat(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -110,18 +103,17 @@ class AboutPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _socialIcon(Icons.language, 'Website'),
-                _socialIcon(Icons.mail_outline, 'Email'),
-                _socialIcon(Icons.camera_alt_outlined, 'Instagram'), // Ícone para Instagram
-                _socialIcon(Icons.share, 'Compartilhar'), // Ícone genérico
+                _socialIcon(Icons.language, t.about.website),
+                _socialIcon(Icons.mail_outline, t.about.email),
+                _socialIcon(Icons.camera_alt_outlined, t.about.instagram), // Ícone para Instagram
+                _socialIcon(Icons.share, t.about.share), // Ícone genérico
               ],
             ),
             const SizedBox(height: 32),
 
             // 7. Informações de Copyright/Versão
             Center(
-              child: Text(
-                'Outvision XR © 2025. Todos os direitos reservados.',
+              child: Text(t.about.copyright,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.montserrat(
                   fontSize: 12,

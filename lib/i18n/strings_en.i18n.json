@@ -1,0 +1,47 @@
+    {
+  "gallery": {
+    "title": "Artwork",
+    "tabArtwork": "Exhibitions",
+    "tabArtists": "Artists",
+    "artworkTitle": "The Garden of Earthly Delights",
+    "artworkArtist": "Hieronymus Bosch",
+    "artistSubtitle": "Curitiba Biennial 2025"
+  },
+  "settings": {
+    "title": "Settings",
+    "getHelp": "Get Help with the App",
+    "appSettings": "App Settings",
+    "language": "Language",
+    "about": "About Out Vision",
+    "imprint": "Imprint",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use"
+  },
+  "about": {
+    "pageTitle": "About Outvision",
+    "mainTitle": "Outvision XR: Art and Augmented Reality",
+    "description": "Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and exhibition visitors like the Curitiba Biennial, our app transforms the way you interact with artworks and artists.",
+    "missionTitle": "Our Mission",
+    "missionText": "To connect people to art in unprecedented ways, using technology to enrich the understanding and engagement with contemporary cultural expressions. We believe that AR can break down barriers and make art more accessible and interactive for everyone.",
+    "visionTitle": "Our Vision",
+    "visionText": "To be the leading platform for Augmented Reality art curation, recognized for its innovation, accessibility, and the ability to create memorable experiences that transcend the traditional limits of galleries and museums.",
+    "connectTitle": "Connect With Us",
+    "website": "Website",
+    "email": "Email",
+    "instagram": "Instagram",
+    "share": "Share",
+    "copyright": "Outvision XR © 2025. All rights reserved."
+  },
+  "languagePage": {
+    "title": "Language",
+    "portuguese": "Português (Brasil)",
+    "english": "English (US)",
+    "spanish": "Español (España)"
+  },
+  "map": {
+    "loadingGps": "Searching for GPS signal...",
+    "artworkLargo": "AR Artwork: Largo da Ordem",
+    "artworkMon": "AR Artwork: MON",
+    "artworkOpera": "AR Artwork: Ópera de Arame"
+  }
+}

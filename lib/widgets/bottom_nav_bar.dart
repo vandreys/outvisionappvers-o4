@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:outvisionxr/pages/gallery.dart';
-import 'package:outvisionxr/pages/settings.dart';
+import 'package:outvisionxr/pages/gallery_page.dart';
+import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/widgets/nav_item.dart';
-import 'package:outvisionxr/pages/maple_sample.dart'; // Importe seu mapa para o Explore
+import 'package:outvisionxr/pages/explore_page.dart'; // Importe seu mapa para o Explore
 
 Widget bottomNavBar(BuildContext context, int currentIndex) {
   return Container(
@@ -22,7 +22,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
               // Versão segura para voltar ao mapa sem erro de rotas nomeadas
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const MapSample()),
+                MaterialPageRoute(builder: (context) => const ExplorePage()),
                 (route) => false,
               );
             }
@@ -32,7 +32,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
         // Gallery - Index 1
         navItem(
           Icons.grid_view, 
-          "Gallery", 
+          "Artwork", 
           currentIndex == 1, 
           currentIndex == 1 ? Colors.pinkAccent : Colors.grey, 
           () {
