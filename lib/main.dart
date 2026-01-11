@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart'; // Import do pacote provider
 import 'package:outvisionxr/utils/language_provider.dart'; // Import do seu LanguageProvider
 
+
 void main() async {
   var languageProvider = LanguageProvider();
   LocaleSettings.setLocale(AppLocale.pt);
