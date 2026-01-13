@@ -25,6 +25,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   StreamSubscription<Position>? _positionStream;
 
   bool _isLoading = true;
+  String? _locationError;
 
   // Gate / Obra ativa
   ArtworkPoint? _activeArtwork;
@@ -76,53 +77,85 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   Future<void> _initLocationService() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      if (mounted) setState(() => _isLoading = false);
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        if (mounted) setState(() => _isLoading = false);
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _locationError = 'Serviço de localização desativado.';
+        });
         return;
       }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _locationError = 'Permissão de localização negada.';
+        });
+        return;
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _locationError = 'Permissão de localização negada permanentemente. Habilite nas configurações.';
+        });
+        return;
+      }
+
+      Position? pos;
+
+      // 1) Tenta posição atual (com timeout)
+      try {
+        pos = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+          timeLimit: const Duration(seconds: 8),
+        );
+      } catch (_) {
+        // 2) Fallback: última posição conhecida
+        pos = await Geolocator.getLastKnownPosition();
+      }
+
+      if (pos == null) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _locationError = 'Não foi possível obter sua localização. Tente novamente.';
+        });
+        return;
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        _currentPosition = LatLng(pos!.latitude, pos.longitude);
+        _isLoading = false;
+        _locationError = null;
+      });
+
+      // Move a câmera UMA vez na inicialização
+      await _moveCameraToPosition(_currentPosition!);
+
+      // Tracking ON
+      _startTracking();
+
+      // Avalia gate já no primeiro ponto
+      _updateArrivalGate(pos);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _locationError = 'Erro ao iniciar localização.';
+      });
     }
-
-    // DEBUG/MVP: posição inicial fixa no MON.
-    // Depois trocamos por Geolocator.getCurrentPosition() para uso real.
-    final Position initialPosition = Position(
-      latitude: -25.431707398660244,
-      longitude: -49.28053248220991,
-      timestamp: DateTime.now(),
-      accuracy: 0.0,
-      altitude: 0.0,
-      heading: 0.0,
-      speed: 0.0,
-      speedAccuracy: 0.0,
-      altitudeAccuracy: 0.0,
-      headingAccuracy: 0.0,
-    );
-
-    if (!mounted) return;
-
-    setState(() {
-      _currentPosition = LatLng(initialPosition.latitude, initialPosition.longitude);
-      _isLoading = false;
-    });
-
-    await _moveCameraToPosition(_currentPosition!);
-
-    // ✅ Liga tracking real
-    _startTracking();
-
-    // ✅ Avalia gate já no start (útil no debug)
-    _updateArrivalGate(initialPosition);
   }
 
   void _startTracking() {
@@ -139,8 +172,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
           _currentPosition = LatLng(position.latitude, position.longitude);
         });
 
-        // Se você não quiser a câmera “grudada” no usuário, a gente remove isso depois.
-        _moveCameraToPosition(_currentPosition!);
+        // ✅ Não move mais a câmera automaticamente (evita “grudar”)
+        // _moveCameraToPosition(_currentPosition!);
 
         // ✅ Atualiza gate
         _updateArrivalGate(position);
@@ -151,7 +184,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   void _updateArrivalGate(Position p) {
     if (_artworks.isEmpty) return;
 
-    // 1) acha a obra mais próxima
     ArtworkPoint nearest = _artworks.first;
     double minDist = double.infinity;
 
@@ -165,12 +197,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     final now = DateTime.now();
 
-    // 2) se gate fechado: aplica dwell de entrada (<=20m por 3s)
     if (!_gateOpen) {
       if (minDist <= _entryRadiusMeters) {
         _enteredRadiusAt ??= now;
-
         final secondsInside = now.difference(_enteredRadiusAt!).inSeconds;
+
         if (secondsInside >= _minDwellSeconds) {
           setState(() {
             _gateOpen = true;
@@ -183,16 +214,13 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       return;
     }
 
-    // 3) se gate aberto: fecha só quando sair >=25m (histerese)
+    // Gate aberto: fecha com histerese
     if (minDist >= _exitRadiusMeters) {
       setState(() {
         _gateOpen = false;
         _activeArtwork = null;
         _enteredRadiusAt = null;
       });
-    } else {
-      // Se você quiser manter sempre a obra "mais próxima" como ativa, habilite este bloco:
-      // if (_activeArtwork?.id != nearest.id) setState(() => _activeArtwork = nearest);
     }
   }
 
@@ -229,9 +257,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => ARExperiencePage(artwork: _activeArtwork!),
-      ),
+      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: _activeArtwork!)),
     );
   }
 
@@ -255,129 +281,144 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                 ],
               ),
             )
-          : Stack(
-              children: [
-                GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target: _currentPosition ?? const LatLng(-25.431707398660244, -49.28053248220991),
-                    zoom: 17,
+          : (_locationError != null)
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _locationError!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLoading = true;
+                              _locationError = null;
+                            });
+                            _initLocationService();
+                          },
+                          child: const Text('Tentar novamente'),
+                        ),
+                      ],
+                    ),
                   ),
-                  onMapCreated: (controller) {
-                    _controller.complete(controller);
-                    controller.setMapStyle(_grayMapStyle);
-                  },
-                  markers: _markers,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                  compassEnabled: false,
-                  mapToolbarEnabled: false,
-                ),
-
-                Positioned(
-                  top: 60,
-                  left: 20,
-                  child: roundedSquareButton(Icons.help_outline, Colors.black, () {}),
-                ),
-
-                Positioned(
-                  top: 60,
-                  right: 20,
-                  child: Column(
-                    children: [
-                      roundedSquareButton(Icons.add, Colors.black, () async {
-                        final controller = await _controller.future;
-                        controller.animateCamera(CameraUpdate.zoomIn());
-                      }),
-                      const SizedBox(height: 10),
-                      roundedSquareButton(Icons.remove, Colors.black, () async {
-                        final controller = await _controller.future;
-                        controller.animateCamera(CameraUpdate.zoomOut());
-                      }),
-                      const SizedBox(height: 10),
-                      roundedSquareButton(Icons.navigation, Colors.black, () {
-                        if (_currentPosition != null) _moveCameraToPosition(_currentPosition!);
-                      }),
-                    ],
-                  ),
-                ),
-
-                // ✅ Card Foto 2 (gate automático)
-                if (_gateOpen && _activeArtwork != null)
-                  Positioned(
-                    left: 20,
-                    right: 20,
-                    bottom: 110, // acima do bottom nav (80)
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-                        ],
+                )
+              : Stack(
+                  children: [
+                    GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: CameraPosition(
+                        target: _currentPosition!,
+                        zoom: 17,
                       ),
+                      onMapCreated: (controller) {
+                        _controller.complete(controller);
+                        controller.setMapStyle(_grayMapStyle);
+                      },
+                      markers: _markers,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: false,
+                      zoomControlsEnabled: false,
+                      compassEnabled: false,
+                      mapToolbarEnabled: false,
+                    ),
+
+                    Positioned(
+                      top: 60,
+                      left: 20,
+                      child: roundedSquareButton(Icons.help_outline, Colors.black, () {}),
+                    ),
+
+                    Positioned(
+                      top: 60,
+                      right: 20,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'You arrived at the location of the artwork',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _activeArtwork!.title,
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 44,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                              onPressed: _openArViewNow,
-                              child: const Text('OPEN AR VIEW NOW'),
-                            ),
-                          ),
+                          roundedSquareButton(Icons.add, Colors.black, () async {
+                            final controller = await _controller.future;
+                            controller.animateCamera(CameraUpdate.zoomIn());
+                          }),
+                          const SizedBox(height: 10),
+                          roundedSquareButton(Icons.remove, Colors.black, () async {
+                            final controller = await _controller.future;
+                            controller.animateCamera(CameraUpdate.zoomOut());
+                          }),
+                          const SizedBox(height: 10),
+                          roundedSquareButton(Icons.navigation, Colors.black, () {
+                            if (_currentPosition != null) _moveCameraToPosition(_currentPosition!);
+                          }),
                         ],
                       ),
                     ),
-                  ),
-              ],
-            ),
+
+                    if (_gateOpen && _activeArtwork != null)
+                      Positioned(
+                        left: 20,
+                        right: 20,
+                        bottom: 110,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: const [
+                              BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'You arrived at the location of the artwork',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                _activeArtwork!.title,
+                                style: const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 44,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  ),
+                                  onPressed: _openArViewNow,
+                                  child: const Text('OPEN AR VIEW NOW'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
       bottomNavigationBar: bottomNavBar(context, 0),
     );
   }
 
   static final String _grayMapStyle = jsonEncode([
-    {
-      "featureType": "all",
-      "stylers": [
-        {"saturation": -100},
-        {"lightness": 40},
-        {"gamma": 0.5}
-      ]
-    },
-    {
-      "featureType": "poi",
-      "stylers": [
-        {"visibility": "off"}
-      ]
-    }
+    {"featureType": "all", "stylers": [{"saturation": -100}, {"lightness": 40}, {"gamma": 0.5}]},
+    {"featureType": "poi", "stylers": [{"visibility": "off"}]},
   ]);
 }
