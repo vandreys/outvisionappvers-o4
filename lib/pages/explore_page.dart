@@ -17,10 +17,8 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
-class _ExplorePageState extends State<ExplorePage>
-    with TickerProviderStateMixin {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
+  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
   final Set<Marker> _markers = <Marker>{};
@@ -80,7 +78,7 @@ class _ExplorePageState extends State<ExplorePage>
 
   Future<void> _initLocationService() async {
     try {
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         if (!mounted) return;
         setState(() {
@@ -90,29 +88,39 @@ class _ExplorePageState extends State<ExplorePage>
         return;
       }
 
-      var permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
 
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied) {
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError =
-              'Permissão de localização negada. Habilite nas configurações.';
+          _locationError = 'Permissão de localização negada.';
+        });
+        return;
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _locationError = 'Permissão de localização negada permanentemente. Habilite nas configurações.';
         });
         return;
       }
 
       Position? pos;
+
+      // 1) Tenta posição atual (com timeout)
       try {
         pos = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
           timeLimit: const Duration(seconds: 8),
         );
       } catch (_) {
+        // 2) Fallback: última posição conhecida
         pos = await Geolocator.getLastKnownPosition();
       }
 
@@ -120,8 +128,7 @@ class _ExplorePageState extends State<ExplorePage>
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError =
-              'Não foi possível obter sua localização. Tente novamente.';
+          _locationError = 'Não foi possível obter sua localização. Tente novamente.';
         });
         return;
       }
@@ -134,10 +141,15 @@ class _ExplorePageState extends State<ExplorePage>
         _locationError = null;
       });
 
+      // Move a câmera UMA vez na inicialização
       await _moveCameraToPosition(_currentPosition!);
+
+      // Tracking ON
       _startTracking();
+
+      // Avalia gate já no primeiro ponto
       _updateArrivalGate(pos);
-    } catch (_) {
+    } catch (e) {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
@@ -147,21 +159,23 @@ class _ExplorePageState extends State<ExplorePage>
   }
 
   void _startTracking() {
-    const settings = LocationSettings(
+    const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 1,
     );
 
-    _positionStream =
-        Geolocator.getPositionStream(locationSettings: settings).listen(
-      (position) {
+    _positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+      (Position position) {
         if (!mounted) return;
 
         setState(() {
-          _currentPosition =
-              LatLng(position.latitude, position.longitude);
+          _currentPosition = LatLng(position.latitude, position.longitude);
         });
 
+        // ✅ Não move mais a câmera automaticamente (evita “grudar”)
+        // _moveCameraToPosition(_currentPosition!);
+
+        // ✅ Atualiza gate
         _updateArrivalGate(position);
       },
     );
@@ -174,8 +188,7 @@ class _ExplorePageState extends State<ExplorePage>
     double minDist = double.infinity;
 
     for (final a in _artworks) {
-      final d = Geolocator.distanceBetween(
-          p.latitude, p.longitude, a.lat, a.lng);
+      final d = Geolocator.distanceBetween(p.latitude, p.longitude, a.lat, a.lng);
       if (d < minDist) {
         minDist = d;
         nearest = a;
@@ -187,8 +200,9 @@ class _ExplorePageState extends State<ExplorePage>
     if (!_gateOpen) {
       if (minDist <= _entryRadiusMeters) {
         _enteredRadiusAt ??= now;
-        if (now.difference(_enteredRadiusAt!).inSeconds >=
-            _minDwellSeconds) {
+        final secondsInside = now.difference(_enteredRadiusAt!).inSeconds;
+
+        if (secondsInside >= _minDwellSeconds) {
           setState(() {
             _gateOpen = true;
             _activeArtwork = nearest;
@@ -200,6 +214,7 @@ class _ExplorePageState extends State<ExplorePage>
       return;
     }
 
+    // Gate aberto: fecha com histerese
     if (minDist >= _exitRadiusMeters) {
       setState(() {
         _gateOpen = false;
@@ -210,34 +225,29 @@ class _ExplorePageState extends State<ExplorePage>
   }
 
   Future<void> _moveCameraToPosition(LatLng position) async {
-    final controller = await _controller.future;
-    controller.animateCamera(
-      CameraUpdate.newLatLngZoom(position, 17),
-    );
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newLatLngZoom(position, 17.0));
   }
 
   void _addBienalMarkers() {
     _markers.addAll([
       Marker(
         markerId: const MarkerId('obra_largo'),
-        position:
-            const LatLng(-25.42776745339319, -49.2722254193995),
+        position: const LatLng(-25.42776745339319, -49.2722254193995),
         infoWindow: InfoWindow(title: t.map.artworkLargo),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300),
+        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
       Marker(
-        markerId: const MarkerId('obra_mon'),
-        position:
-            const LatLng(-25.431707398660244, -49.28053248220991),
+        markerId: const MarkerId('Primeira Obra'),
+        position: const LatLng(-25.431707398660244, -49.28053248220991),
         infoWindow: InfoWindow(title: t.map.artworkMon),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300),
+        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
       Marker(
         markerId: const MarkerId('obra_opera'),
-        position:
-            const LatLng(-25.384375553058913, -49.27629471973898),
+        position: const LatLng(-25.384375553058913, -49.27629471973898),
         infoWindow: InfoWindow(title: t.map.artworkOpera),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300),
+        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
       ),
     ]);
   }
@@ -247,10 +257,7 @@ class _ExplorePageState extends State<ExplorePage>
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) =>
-            ARExperiencePage(artwork: _activeArtwork!),
-      ),
+      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: _activeArtwork!)),
     );
   }
 
@@ -258,9 +265,52 @@ class _ExplorePageState extends State<ExplorePage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(color: Colors.black),
+                  const SizedBox(height: 20),
+                  Text(
+                    t.map.loadingGps,
+                    style: const TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
           : (_locationError != null)
-              ? Center(child: Text(_locationError!))
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _locationError!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLoading = true;
+                              _locationError = null;
+                            });
+                            _initLocationService();
+                          },
+                          child: const Text('Tentar novamente'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : Stack(
                   children: [
                     GoogleMap(
@@ -284,8 +334,7 @@ class _ExplorePageState extends State<ExplorePage>
                     Positioned(
                       top: 60,
                       left: 20,
-                      child: roundedSquareButton(
-                          Icons.help_outline, Colors.black, () {}),
+                      child: roundedSquareButton(Icons.help_outline, Colors.black, () {}),
                     ),
 
                     Positioned(
@@ -293,23 +342,18 @@ class _ExplorePageState extends State<ExplorePage>
                       right: 20,
                       child: Column(
                         children: [
-                          roundedSquareButton(Icons.add, Colors.black,
-                              () async {
-                            final c = await _controller.future;
-                            c.animateCamera(CameraUpdate.zoomIn());
+                          roundedSquareButton(Icons.add, Colors.black, () async {
+                            final controller = await _controller.future;
+                            controller.animateCamera(CameraUpdate.zoomIn());
                           }),
                           const SizedBox(height: 10),
-                          roundedSquareButton(Icons.remove, Colors.black,
-                              () async {
-                            final c = await _controller.future;
-                            c.animateCamera(CameraUpdate.zoomOut());
+                          roundedSquareButton(Icons.remove, Colors.black, () async {
+                            final controller = await _controller.future;
+                            controller.animateCamera(CameraUpdate.zoomOut());
                           }),
                           const SizedBox(height: 10),
-                          roundedSquareButton(Icons.navigation,
-                              Colors.black, () {
-                            if (_currentPosition != null) {
-                              _moveCameraToPosition(_currentPosition!);
-                            }
+                          roundedSquareButton(Icons.navigation, Colors.black, () {
+                            if (_currentPosition != null) _moveCameraToPosition(_currentPosition!);
                           }),
                         ],
                       ),
@@ -326,15 +370,12 @@ class _ExplorePageState extends State<ExplorePage>
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
-                              )
+                              BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
                             ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 'You arrived at the location of the artwork',
@@ -359,30 +400,20 @@ class _ExplorePageState extends State<ExplorePage>
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(16),
-                                    ),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   ),
                                   onPressed: _openArViewNow,
-                                  child:
-                                      const Text('OPEN AR VIEW NOW'),
+                                  child: const Text('OPEN AR VIEW NOW'),
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-
-                    /// 🔥 NAV BAR FLUTUANTE (ÚNICA MUDANÇA)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 12,
-                      child: bottomNavBar(context, 0),
-                    ),
                   ],
                 ),
+      bottomNavigationBar: bottomNavBar(context, 0),
     );
   }
 
