@@ -40,6 +40,8 @@ android {
 dependencies {
     // AR + 3D (Filament + ARCore)
     implementation("io.github.sceneview:arsceneview:2.3.1")
+    // Lifecycle para PlatformView
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 }
 
 flutter {
