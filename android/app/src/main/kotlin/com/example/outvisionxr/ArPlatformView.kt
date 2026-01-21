@@ -1,8 +1,13 @@
 package com.example.outvisionxr
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import com.google.ar.core.Anchor
 import com.google.ar.core.Config
 import com.google.ar.core.Earth
@@ -25,19 +30,28 @@ class ArPlatformView(
     messenger: BinaryMessenger,
     private val viewId: Int,
     private val args: Any?
-) : PlatformView, EventChannel.StreamHandler {
+) : PlatformView, EventChannel.StreamHandler, LifecycleOwner {
 
     private val TAG = "OutvisionXR-AR"
+
+    // Lifecycle para o ARSceneView
+    private val lifecycleRegistry = LifecycleRegistry(this)
+    override val lifecycle: Lifecycle get() = lifecycleRegistry
+
+    // Obtém Activity do Context
+    private val activity: Activity? = context.findActivity()
 
     // ─────────────────────────────────────────────
     // ARSceneView → SOMENTE câmera no init
     // ─────────────────────────────────────────────
     private val arSceneView = ARSceneView(
-        context = context,
+        context = activity ?: context,
         sessionConfiguration = { _: Session, config: Config ->
             config.geospatialMode = Config.GeospatialMode.ENABLED
         }
-    )
+    ).apply {
+        lifecycle = this@ArPlatformView.lifecycle
+    }
 
     private var eventSink: EventChannel.EventSink? = null
     private var lastStatus: String? = null
@@ -76,14 +90,18 @@ class ArPlatformView(
             tick()
         }
 
-        // Resume seguro (evita crash de surface)
+        // Inicia o lifecycle como CREATED
+        lifecycleRegistry.currentState = Lifecycle.State.CREATED
+
+        // Resume após surface attach
         arSceneView.post {
-            Log.i(TAG, "Resuming ARSceneView after surface attach")
-            callIfExists(arSceneView, "onResume")
-            callIfExists(arSceneView, "resume")
+            Log.i(TAG, "Starting ARSceneView lifecycle")
+            lifecycleRegistry.currentState = Lifecycle.State.STARTED
+            lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+            Log.i(TAG, "ARSceneView lifecycle RESUMED")
         }
 
-        Log.i(TAG, "init: viewId=$viewId lat=$lat lng=$lng asset=$androidGlbAsset")
+        Log.i(TAG, "init: viewId=$viewId lat=$lat lng=$lng asset=$androidGlbAsset activity=${activity != null}")
     }
 
     override fun getView(): View = arSceneView
@@ -102,28 +120,27 @@ class ArPlatformView(
     }
 
     // ─────────────────────────────────────────────
-    // DISPOSE (SEM destroy())
+    // DISPOSE
     // ─────────────────────────────────────────────
     override fun dispose() {
-    Log.i(TAG, "dispose")
+        Log.i(TAG, "dispose")
 
-    // Para o loop
-    arSceneView.onFrame = null
-    eventSink = null
+        // Para o loop
+        arSceneView.onFrame = null
+        eventSink = null
 
-    // Tenta tirar da cena (se API existir, senão ignora)
-    try { anchorNode?.let { arSceneView.removeChildNode(it) } } catch (_: Throwable) {}
-    anchorNode = null
-    modelNode = null
-    modelInstance = null
+        // Tenta tirar da cena (se API existir, senão ignora)
+        try { anchorNode?.let { arSceneView.removeChildNode(it) } } catch (_: Throwable) {}
+        anchorNode = null
+        modelNode = null
+        modelInstance = null
 
-    // Libera o anchor do ARCore
-    try { anchor?.detach() } catch (_: Throwable) {}
-    anchor = null
+        // Libera o anchor do ARCore
+        try { anchor?.detach() } catch (_: Throwable) {}
+        anchor = null
 
-    // Pausa a view (compatível com variações de API)
-    callIfExists(arSceneView, "onPause")
-    callIfExists(arSceneView, "pause")
+        // Encerra lifecycle
+        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 
     // ─────────────────────────────────────────────
@@ -255,12 +272,14 @@ class ArPlatformView(
         Log.e(TAG, message)
     }
 
-    private fun callIfExists(target: Any, methodName: String) {
-        try {
-            val method = target.javaClass.methods.firstOrNull {
-                it.name == methodName && it.parameterTypes.isEmpty()
-            }
-            method?.invoke(target)
-        } catch (_: Throwable) {}
+}
+
+// Extension para obter Activity do Context
+private fun Context.findActivity(): Activity? {
+    var ctx = this
+    while (ctx is ContextWrapper) {
+        if (ctx is Activity) return ctx
+        ctx = ctx.baseContext
     }
+    return null
 }
