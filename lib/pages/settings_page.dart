@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
-import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/pages/settings/settings_about.dart';
+import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -25,91 +25,86 @@ class SettingsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+      body: Stack(
         children: [
-          // Começamos direto com as opções de suporte e ajustes
-          _buildSettingsTile(
-            title: t.settings.getHelp,
-            onTap: () {
-              // Ação para ajuda
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.appSettings,
-            onTap: () {
-              // Ação para configurações internas
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.language,
-            onTap: () {
-              // NAVEGAÇÃO PARA A PÁGINA DE SELEÇÃO DE IDIOMA
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LanguagePage()),
-              );
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.about,
-            onTap: () {
-                  // NAVEGAÇÃO PARA A PÁGINA "ABOUT OUTVISION"
+          /// CONTEÚDO PRINCIPAL
+          ListView(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 120),
+            children: [
+              _buildSettingsTile(
+                title: t.settings.getHelp,
+                onTap: () {},
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.appSettings,
+                onTap: () {},
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.language,
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AboutPage()),
+                    MaterialPageRoute(
+                      builder: (context) => const LanguagePage(),
+                    ),
                   );
-            },
+                },
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.about,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AboutPage(),
+                    ),
+                  );
+                },
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.imprint,
+                isExternal: true,
+                onTap: () {},
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.privacyPolicy,
+                isExternal: true,
+                onTap: () {},
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+
+              _buildSettingsTile(
+                title: t.settings.termsOfUse,
+                isExternal: true,
+                onTap: () {},
+              ),
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
+            ],
           ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          // Itens com ícone de link externo (Imprint, Privacy, Terms)
-          _buildSettingsTile(
-            title: t.settings.imprint,
-            isExternal: true,
-            onTap: () {
-              // Abrir link externo
-            },
+
+          /// BOTTOM NAVIGATION FLUTUANTE (IGUAL AO EXPLORE)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: bottomNavBar(context, 3),
           ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.privacyPolicy,
-            isExternal: true,
-            onTap: () {
-              // Abrir link externo
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.termsOfUse,
-            isExternal: true,
-            onTap: () {
-              // Abrir link externo
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
         ],
       ),
-      bottomNavigationBar: bottomNavBar(context,3),
     );
   }
 
-  // Widget auxiliar para construir as linhas de configuração
+  /// ITEM DE CONFIGURAÇÃO
   Widget _buildSettingsTile({
     required String title,
     bool isExternal = false,

@@ -38,8 +38,8 @@ android {
 }
 
 dependencies {
-    // ✅ ARCore (necessário para Geospatial)
-    implementation("com.google.ar:core:1.46.0")
+    // AR + 3D (Filament + ARCore)
+    implementation("io.github.sceneview:arsceneview:2.3.1")
 }
 
 flutter {

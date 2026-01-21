@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 112 (37 per locale)
+/// Strings: 120 (40 per locale)
 ///
-/// Built on 2026-01-04 at 05:01 UTC
+/// Built on 2026-01-14 at 05:55 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -154,6 +154,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsAboutEn about = _StringsAboutEn._(_root);
 	late final _StringsLanguagePageEn languagePage = _StringsLanguagePageEn._(_root);
 	late final _StringsMapEn map = _StringsMapEn._(_root);
+	late final _StringsBottomNavEn bottomNav = _StringsBottomNavEn._(_root);
 }
 
 // Path: gallery
@@ -236,6 +237,19 @@ class _StringsMapEn {
 	String get artworkOpera => 'AR Artwork: Ópera de Arame';
 }
 
+// Path: bottomNav
+class _StringsBottomNavEn {
+	_StringsBottomNavEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get explore => 'Explore';
+	String get gallery => 'Gallery';
+	String get captured => 'Captured';
+	String get settings => 'Settings';
+}
+
 // Path: <root>
 class _StringsEs implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
@@ -265,6 +279,7 @@ class _StringsEs implements Translations {
 	@override late final _StringsAboutEs about = _StringsAboutEs._(_root);
 	@override late final _StringsLanguagePageEs languagePage = _StringsLanguagePageEs._(_root);
 	@override late final _StringsMapEs map = _StringsMapEs._(_root);
+	@override late final _StringsBottomNavEs bottomNav = _StringsBottomNavEs._(_root);
 }
 
 // Path: gallery
@@ -348,6 +363,19 @@ class _StringsMapEs implements _StringsMapEn {
 	@override String get artworkLargo => 'Obra RA: Largo da Ordem';
 	@override String get artworkMon => 'Obra RA: MON';
 	@override String get artworkOpera => 'Obra RA: Ópera de Arame';
+}
+
+// Path: bottomNav
+class _StringsBottomNavEs implements _StringsBottomNavEn {
+	_StringsBottomNavEs._(this._root);
+
+	@override final _StringsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get explore => 'Explorar';
+	@override String get gallery => 'Galería';
+	@override String get captured => 'Capturado';
+	@override String get settings => 'Configuración';
 }
 
 // Path: <root>
@@ -475,9 +503,6 @@ class _StringsBottomNavPt implements _StringsBottomNavEn {
 	@override String get settings => 'Obra AR: Ópera de Arame';
 }
 
-class _StringsBottomNavEn {
-}
-
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -519,6 +544,10 @@ extension on Translations {
 			case 'map.artworkLargo': return 'AR Artwork: Largo da Ordem';
 			case 'map.artworkMon': return 'AR Artwork: MON';
 			case 'map.artworkOpera': return 'AR Artwork: Ópera de Arame';
+			case 'bottomNav.explore': return 'Explore';
+			case 'bottomNav.gallery': return 'Gallery';
+			case 'bottomNav.captured': return 'Captured';
+			case 'bottomNav.settings': return 'Settings';
 			default: return null;
 		}
 	}
@@ -565,6 +594,10 @@ extension on _StringsEs {
 			case 'map.artworkLargo': return 'Obra RA: Largo da Ordem';
 			case 'map.artworkMon': return 'Obra RA: MON';
 			case 'map.artworkOpera': return 'Obra RA: Ópera de Arame';
+			case 'bottomNav.explore': return 'Explorar';
+			case 'bottomNav.gallery': return 'Galería';
+			case 'bottomNav.captured': return 'Capturado';
+			case 'bottomNav.settings': return 'Configuración';
 			default: return null;
 		}
 	}

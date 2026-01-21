@@ -1,4 +1,4 @@
-    {
+{
   "gallery": {
     "title": "Artwork",
     "tabArtwork": "Exhibitions",
@@ -43,5 +43,11 @@
     "artworkLargo": "AR Artwork: Largo da Ordem",
     "artworkMon": "AR Artwork: MON",
     "artworkOpera": "AR Artwork: Ópera de Arame"
+  },
+  "bottomNav": {
+    "explore": "Explore",
+    "gallery": "Gallery",
+    "captured": "Captured",
+    "settings": "Settings"
   }
 }

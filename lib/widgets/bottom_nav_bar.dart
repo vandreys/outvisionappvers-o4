@@ -45,18 +45,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             }
           },
         ),
-
-        // Captured - Index 2
-        navItem(
-          Icons.photo_camera, 
-          "Captured", 
-          currentIndex == 2, 
-          currentIndex == 2 ? Colors.pinkAccent : Colors.grey, 
-          () {
-            // Ação para Captured
-          },
-        ),
-
+        
         // Settings - Index 3
         navItem(
           Icons.settings, 

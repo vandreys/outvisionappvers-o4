@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
@@ -28,7 +29,6 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
 
   bool _onboardingDone = false;
 
-  int? _platformViewId;
   StreamSubscription? _arEventsSub;
 
   ArRuntimeStatus _status = ArRuntimeStatus.localizing;
@@ -39,10 +39,35 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
   static const Duration _minLocalizingDuration = Duration(seconds: 5);
   Timer? _readyDelayTimer;
 
+  // ✅ PERMISSION GATE (câmera + localização)
+  bool _cameraGranted = false; // aqui significa "permissões do AR ok"
+  bool _checkingCamera = true;
+
   @override
   void initState() {
     super.initState();
     _loadOnboarding();
+    _checkArPermissions();
+  }
+
+  // ✅ CÂMERA + LOCALIZAÇÃO (necessário p/ Geospatial)
+  Future<void> _checkArPermissions() async {
+    setState(() => _checkingCamera = true);
+
+    final results = await [
+      Permission.camera,
+      Permission.locationWhenInUse,
+    ].request();
+
+    if (!mounted) return;
+
+    final cameraOk = results[Permission.camera]?.isGranted ?? false;
+    final locationOk = results[Permission.locationWhenInUse]?.isGranted ?? false;
+
+    setState(() {
+      _cameraGranted = cameraOk && locationOk;
+      _checkingCamera = false;
+    });
   }
 
   Future<void> _loadOnboarding() async {
@@ -55,7 +80,6 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       _status = ArRuntimeStatus.localizing;
     });
 
-    // ✅ Se já entrou direto no AR (onboarding já feito), inicia contagem do localizing
     if (done) _localizingStartedAt = DateTime.now();
   }
 
@@ -69,13 +93,10 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       _status = ArRuntimeStatus.localizing;
     });
 
-    // ✅ Começa contagem do mínimo de 5s assim que o onboarding termina
     _localizingStartedAt = DateTime.now();
   }
 
   void _onPlatformViewCreated(int id) {
-    _platformViewId = id;
-
     final channelName = 'outvisionxr/ar_view_events_$id';
     final events = EventChannel(channelName);
 
@@ -96,7 +117,6 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
         if (!mounted) return;
 
         if (status == 'ready') {
-          // ✅ Segura o ready até completar 5s de overlay
           final started = _localizingStartedAt ?? DateTime.now();
           final elapsed = DateTime.now().difference(started);
           final remaining = _minLocalizingDuration - elapsed;
@@ -118,10 +138,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
             });
           }
         } else if (status == 'localizing' || status == 'scanning') {
-          // ✅ Se voltar a localizing, cancela qualquer “ready agendado”
           _readyDelayTimer?.cancel();
-
-          // ✅ Se ainda não começou a contagem, inicia agora
           _localizingStartedAt ??= DateTime.now();
 
           setState(() {
@@ -175,6 +192,70 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
     );
   }
 
+  Widget _cameraPermissionOverlay() {
+    return Positioned.fill(
+      child: Container(
+        color: Colors.black,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(24),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Permissão necessária',
+                style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Precisamos de câmera e localização para abrir o AR.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: 'Montserrat'),
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton(
+                  onPressed: _checkArPermissions,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
+                  child: const Text('Permitir'),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton(
+                  onPressed: () => openAppSettings(),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
+                  child: const Text('Abrir configurações'),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black12),
+                  ),
+                  child: const Text('Voltar'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final artwork = widget.artwork;
@@ -184,11 +265,16 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       body: SafeArea(
         child: Stack(
           children: [
-            _ARPlatformView(
-              artwork: artwork,
-              viewType: _viewType,
-              onCreated: _onPlatformViewCreated,
-            ),
+            if (_checkingCamera)
+              const Center(child: CircularProgressIndicator())
+            else if (!_cameraGranted)
+              _cameraPermissionOverlay()
+            else
+              _ARPlatformView(
+                artwork: artwork,
+                viewType: _viewType,
+                onCreated: _onPlatformViewCreated,
+              ),
             Positioned(
               top: 16,
               left: 16,
@@ -199,9 +285,9 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
               right: 16,
               child: roundedSquareButton(Icons.help_outline, Colors.black, _openHelp),
             ),
-            if (!_onboardingDone) _OnboardingOverlay(onStart: _completeOnboarding),
-            if (_onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
-            if (_onboardingDone && _status == ArRuntimeStatus.error)
+            if (_cameraGranted && !_onboardingDone) _OnboardingOverlay(onStart: _completeOnboarding),
+            if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
+            if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.error)
               _ErrorOverlay(message: _errorMessage ?? 'Erro no AR'),
           ],
         ),
@@ -231,10 +317,7 @@ class _ARPlatformView extends StatelessWidget {
       'arrivalRadiusMeters': artwork.arrivalRadiusMeters,
       'eyeLevelOffsetMeters': artwork.eyeLevelOffsetMeters,
       'faceUser': artwork.faceUser,
-
-      // ✅ GLB local asset (Android) - se você tiver esse campo no ArtworkPoint
-      // Ex.: assets/3dmodels/stateofbeing.glb
-      'androidGlbAsset': artwork.androidGlbUrl,
+      'androidGlbAsset': 'assets/3dmodels/stateofbeing.glb',
     };
 
     if (Platform.isAndroid) {
@@ -270,7 +353,7 @@ class _OnboardingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.65),
+        color: Colors.black.withValues(alpha: 0.65),
         child: Center(
           child: Container(
             width: double.infinity,
@@ -291,7 +374,7 @@ class _OnboardingOverlay extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(
+                const Text(
                   'Mova o celular lentamente para ajudar o AR a se localizar.',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
@@ -336,12 +419,12 @@ class _LocalizingOverlay extends StatelessWidget {
         child: Container(
           alignment: Alignment.bottomCenter,
           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 28),
-          decoration: BoxDecoration(color: Colors.black.withOpacity(0.25)),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.25)),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.92),
+              color: Colors.white.withValues(alpha: 0.92),
               borderRadius: BorderRadius.circular(18),
             ),
             child: const Column(
@@ -384,7 +467,7 @@ class _ErrorOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.65),
+        color: Colors.black.withValues(alpha: 0.65),
         alignment: Alignment.center,
         padding: const EdgeInsets.all(24),
         child: Container(

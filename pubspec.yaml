@@ -8,6 +8,7 @@ environment:
   sdk: ^3.2.0
 
 dependencies:
+  permission_handler: ^11.3.1
   flutter:
     sdk: flutter
 
@@ -21,20 +22,20 @@ dependencies:
   google_maps_flutter: ^2.5.3
   geolocator: ^11.0.0
 
-  # NOVAS DEPENDÊNCIAS DO SLANG
-  slang: ^3.29.0
-  slang_flutter: ^3.29.0
+  # DEPENDÊNCIAS DO SLANG (ATUALIZADAS)
+  slang: ^3.30.0
+  slang_flutter: ^3.30.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
 
-  # NOVAS DEPENDÊNCIAS DE DESENVOLVIMENTO PARA O SLANG
+  # DEPENDÊNCIAS DE DESENVOLVIMENTO DO SLANG (ATUALIZADAS)
   build_runner: ^2.4.8
-  slang_build_runner: ^3.29.0
+  slang_build_runner: ^3.30.0
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/3dmodels/
+    - assets/3dmodels/stateofbeing.glb
