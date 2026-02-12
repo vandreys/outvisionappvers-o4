@@ -257,38 +257,39 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
   @override
   Widget build(BuildContext context) {
     final artwork = widget.artwork;
+    final topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            if (_checkingCamera)
-              const Center(child: CircularProgressIndicator())
-            else if (!_cameraGranted)
-              _cameraPermissionOverlay()
-            else
-              _ARPlatformView(
+      body: Stack(
+        children: [
+          if (_checkingCamera)
+            const Center(child: CircularProgressIndicator())
+          else if (!_cameraGranted)
+            _cameraPermissionOverlay()
+          else
+            Positioned.fill(
+              child: _ARPlatformView(
                 artwork: artwork,
                 viewType: _viewType,
                 onCreated: _onPlatformViewCreated,
               ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: roundedSquareButton(Icons.close, Colors.black, () => Navigator.pop(context)),
             ),
-            Positioned(
-              top: 16,
-              right: 16,
-              child: roundedSquareButton(Icons.help_outline, Colors.black, _openHelp),
-            ),
-            if (_cameraGranted && !_onboardingDone) _OnboardingOverlay(onStart: _completeOnboarding),
-            if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
-            if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.error)
-              _ErrorOverlay(message: _errorMessage ?? 'Erro no AR'),
-          ],
-        ),
+          Positioned(
+            top: topPadding + 16,
+            left: 16,
+            child: roundedSquareButton(Icons.close, Colors.black, () => Navigator.pop(context)),
+          ),
+          Positioned(
+            top: topPadding + 16,
+            right: 16,
+            child: roundedSquareButton(Icons.help_outline, Colors.black, _openHelp),
+          ),
+          if (_cameraGranted && !_onboardingDone) _OnboardingOverlay(onStart: _completeOnboarding),
+          if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
+          if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.error)
+            _ErrorOverlay(message: _errorMessage ?? 'Erro no AR'),
+        ],
       ),
     );
   }
@@ -316,6 +317,7 @@ class _ARPlatformView extends StatelessWidget {
       'eyeLevelOffsetMeters': artwork.eyeLevelOffsetMeters,
       'faceUser': artwork.faceUser,
       'androidGlbAsset': 'assets/3dmodels/stateofbeing.glb',
+      'iosUsdzAsset': 'assets/3dmodels/stateofbeing.usdz',
     };
 
     if (Platform.isAndroid) {

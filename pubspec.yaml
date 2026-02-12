@@ -27,6 +27,8 @@ dependencies:
   slang_flutter: ^3.30.0
   firebase_core: ^4.4.0
   firebase_database: ^12.1.3
+  cloud_firestore: ^6.1.2
+  firebase_auth: ^6.1.4
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +43,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/3dmodels/stateofbeing.glb
+    - assets/3dmodels/dress.usdz

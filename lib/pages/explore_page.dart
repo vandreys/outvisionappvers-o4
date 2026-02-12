@@ -46,8 +46,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       ArtworkPoint(
         id: 'obra_largo',
         title: t.map.artworkLargo,
-        lat: -25.42776745339319,
-        lng: -49.2722254193995,
+        lat: -26.294514160515284,
+        lng: -48.85139160184969,
         arrivalRadiusMeters: _entryRadiusMeters,
       ),
       ArtworkPoint(

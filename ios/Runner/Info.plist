@@ -25,14 +25,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	
-	<!-- INÍCIO DAS CHAVES DE LOCALIZAÇÃO ADICIONADAS AQUI -->
+	<!-- Camera (required for AR) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Este app precisa da câmera para a experiência de Realidade Aumentada.</string>
+
+	<!-- Location (required for AR geospatial + map) -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Este app precisa da localização para mostrar obras próximas na Bienal.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Este app precisa da localização para navegação AR em tempo real.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need your location to show nearby experiences.</string>
-	<!-- FIM DAS CHAVES DE LOCALIZAÇÃO ADICIONADAS AQUI -->
 
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
