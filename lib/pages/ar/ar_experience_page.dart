@@ -179,11 +179,10 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       builder: (_) => AlertDialog(
         title: const Text(
           'Ajuda',
-          style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         content: const Text(
-          'Mova o celular lentamente e aponte para o ambiente para melhorar a localização.',
-          style: TextStyle(fontFamily: 'Montserrat'),
+          'Mova o celular lentamente e aponte para o ambiente para melhorar a localização.'
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
@@ -207,13 +206,12 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
             children: [
               const Text(
                 'Permissão necessária',
-                style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               const Text(
                 'Precisamos de câmera e localização para abrir o AR.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Montserrat'),
               ),
               const SizedBox(height: 14),
               SizedBox(
@@ -367,7 +365,6 @@ class _OnboardingOverlay extends StatelessWidget {
                 const Text(
                   'Scan the floor in front of you.',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.black,
@@ -377,7 +374,6 @@ class _OnboardingOverlay extends StatelessWidget {
                 const Text(
                   'Mova o celular lentamente para ajudar o AR a se localizar.',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
                     color: Colors.grey,
                     fontWeight: FontWeight.w500,
                   ),
@@ -396,7 +392,7 @@ class _OnboardingOverlay extends StatelessWidget {
                     onPressed: onStart,
                     child: const Text(
                       'Got it, let’s start →',
-                      style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -433,7 +429,6 @@ class _LocalizingOverlay extends StatelessWidget {
                 Text(
                   'Scan the floor',
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black,
@@ -444,7 +439,6 @@ class _LocalizingOverlay extends StatelessWidget {
                   'Scan the floor in front of you to place the artwork.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
                   ),
@@ -479,13 +473,12 @@ class _ErrorOverlay extends StatelessWidget {
             children: [
               const Text(
                 'Erro no AR',
-                style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontFamily: 'Montserrat'),
               ),
               const SizedBox(height: 14),
               SizedBox(

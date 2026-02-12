@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 120 (40 per locale)
+/// Strings: 123 (41 per locale)
 ///
-/// Built on 2026-01-14 at 05:55 UTC
+/// Built on 2026-02-06 at 18:18 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -164,12 +164,13 @@ class _StringsGalleryEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Artwork';
-	String get tabArtwork => 'Exhibitions';
+	String get title => 'Exhibitions';
+	String get tabArtwork => 'Artwork';
 	String get tabArtists => 'Artists';
 	String get artworkTitle => 'The Garden of Earthly Delights';
 	String get artworkArtist => 'Hieronymus Bosch';
 	String get artistSubtitle => 'Curitiba Biennial 2025';
+	String get viewExhibition => 'View exhibition';
 }
 
 // Path: settings
@@ -180,7 +181,7 @@ class _StringsSettingsEn {
 
 	// Translations
 	String get title => 'Settings';
-	String get getHelp => 'Get Help with the App';
+	String get getHelp => 'How to use the App';
 	String get appSettings => 'App Settings';
 	String get language => 'Language';
 	String get about => 'About Out Vision';
@@ -289,12 +290,13 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override final _StringsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Obras';
-	@override String get tabArtwork => 'Exposiciones';
+	@override String get title => 'Exposiciones';
+	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
 	@override String get artworkTitle => 'El Jardín de las Delicias Terrenales';
 	@override String get artworkArtist => 'El Bosco';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
+	@override String get viewExhibition => 'Ver exposición';
 }
 
 // Path: settings
@@ -305,7 +307,7 @@ class _StringsSettingsEs implements _StringsSettingsEn {
 
 	// Translations
 	@override String get title => 'Ajustes';
-	@override String get getHelp => 'Obtener Ayuda con la App';
+	@override String get getHelp => 'Como usar el App';
 	@override String get appSettings => 'Configuración de la Aplicación';
 	@override String get language => 'Idioma';
 	@override String get about => 'Acerca de Out Vision';
@@ -417,12 +419,13 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override final _StringsPt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Obras';
-	@override String get tabArtwork => 'Exibições';
+	@override String get title => 'Exposições';
+	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
 	@override String get artworkTitle => 'O Jardim das Delícias Terrenas';
 	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
+	@override String get viewExhibition => 'Ver exposição';
 }
 
 // Path: settings
@@ -433,7 +436,7 @@ class _StringsSettingsPt implements _StringsSettingsEn {
 
 	// Translations
 	@override String get title => 'Configurações';
-	@override String get getHelp => 'Obter Ajuda com o App';
+	@override String get getHelp => 'Como usar o App';
 	@override String get appSettings => 'Configurações do App';
 	@override String get language => 'Idioma';
 	@override String get about => 'Sobre Out Vision';
@@ -509,14 +512,15 @@ class _StringsBottomNavPt implements _StringsBottomNavEn {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Artwork';
-			case 'gallery.tabArtwork': return 'Exhibitions';
+			case 'gallery.title': return 'Exhibitions';
+			case 'gallery.tabArtwork': return 'Artwork';
 			case 'gallery.tabArtists': return 'Artists';
 			case 'gallery.artworkTitle': return 'The Garden of Earthly Delights';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Curitiba Biennial 2025';
+			case 'gallery.viewExhibition': return 'View exhibition';
 			case 'settings.title': return 'Settings';
-			case 'settings.getHelp': return 'Get Help with the App';
+			case 'settings.getHelp': return 'How to use the App';
 			case 'settings.appSettings': return 'App Settings';
 			case 'settings.language': return 'Language';
 			case 'settings.about': return 'About Out Vision';
@@ -556,14 +560,15 @@ extension on Translations {
 extension on _StringsEs {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Obras';
-			case 'gallery.tabArtwork': return 'Exposiciones';
+			case 'gallery.title': return 'Exposiciones';
+			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
 			case 'gallery.artworkTitle': return 'El Jardín de las Delicias Terrenales';
 			case 'gallery.artworkArtist': return 'El Bosco';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
+			case 'gallery.viewExhibition': return 'Ver exposición';
 			case 'settings.title': return 'Ajustes';
-			case 'settings.getHelp': return 'Obtener Ayuda con la App';
+			case 'settings.getHelp': return 'Como usar el App';
 			case 'settings.appSettings': return 'Configuración de la Aplicación';
 			case 'settings.language': return 'Idioma';
 			case 'settings.about': return 'Acerca de Out Vision';
@@ -606,14 +611,15 @@ extension on _StringsEs {
 extension on _StringsPt {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Obras';
-			case 'gallery.tabArtwork': return 'Exibições';
+			case 'gallery.title': return 'Exposições';
+			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
 			case 'gallery.artworkTitle': return 'O Jardim das Delícias Terrenas';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
+			case 'gallery.viewExhibition': return 'Ver exposição';
 			case 'settings.title': return 'Configurações';
-			case 'settings.getHelp': return 'Obter Ajuda com o App';
+			case 'settings.getHelp': return 'Como usar o App';
 			case 'settings.appSettings': return 'Configurações do App';
 			case 'settings.language': return 'Idioma';
 			case 'settings.about': return 'Sobre Out Vision';

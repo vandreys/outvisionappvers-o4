@@ -1,15 +1,16 @@
 {
   "gallery": {
-    "title": "Obras",
-    "tabArtwork": "Exposiciones",
+    "title": "Exposiciones",
+    "tabArtwork": "Obras",
     "tabArtists": "Artistas",
     "artworkTitle": "El Jardín de las Delicias Terrenales",
     "artworkArtist": "El Bosco",
-    "artistSubtitle": "Bienal de Curitiba 2025"
+    "artistSubtitle": "Bienal de Curitiba 2025",
+    "viewExhibition": "Ver exposición"
   },
   "settings": {
     "title": "Ajustes",
-    "getHelp": "Obtener Ayuda con la App",
+    "getHelp": "Como usar el App",
     "appSettings": "Configuración de la Aplicación",
     "language": "Idioma",
     "about": "Acerca de Out Vision",

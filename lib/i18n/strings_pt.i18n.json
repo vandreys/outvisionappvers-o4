@@ -1,15 +1,16 @@
     {
   "gallery": {
-    "title": "Obras",
-    "tabArtwork": "Exibições",
+    "title": "Exposições",
+    "tabArtwork": "Obras",
     "tabArtists": "Artistas",
     "artworkTitle": "O Jardim das Delícias Terrenas",
     "artworkArtist": "Hieronymus Bosch",
-    "artistSubtitle": "Bienal de Curitiba 2025"
+    "artistSubtitle": "Bienal de Curitiba 2025",
+    "viewExhibition": "Ver exposição"
   },
   "settings": {
     "title": "Configurações",
-    "getHelp": "Obter Ajuda com o App",
+    "getHelp": "Como usar o App",
     "appSettings": "Configurações do App",
     "language": "Idioma",
     "about": "Sobre Out Vision",

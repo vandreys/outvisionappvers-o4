@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "604467548182",
+    "firebase_url": "https://outvision-app-24329-default-rtdb.firebaseio.com",
+    "project_id": "outvision-app-24329",
+    "storage_bucket": "outvision-app-24329.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604467548182:android:e4a87a76023e033c45a537",
+        "android_client_info": {
+          "package_name": "com.example.outvisionxr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc-QfIfOa_9rvEnfag-6D7bSHotFtwIV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

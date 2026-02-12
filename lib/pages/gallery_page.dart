@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 
 class GalleryPage extends StatelessWidget {
@@ -16,22 +16,23 @@ class GalleryPage extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            t.gallery.title,
-            style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.bold,
+            t.gallery.title.toUpperCase(),
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
               fontSize: 24,
               color: Colors.black,
             ),
           ),
           centerTitle: true,
           bottom: TabBar(
-            indicatorColor: Colors.pinkAccent,
-            labelColor: Colors.pinkAccent,
-            unselectedLabelColor: Colors.grey,
-            indicatorWeight: 3,
-            labelStyle: GoogleFonts.montserrat(
+            indicatorColor: Colors.black,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey[600],
+            indicatorWeight: 2,
+            labelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontSize: 15,
+              letterSpacing: 1.2,
             ),
             tabs: [
               Tab(text: t.gallery.tabArtwork),
@@ -39,7 +40,7 @@ class GalleryPage extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             ArtworksList(),
             ArtistsList(),
@@ -58,68 +59,74 @@ class ArtworksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.all(20),
-      itemCount: 4, 
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      itemCount: 4,
       itemBuilder: (context, index) {
         return Padding(
-          // CORREÇÃO AQUI: De EdgeInsets.bottom para EdgeInsets.only
-          padding: const EdgeInsets.only(bottom: 35.0), 
+          padding: const EdgeInsets.only(bottom: 42),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // IMAGEM / OBRA
               Container(
-                height: 450,
+                height: 220,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xFFEDEBE7),
+                  borderRadius: BorderRadius.circular(5),
                   image: const DecorationImage(
-                    image: NetworkImage('https://via.placeholder.com/450x600'), 
+                    image: NetworkImage('https://via.placeholder.com/450x600'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text( t.gallery.artworkTitle,
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          t.gallery.artworkArtist,
-                          style: GoogleFonts.montserrat(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+
+              const SizedBox(height: 18),
+
+              // TEXTO
+              Text(
+                t.gallery.artworkTitle,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                t.gallery.artworkArtist,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey[600],
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              // 🔘 BOTÃO "VER EXPOSIÇÃO"
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.favorite_border, color: Colors.black, size: 26),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.camera_alt_outlined, color: Colors.black, size: 26),
-                        onPressed: () {},
-                      ),
-                    ],
+                  onPressed: () {
+                    // ação futura
+                  },
+                  child: Text(
+                    t.gallery.viewExhibition,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -131,38 +138,104 @@ class ArtworksList extends StatelessWidget {
 
 // --- SUB-PÁGINA: LISTA DE ARTISTAS ---
 class ArtistsList extends StatelessWidget {
-  const ArtistsList({super.key});
+  ArtistsList({super.key});
+  final ArtistService _artistService = ArtistService();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(20),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          // CORREÇÃO AQUI: De EdgeInsets.bottom para EdgeInsets.only
-          margin: const EdgeInsets.only(bottom: 15),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            leading: const CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person, color: Colors.white),
+    return StreamBuilder(
+      stream: _artistService.getArtistStream(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                Icons.error,
+                size: 75,
+              ),
+              const SizedBox(height: 5.0),
+            ]),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+              ],
             ),
-            title: Text(t.gallery.tabArtists,
-              style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+          );
+        }
+
+        if (snapshot.data!.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.mood_bad,
+                  size: 75,
+                ),
+                const SizedBox(height: 5.0),
+              ],
             ),
-            subtitle: const Text('colocar o numero de obras'), 
-            // meu atributo vai trazer um jason artista nome e quantas obras
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
-            onTap: () {},
-          ),
+          );
+        }
+
+        return ListView(
+          children: snapshot.data!
+              .map<Widget>((artistData) => _buildArtistListItem(artistData, context))
+              .toList(),
         );
       },
     );
   }
 }
+
+Widget _buildArtistListItem(Map<String, dynamic> artistData, BuildContext context) {
+    return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEDEBE7),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+
+            leading: const CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.black12,
+              child: Icon(Icons.person, size: 18, color: Colors.black),
+            ),
+
+            // NOME DO ARTISTA (mesmo size do título da obra)
+            title: Text(
+              artistData["name"],
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+
+            // NÚMERO DE OBRAS (mesmo size do artista na obra)
+            subtitle: Text(
+              '3 obras', // depois vem do JSON
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey[600],
+              ),
+            ),
+
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 12,
+              color: Colors.black,
+            ),
+            onTap: () {},
+          ),
+        );
+  }

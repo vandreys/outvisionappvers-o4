@@ -1,6 +1,5 @@
 // widgets/language_switcher.dart
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:provider/provider.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -85,7 +84,7 @@ class LanguageSwitcher extends StatelessWidget {
                       children: [
                         Text(
                           languageDisplayName,
-                          style: GoogleFonts.montserrat(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,

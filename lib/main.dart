@@ -4,6 +4,7 @@ import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
+//import 'packpage:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

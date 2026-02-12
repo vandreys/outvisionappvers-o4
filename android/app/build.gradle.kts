@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -38,6 +39,10 @@ android {
 }
 
 dependencies {
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+    // Firebase Analytics (mínimo recomendado)
+    implementation("com.google.firebase:firebase-analytics")
     // AR + 3D (Filament + ARCore)
     implementation("io.github.sceneview:arsceneview:2.3.1")
     // Lifecycle para PlatformView

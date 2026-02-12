@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:outvisionxr/i18n/strings.g.dart'; // Para usar a fonte Montserrat
+import 'package:outvisionxr/i18n/strings.g.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -10,7 +9,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.about.pageTitle,
-          style: GoogleFonts.montserrat(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
             color: Colors.black, // Cor do texto do AppBar
@@ -37,7 +36,7 @@ class AboutPage extends StatelessWidget {
 
             // 2. Título Principal
             Text(t.about.mainTitle,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -47,7 +46,7 @@ class AboutPage extends StatelessWidget {
 
             // 3. Descrição Geral
             Text(t.about.pageTitle,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -57,7 +56,7 @@ class AboutPage extends StatelessWidget {
 
             // 4. Seção: Nossa Missão
             Text(t.about.missionTitle,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -65,7 +64,7 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(t.about.missionText,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -75,7 +74,7 @@ class AboutPage extends StatelessWidget {
 
             // 5. Seção: Nossa Visão
             Text(t.about.visionTitle,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -83,7 +82,7 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(t.about.visionText,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -93,7 +92,7 @@ class AboutPage extends StatelessWidget {
 
             // 6. Seção: Conecte-se Conosco (Exemplo de ícones sociais)
             Text(t.about.connectTitle,
-              style: GoogleFonts.montserrat(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -115,7 +114,7 @@ class AboutPage extends StatelessWidget {
             Center(
               child: Text(t.about.copyright,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(
+                style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
@@ -143,7 +142,7 @@ class AboutPage extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           label,
-          style: GoogleFonts.montserrat(
+          style: TextStyle(
             fontSize: 12,
             color: Colors.black87,
           ),

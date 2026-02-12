@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
@@ -15,7 +14,7 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Settings',
-          style: GoogleFonts.montserrat(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
             color: Colors.black,
@@ -33,15 +32,6 @@ class SettingsPage extends StatelessWidget {
             title: t.settings.getHelp,
             onTap: () {
               // Ação para ajuda
-            },
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          
-          _buildSettingsTile(
-            title: t.settings.appSettings,
-            onTap: () {
-              // Ação para configurações internas
             },
           ),
           
@@ -124,7 +114,7 @@ class SettingsPage extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.montserrat(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Colors.black,

@@ -274,7 +274,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                   Text(
                     t.map.loadingGps,
                     style: const TextStyle(
-                      fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -292,7 +291,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                           _locationError!,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontFamily: 'Montserrat',
+    
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -388,7 +387,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                               Text(
                                 _activeArtwork!.title,
                                 style: const TextStyle(
-                                  fontFamily: 'Montserrat',
+          
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),

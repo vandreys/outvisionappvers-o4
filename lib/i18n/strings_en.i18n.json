@@ -1,15 +1,16 @@
 {
   "gallery": {
-    "title": "Artwork",
-    "tabArtwork": "Exhibitions",
+    "title": "Exhibitions",
+    "tabArtwork": "Artwork",
     "tabArtists": "Artists",
     "artworkTitle": "The Garden of Earthly Delights",
     "artworkArtist": "Hieronymus Bosch",
-    "artistSubtitle": "Curitiba Biennial 2025"
+    "artistSubtitle": "Curitiba Biennial 2025",
+    "viewExhibition": "View exhibition"
   },
   "settings": {
     "title": "Settings",
-    "getHelp": "Get Help with the App",
+    "getHelp": "How to use the App",
     "appSettings": "App Settings",
     "language": "Language",
     "about": "About Out Vision",
