@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import android.widget.Toast
 
 class MainActivity : FlutterActivity() {
 
@@ -21,6 +22,20 @@ class MainActivity : FlutterActivity() {
                 arrayOf(Manifest.permission.CAMERA),
                 1001
             )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "A permissão de câmera é necessária para RA", Toast.LENGTH_LONG).show()
+                // Opcional: Fechar o app ou voltar para a tela anterior via FlutterEngine
+            }
         }
     }
 

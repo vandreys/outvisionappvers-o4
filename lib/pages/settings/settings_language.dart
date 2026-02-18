@@ -11,7 +11,7 @@ class LanguagePage extends StatelessWidget { // Mudado para StatelessWidget
     return Scaffold(
       backgroundColor: Colors.white, // Fundo branco da tela
       appBar: AppBar(
-        title: Text(t.languagePage.title,
+        title: Text(context.t.languagePage.title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

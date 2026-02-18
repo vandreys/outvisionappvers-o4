@@ -35,20 +35,26 @@
   },
   "languagePage": {
     "title": "Idioma",
-    "portuguese": "Português (Brasil)",
-    "english": "Inglês (EUA)",
-    "spanish": "Espanhol (Espanha)"
+    "portuguese": "Português",
+    "english": "Inglês",
+    "spanish": "Espanhol"
   },
   "map": {
     "loadingGps": "Buscando sinal de GPS...",
     "artworkLargo": "Obra AR: Largo da Ordem",
     "artworkMon": "Obra AR: MON",
-    "artworkOpera": "Obra AR: Ópera de Arame"
+    "artworkOpera": "Obra AR: Ópera de Arame",
+    "arrivedTitle": "Você chegou ao local da obra",
+    "openArButton": "Abrir Realidade aumentada"
   },
   "bottomNav": {
     "explore": "Explorar",
-    "gallery": "Obras",
-    "captured": "Obra AR: MON",
-    "settings": "Obra AR: Ópera de Arame"
+    "gallery": "Exposições",
+    "captured": "Capturados",
+    "settings": "Configurações"
+  },
+  "ar": {
+    "scanInstruction": "Escaneie o chão movendo o celular",
+    "tapToPlace": "Toque na tela para posicionar a obra"
   }
 }

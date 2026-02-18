@@ -35,23 +35,26 @@
   },
   "languagePage": {
     "title": "Idioma",
-    "portuguese": "Português (Brasil)",
-    "english": "Inglés (EE. UU.)",
-    "spanish": "Español (España)",
-    "french": "Francés (Francia)",
-    "german": "Alemán (Alemania)",
-    "chinese": "Chino (Simplificado)"
+    "portuguese": "Português",
+    "english": "Inglés",
+    "spanish": "Español"
   },
   "map": {
     "loadingGps": "Buscando señal de GPS...",
     "artworkLargo": "Obra RA: Largo da Ordem",
     "artworkMon": "Obra RA: MON",
-    "artworkOpera": "Obra RA: Ópera de Arame"
+    "artworkOpera": "Obra RA: Ópera de Arame",
+    "arrivedTitle": "Has llegado a la ubicación de la obra",
+    "openArButton": "Abrir Realidad aumentada"
   },
   "bottomNav": {
     "explore": "Explorar",
-    "gallery": "Galería",
+    "gallery": "Exposiciones",
     "captured": "Capturado",
     "settings": "Configuración"
+  },
+  "ar": {
+    "scanInstruction": "Escanea el suelo moviendo el móvil",
+    "tapToPlace": "Toca la pantalla para colocar la obra"
   }
 }

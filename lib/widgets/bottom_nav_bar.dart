@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/gallery_page.dart';
 import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/widgets/nav_item.dart';
@@ -14,7 +15,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
         // Explore - Index 0
         navItem(
           Icons.location_on, 
-          "Explore", 
+          context.t.bottomNav.explore, 
           currentIndex == 0, 
           currentIndex == 0 ? Colors.pinkAccent : Colors.grey, 
           () {
@@ -32,7 +33,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
         // Gallery - Index 1
         navItem(
           Icons.grid_view, 
-          "Artwork", 
+          context.t.bottomNav.gallery, 
           currentIndex == 1, 
           currentIndex == 1 ? Colors.pinkAccent : Colors.grey, 
           () {
@@ -49,7 +50,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
         // Settings - Index 3
         navItem(
           Icons.settings, 
-          "Settings", 
+          context.t.bottomNav.settings, 
           currentIndex == 3, 
           currentIndex == 3 ? Colors.pinkAccent : Colors.grey, 
           () {

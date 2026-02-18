@@ -24,7 +24,7 @@
         <!-- Google Maps / Geospatial -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="SUA_API_KEY_AQUI" />
+            android:value="AIzaSyD-6SfQ7dWgYzPwgI7LR31oV7AJINjPKUw" />
 
         <!-- ARCore como OPTIONAL -->
         <meta-data

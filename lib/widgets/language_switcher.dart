@@ -1,24 +1,11 @@
 // widgets/language_switcher.dart
 import 'package:flutter/material.dart';
-import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:provider/provider.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
 
 class LanguageSwitcher extends StatelessWidget {
   const LanguageSwitcher({super.key});
-
-  // Função auxiliar para obter um nome legível para o idioma
-  String _getLocaleName(AppLocale locale) {
-    switch (locale) {
-      case AppLocale.pt:
-        return 'Português (Brasil)';
-      case AppLocale.en:
-        return 'English';
-      case AppLocale.es:
-        return 'Español';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +14,12 @@ class LanguageSwitcher extends StatelessWidget {
         final currentAppLocale = languageProvider.currentLocale;
 
         final Map<AppLocale, String> languageDisplayMap = {
-          AppLocale.pt: _getLocaleName(AppLocale.pt),
-          AppLocale.en: _getLocaleName(AppLocale.en),
-          AppLocale.es: _getLocaleName(AppLocale.es),
+          AppLocale.pt: context.t.languagePage.portuguese,
+          AppLocale.en: context.t.languagePage.english,
+          AppLocale.es: context.t.languagePage.spanish,
         };
 
-        return Scaffold(
-          body: ListView.builder(
+        return ListView.builder(
             padding: const EdgeInsets.all(16.0),
             itemCount: languageDisplayMap.length,
             itemBuilder: (context, index) {
@@ -49,12 +35,6 @@ class LanguageSwitcher extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     languageProvider.setLocale(appLocale);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ExplorePage(),
-                      ),
-                    );
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -102,7 +82,6 @@ class LanguageSwitcher extends StatelessWidget {
                 ),
               );
             },
-          ),
         );
       },
     );

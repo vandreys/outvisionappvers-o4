@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           // Começamos direto com as opções de suporte e ajustes
           _buildSettingsTile(
-            title: t.settings.getHelp,
+            title: context.t.settings.getHelp,
             onTap: () {
               // Ação para ajuda
             },
@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: t.settings.language,
+            title: context.t.settings.language,
             onTap: () {
               // NAVEGAÇÃO PARA A PÁGINA DE SELEÇÃO DE IDIOMA
               Navigator.push(
@@ -51,7 +51,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: t.settings.about,
+            title: context.t.settings.about,
             onTap: () {
                   // NAVEGAÇÃO PARA A PÁGINA "ABOUT OUTVISION"
                   Navigator.push(
@@ -65,7 +65,7 @@ class SettingsPage extends StatelessWidget {
           
           // Itens com ícone de link externo (Imprint, Privacy, Terms)
           _buildSettingsTile(
-            title: t.settings.imprint,
+            title: context.t.settings.imprint,
             isExternal: true,
             onTap: () {
               // Abrir link externo
@@ -75,7 +75,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: t.settings.privacyPolicy,
+            title: context.t.settings.privacyPolicy,
             isExternal: true,
             onTap: () {
               // Abrir link externo
@@ -85,7 +85,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
           
           _buildSettingsTile(
-            title: t.settings.termsOfUse,
+            title: context.t.settings.termsOfUse,
             isExternal: true,
             onTap: () {
               // Abrir link externo

@@ -35,20 +35,26 @@
   },
   "languagePage": {
     "title": "Language",
-    "portuguese": "Português (Brasil)",
-    "english": "English (US)",
-    "spanish": "Español (España)"
+    "portuguese": "Português",
+    "english": "English",
+    "spanish": "Español"
   },
   "map": {
     "loadingGps": "Searching for GPS signal...",
     "artworkLargo": "AR Artwork: Largo da Ordem",
     "artworkMon": "AR Artwork: MON",
-    "artworkOpera": "AR Artwork: Ópera de Arame"
+    "artworkOpera": "AR Artwork: Ópera de Arame",
+    "arrivedTitle": "You have arrived at the artwork location",
+    "openArButton": "Open Augmented Reality"
   },
   "bottomNav": {
     "explore": "Explore",
-    "gallery": "Gallery",
+    "gallery": "Exhibitions",
     "captured": "Captured",
     "settings": "Settings"
+  },
+  "ar": {
+    "scanInstruction": "Scan the floor by moving your phone",
+    "tapToPlace": "Tap on screen to place artwork"
   }
 }

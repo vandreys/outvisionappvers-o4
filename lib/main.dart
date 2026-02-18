@@ -40,7 +40,6 @@ class OutvisionApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
 
-        // FORÇA INTER EM TODO O APP
         fontFamily: GoogleFonts.inter().fontFamily,
 
         // TextTheme compatível com Material 3

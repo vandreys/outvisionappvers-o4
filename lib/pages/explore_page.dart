@@ -9,6 +9,7 @@ import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
+import 'package:outvisionxr/widgets/artwork_proximity_card.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -21,7 +22,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
-  final Set<Marker> _markers = <Marker>{};
+  Set<Marker> _markers = <Marker>{};
   StreamSubscription<Position>? _positionStream;
 
   bool _isLoading = true;
@@ -31,7 +32,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   ArtworkPoint? _activeArtwork;
   bool _gateOpen = false;
   DateTime? _enteredRadiusAt;
-  late final List<ArtworkPoint> _artworks;
+  List<ArtworkPoint> _artworks = [];
+  Map<String, dynamic>? _nearbyArtwork;
 
   // Config do gate
   static const int _minDwellSeconds = 3;
@@ -42,6 +44,23 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   void initState() {
     super.initState();
 
+    _initLocationService();
+  }
+
+  @override
+  void dispose() {
+    _positionStream?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Atualiza as obras e marcadores sempre que as dependências (como idioma) mudam
+    _updateArtworksData();
+  }
+
+  void _updateArtworksData() {
     _artworks = [
       ArtworkPoint(
         id: 'obra_largo',
@@ -65,15 +84,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         arrivalRadiusMeters: _entryRadiusMeters,
       ),
     ];
-
-    _initLocationService();
-    _addBienalMarkers();
-  }
-
-  @override
-  void dispose() {
-    _positionStream?.cancel();
-    super.dispose();
+    _updateMarkers();
   }
 
   Future<void> _initLocationService() async {
@@ -168,9 +179,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       (Position position) {
         if (!mounted) return;
 
-        setState(() {
-          _currentPosition = LatLng(position.latitude, position.longitude);
-        });
+        // OTIMIZAÇÃO: Atualizamos a variável sem setState para evitar rebuilds desnecessários do Mapa.
+        _currentPosition = LatLng(position.latitude, position.longitude);
 
         // ✅ Não move mais a câmera automaticamente (evita “grudar”)
         // _moveCameraToPosition(_currentPosition!);
@@ -206,6 +216,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
           setState(() {
             _gateOpen = true;
             _activeArtwork = nearest;
+            _nearbyArtwork = {
+              'id': nearest.id,
+              'name': nearest.title,
+              // 'imageUrl': '', // Futuramente você preencherá isso com dados do Firebase
+            };
           });
         }
       } else {
@@ -220,6 +235,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         _gateOpen = false;
         _activeArtwork = null;
         _enteredRadiusAt = null;
+        _nearbyArtwork = null;
       });
     }
   }
@@ -229,27 +245,18 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     controller.animateCamera(CameraUpdate.newLatLngZoom(position, 17.0));
   }
 
-  void _addBienalMarkers() {
-    _markers.addAll([
-      Marker(
-        markerId: const MarkerId('obra_largo'),
-        position: const LatLng(-25.42776745339319, -49.2722254193995),
-        infoWindow: InfoWindow(title: t.map.artworkLargo),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
-      ),
-      Marker(
-        markerId: const MarkerId('Primeira Obra'),
-        position: const LatLng(-25.431707398660244, -49.28053248220991),
-        infoWindow: InfoWindow(title: t.map.artworkMon),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
-      ),
-      Marker(
-        markerId: const MarkerId('obra_opera'),
-        position: const LatLng(-25.384375553058913, -49.27629471973898),
-        infoWindow: InfoWindow(title: t.map.artworkOpera),
-        icon: BitmapDescriptor.defaultMarkerWithHue(300.0),
-      ),
-    ]);
+  void _updateMarkers() {
+    // Recria o Set de marcadores para garantir que o Google Maps detecte a mudança
+    setState(() {
+      _markers = _artworks.map((artwork) {
+      return Marker(
+        markerId: MarkerId(artwork.id),
+        position: LatLng(artwork.lat, artwork.lng),
+        infoWindow: InfoWindow(title: artwork.title),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      );
+      }).toSet();
+    });
   }
 
   void _openArViewNow() {
@@ -358,56 +365,20 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       ),
                     ),
 
-                    if (_gateOpen && _activeArtwork != null)
+                    if (_nearbyArtwork != null)
                       Positioned(
-                        left: 20,
-                        right: 20,
-                        bottom: 110,
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'You arrived at the location of the artwork',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                _activeArtwork!.title,
-                                style: const TextStyle(
-          
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                width: double.infinity,
-                                height: 44,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  ),
-                                  onPressed: _openArViewNow,
-                                  child: const Text('OPEN AR VIEW NOW'),
-                                ),
-                              ),
-                            ],
-                          ),
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: ArtworkProximityCard(
+                          artworkData: _nearbyArtwork!,
+                          onClose: () {
+                            setState(() => _nearbyArtwork = null);
+                          },
+                          onOpenAr: () {
+                            _openArViewNow();
+                            setState(() => _nearbyArtwork = null);
+                          },
                         ),
                       ),
                   ],

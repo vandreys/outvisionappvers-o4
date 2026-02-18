@@ -250,6 +250,10 @@ class ArPlatformView(
         val androidAssetPath = "flutter_assets/$flutterAssetPath"
         val outFile = File(context.cacheDir, outFileName)
 
+        if (outFile.exists()) {
+            return outFile
+        }
+
         context.assets.open(androidAssetPath).use { input ->
             FileOutputStream(outFile).use { output ->
                 input.copyTo(output)

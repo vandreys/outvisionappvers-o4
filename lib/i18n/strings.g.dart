@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 123 (41 per locale)
+/// Strings: 132 (44 per locale)
 ///
-/// Built on 2026-02-06 at 18:18 UTC
+/// Built on 2026-02-18 at 08:49 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -155,6 +155,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsLanguagePageEn languagePage = _StringsLanguagePageEn._(_root);
 	late final _StringsMapEn map = _StringsMapEn._(_root);
 	late final _StringsBottomNavEn bottomNav = _StringsBottomNavEn._(_root);
+	late final _StringsArEn ar = _StringsArEn._(_root);
 }
 
 // Path: gallery
@@ -220,9 +221,9 @@ class _StringsLanguagePageEn {
 
 	// Translations
 	String get title => 'Language';
-	String get portuguese => 'Português (Brasil)';
-	String get english => 'English (US)';
-	String get spanish => 'Español (España)';
+	String get portuguese => 'Português';
+	String get english => 'English';
+	String get spanish => 'Español';
 }
 
 // Path: map
@@ -236,6 +237,8 @@ class _StringsMapEn {
 	String get artworkLargo => 'AR Artwork: Largo da Ordem';
 	String get artworkMon => 'AR Artwork: MON';
 	String get artworkOpera => 'AR Artwork: Ópera de Arame';
+	String get arrivedTitle => 'You have arrived at the artwork location';
+	String get openArButton => 'Open Augmented Reality';
 }
 
 // Path: bottomNav
@@ -246,9 +249,20 @@ class _StringsBottomNavEn {
 
 	// Translations
 	String get explore => 'Explore';
-	String get gallery => 'Gallery';
+	String get gallery => 'Exhibitions';
 	String get captured => 'Captured';
 	String get settings => 'Settings';
+}
+
+// Path: ar
+class _StringsArEn {
+	_StringsArEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get scanInstruction => 'Scan the floor by moving your phone';
+	String get tapToPlace => 'Tap on screen to place artwork';
 }
 
 // Path: <root>
@@ -281,6 +295,7 @@ class _StringsEs implements Translations {
 	@override late final _StringsLanguagePageEs languagePage = _StringsLanguagePageEs._(_root);
 	@override late final _StringsMapEs map = _StringsMapEs._(_root);
 	@override late final _StringsBottomNavEs bottomNav = _StringsBottomNavEs._(_root);
+	@override late final _StringsArEs ar = _StringsArEs._(_root);
 }
 
 // Path: gallery
@@ -346,12 +361,9 @@ class _StringsLanguagePageEs implements _StringsLanguagePageEn {
 
 	// Translations
 	@override String get title => 'Idioma';
-	@override String get portuguese => 'Português (Brasil)';
-	@override String get english => 'Inglés (EE. UU.)';
-	@override String get spanish => 'Español (España)';
-	@override String get french => 'Francés (Francia)';
-	@override String get german => 'Alemán (Alemania)';
-	@override String get chinese => 'Chino (Simplificado)';
+	@override String get portuguese => 'Português';
+	@override String get english => 'Inglés';
+	@override String get spanish => 'Español';
 }
 
 // Path: map
@@ -365,6 +377,8 @@ class _StringsMapEs implements _StringsMapEn {
 	@override String get artworkLargo => 'Obra RA: Largo da Ordem';
 	@override String get artworkMon => 'Obra RA: MON';
 	@override String get artworkOpera => 'Obra RA: Ópera de Arame';
+	@override String get arrivedTitle => 'Has llegado a la ubicación de la obra';
+	@override String get openArButton => 'Abrir Realidad aumentada';
 }
 
 // Path: bottomNav
@@ -375,9 +389,20 @@ class _StringsBottomNavEs implements _StringsBottomNavEn {
 
 	// Translations
 	@override String get explore => 'Explorar';
-	@override String get gallery => 'Galería';
+	@override String get gallery => 'Exposiciones';
 	@override String get captured => 'Capturado';
 	@override String get settings => 'Configuración';
+}
+
+// Path: ar
+class _StringsArEs implements _StringsArEn {
+	_StringsArEs._(this._root);
+
+	@override final _StringsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get scanInstruction => 'Escanea el suelo moviendo el móvil';
+	@override String get tapToPlace => 'Toca la pantalla para colocar la obra';
 }
 
 // Path: <root>
@@ -410,6 +435,7 @@ class _StringsPt implements Translations {
 	@override late final _StringsLanguagePagePt languagePage = _StringsLanguagePagePt._(_root);
 	@override late final _StringsMapPt map = _StringsMapPt._(_root);
 	@override late final _StringsBottomNavPt bottomNav = _StringsBottomNavPt._(_root);
+	@override late final _StringsArPt ar = _StringsArPt._(_root);
 }
 
 // Path: gallery
@@ -475,9 +501,9 @@ class _StringsLanguagePagePt implements _StringsLanguagePageEn {
 
 	// Translations
 	@override String get title => 'Idioma';
-	@override String get portuguese => 'Português (Brasil)';
-	@override String get english => 'Inglês (EUA)';
-	@override String get spanish => 'Espanhol (Espanha)';
+	@override String get portuguese => 'Português';
+	@override String get english => 'Inglês';
+	@override String get spanish => 'Espanhol';
 }
 
 // Path: map
@@ -491,6 +517,8 @@ class _StringsMapPt implements _StringsMapEn {
 	@override String get artworkLargo => 'Obra AR: Largo da Ordem';
 	@override String get artworkMon => 'Obra AR: MON';
 	@override String get artworkOpera => 'Obra AR: Ópera de Arame';
+	@override String get arrivedTitle => 'Você chegou ao local da obra';
+	@override String get openArButton => 'Abrir Realidade aumentada';
 }
 
 // Path: bottomNav
@@ -501,9 +529,20 @@ class _StringsBottomNavPt implements _StringsBottomNavEn {
 
 	// Translations
 	@override String get explore => 'Explorar';
-	@override String get gallery => 'Obras';
-	@override String get captured => 'Obra AR: MON';
-	@override String get settings => 'Obra AR: Ópera de Arame';
+	@override String get gallery => 'Exposições';
+	@override String get captured => 'Capturados';
+	@override String get settings => 'Configurações';
+}
+
+// Path: ar
+class _StringsArPt implements _StringsArEn {
+	_StringsArPt._(this._root);
+
+	@override final _StringsPt _root; // ignore: unused_field
+
+	// Translations
+	@override String get scanInstruction => 'Escaneie o chão movendo o celular';
+	@override String get tapToPlace => 'Toque na tela para posicionar a obra';
 }
 
 /// Flat map(s) containing all translations.
@@ -541,17 +580,21 @@ extension on Translations {
 			case 'about.share': return 'Share';
 			case 'about.copyright': return 'Outvision XR © 2025. All rights reserved.';
 			case 'languagePage.title': return 'Language';
-			case 'languagePage.portuguese': return 'Português (Brasil)';
-			case 'languagePage.english': return 'English (US)';
-			case 'languagePage.spanish': return 'Español (España)';
+			case 'languagePage.portuguese': return 'Português';
+			case 'languagePage.english': return 'English';
+			case 'languagePage.spanish': return 'Español';
 			case 'map.loadingGps': return 'Searching for GPS signal...';
 			case 'map.artworkLargo': return 'AR Artwork: Largo da Ordem';
 			case 'map.artworkMon': return 'AR Artwork: MON';
 			case 'map.artworkOpera': return 'AR Artwork: Ópera de Arame';
+			case 'map.arrivedTitle': return 'You have arrived at the artwork location';
+			case 'map.openArButton': return 'Open Augmented Reality';
 			case 'bottomNav.explore': return 'Explore';
-			case 'bottomNav.gallery': return 'Gallery';
+			case 'bottomNav.gallery': return 'Exhibitions';
 			case 'bottomNav.captured': return 'Captured';
 			case 'bottomNav.settings': return 'Settings';
+			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
+			case 'ar.tapToPlace': return 'Tap on screen to place artwork';
 			default: return null;
 		}
 	}
@@ -589,20 +632,21 @@ extension on _StringsEs {
 			case 'about.share': return 'Compartir';
 			case 'about.copyright': return 'Outvision XR © 2025. Todos los derechos reservados.';
 			case 'languagePage.title': return 'Idioma';
-			case 'languagePage.portuguese': return 'Português (Brasil)';
-			case 'languagePage.english': return 'Inglés (EE. UU.)';
-			case 'languagePage.spanish': return 'Español (España)';
-			case 'languagePage.french': return 'Francés (Francia)';
-			case 'languagePage.german': return 'Alemán (Alemania)';
-			case 'languagePage.chinese': return 'Chino (Simplificado)';
+			case 'languagePage.portuguese': return 'Português';
+			case 'languagePage.english': return 'Inglés';
+			case 'languagePage.spanish': return 'Español';
 			case 'map.loadingGps': return 'Buscando señal de GPS...';
 			case 'map.artworkLargo': return 'Obra RA: Largo da Ordem';
 			case 'map.artworkMon': return 'Obra RA: MON';
 			case 'map.artworkOpera': return 'Obra RA: Ópera de Arame';
+			case 'map.arrivedTitle': return 'Has llegado a la ubicación de la obra';
+			case 'map.openArButton': return 'Abrir Realidad aumentada';
 			case 'bottomNav.explore': return 'Explorar';
-			case 'bottomNav.gallery': return 'Galería';
+			case 'bottomNav.gallery': return 'Exposiciones';
 			case 'bottomNav.captured': return 'Capturado';
 			case 'bottomNav.settings': return 'Configuración';
+			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
+			case 'ar.tapToPlace': return 'Toca la pantalla para colocar la obra';
 			default: return null;
 		}
 	}
@@ -640,17 +684,21 @@ extension on _StringsPt {
 			case 'about.share': return 'Compartilhar';
 			case 'about.copyright': return 'Outvision XR © 2025. Todos os direitos reservados.';
 			case 'languagePage.title': return 'Idioma';
-			case 'languagePage.portuguese': return 'Português (Brasil)';
-			case 'languagePage.english': return 'Inglês (EUA)';
-			case 'languagePage.spanish': return 'Espanhol (Espanha)';
+			case 'languagePage.portuguese': return 'Português';
+			case 'languagePage.english': return 'Inglês';
+			case 'languagePage.spanish': return 'Espanhol';
 			case 'map.loadingGps': return 'Buscando sinal de GPS...';
 			case 'map.artworkLargo': return 'Obra AR: Largo da Ordem';
 			case 'map.artworkMon': return 'Obra AR: MON';
 			case 'map.artworkOpera': return 'Obra AR: Ópera de Arame';
+			case 'map.arrivedTitle': return 'Você chegou ao local da obra';
+			case 'map.openArButton': return 'Abrir Realidade aumentada';
 			case 'bottomNav.explore': return 'Explorar';
-			case 'bottomNav.gallery': return 'Obras';
-			case 'bottomNav.captured': return 'Obra AR: MON';
-			case 'bottomNav.settings': return 'Obra AR: Ópera de Arame';
+			case 'bottomNav.gallery': return 'Exposições';
+			case 'bottomNav.captured': return 'Capturados';
+			case 'bottomNav.settings': return 'Configurações';
+			case 'ar.scanInstruction': return 'Escaneie o chão movendo o celular';
+			case 'ar.tapToPlace': return 'Toque na tela para posicionar a obra';
 			default: return null;
 		}
 	}

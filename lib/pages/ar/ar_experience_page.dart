@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
@@ -160,7 +162,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
 
         setState(() {
           _status = ArRuntimeStatus.error;
-          _errorMessage = 'Falha ao receber eventos do AR.';
+          _errorMessage = 'Falha ao receber eventos de Realidade Aumentada.';
         });
       },
     );
@@ -176,78 +178,89 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
   void _openHelp() {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text(
-          'Ajuda',
-          style: TextStyle(fontWeight: FontWeight.bold),
+      barrierColor: Colors.transparent, // To see the blur
+      builder: (_) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: AlertDialog(
+          backgroundColor: const Color(0xFF2C2C2E).withOpacity(0.9),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+          title: const Text(
+            'Ajuda',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          content: Text(
+            'Mova o aparelho lentamente e aponte para o ambiente para melhorar a localização.',
+            style: TextStyle(color: Colors.white.withOpacity(0.8)),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+          ],
         ),
-        content: const Text(
-          'Mova o celular lentamente e aponte para o ambiente para melhorar a localização.'
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
-        ],
       ),
     );
   }
 
   Widget _cameraPermissionOverlay() {
     return Positioned.fill(
-      child: Container(
-        color: Colors.black,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Permissão necessária',
-                style: TextStyle(fontWeight: FontWeight.bold),
+          color: Colors.black.withOpacity(0.5),
+          child: Center(
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C1C1E),
+                borderRadius: BorderRadius.circular(28),
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'Precisamos de câmera e localização para abrir o AR.',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 14),
-              SizedBox(
-                width: double.infinity,
-                height: 44,
-                child: ElevatedButton(
-                  onPressed: _checkArPermissions,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
-                  child: const Text('Permitir'),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                height: 44,
-                child: ElevatedButton(
-                  onPressed: () => openAppSettings(),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
-                  child: const Text('Abrir configurações'),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                height: 44,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    side: const BorderSide(color: Colors.black12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 40),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Permissões Necessárias',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                   ),
-                  child: const Text('Voltar'),
-                ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Para visualizar a obra, precisamos de acesso à sua câmera e localização.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _checkArPermissions,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      child: const Text('Permitir Acesso', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      'Agora não',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -276,20 +289,58 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
               ),
             ),
           Positioned(
-            top: topPadding + 16,
-            left: 16,
-            child: roundedSquareButton(Icons.close, Colors.black, () => Navigator.pop(context)),
+            top: topPadding + 12,
+            left: 12,
+            child: _GlassmorphicButton(
+              icon: Icons.close,
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
           Positioned(
-            top: topPadding + 16,
-            right: 16,
-            child: roundedSquareButton(Icons.help_outline, Colors.black, _openHelp),
+            top: topPadding + 12,
+            right: 12,
+            child: _GlassmorphicButton(
+              icon: Icons.help_outline,
+              onPressed: _openHelp,
+            ),
           ),
-          if (_cameraGranted && !_onboardingDone) _OnboardingOverlay(onStart: _completeOnboarding),
-          if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
+          if (_cameraGranted && !_onboardingDone)
+            _OnboardingOverlay(onStart: _completeOnboarding),
+          if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) _LocalizingOverlay(),
           if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.error)
-            _ErrorOverlay(message: _errorMessage ?? 'Erro no AR'),
+            _ErrorOverlay(message: _errorMessage ?? 'Erro na Realidade Aumentada.'),
         ],
+      ),
+    );
+  }
+}
+
+class _GlassmorphicButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _GlassmorphicButton({required this.icon, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+          ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(icon, color: Colors.white, size: 24),
+            onPressed: onPressed,
+          ),
+        ),
       ),
     );
   }
@@ -339,7 +390,7 @@ class _ARPlatformView extends StatelessWidget {
     }
 
     return const Center(
-      child: Text('AR não suportado nesta plataforma', style: TextStyle(color: Colors.white)),
+      child: Text('Realidade Aumentada não suportada nesta plataforma', style: TextStyle(color: Colors.white)),
     );
   }
 }
@@ -352,53 +403,61 @@ class _OnboardingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Container(
-        color: Colors.black.withValues(alpha: 0.65),
-        child: Center(
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 24),
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Scan the floor in front of you.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Mova o celular lentamente para ajudar o AR a se localizar.',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 44,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      elevation: 0,
-                    ),
-                    onPressed: onStart,
-                    child: const Text(
-                      'Got it, let’s start →',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          color: Colors.black.withOpacity(0.5),
+          child: Center(
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C1C1E), // Dark grey, iOS-like
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.t.ar.scanInstruction,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Text(
+                    'Mova o aparelho lentamente para ajudar a Obra a se localizar.', // This should be translated
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                      ),
+                      onPressed: onStart,
+                      child: const Text(
+                        'Entendi, vamos começar', // This should be translated
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -414,39 +473,32 @@ class _LocalizingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: IgnorePointer(
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 28),
-          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.25)),
+        child: Center(
           child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.92),
-              borderRadius: BorderRadius.circular(18),
+              color: Colors.black.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(100), // Pill shape
             ),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Scan the floor',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.black,
+            child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  'Scan the floor in front of you to place the artwork.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                  const SizedBox(width: 16),
+                  Text(
+                    context.t.ar.scanInstruction,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ),
         ),
       ),
@@ -463,36 +515,50 @@ class _ErrorOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withValues(alpha: 0.65),
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(24),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Erro no AR',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 14),
-              SizedBox(
-                width: double.infinity,
-                height: 44,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
-                  child: const Text('Voltar'),
+        color: Colors.black.withOpacity(0.7),
+        child: Center(
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1C1C1E),
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.redAccent, size: 40),
+                const SizedBox(height: 16),
+                const Text(
+                  'Ocorreu um Erro', // Should be translated
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    child: const Text(
+                      'Voltar', // Should be translated
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
