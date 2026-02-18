@@ -152,7 +152,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
 
           setState(() {
             _status = ArRuntimeStatus.error;
-            _errorMessage = message ?? 'Erro no AR.';
+            _errorMessage = message ?? context.t.ar.genericError;
           });
         }
       },
@@ -162,7 +162,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
 
         setState(() {
           _status = ArRuntimeStatus.error;
-          _errorMessage = 'Falha ao receber eventos de Realidade Aumentada.';
+          _errorMessage = context.t.ar.eventsError;
         });
       },
     );
@@ -184,18 +184,18 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
         child: AlertDialog(
           backgroundColor: const Color(0xFF2C2C2E).withOpacity(0.9),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-          title: const Text(
-            'Ajuda',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          title: Text(
+            context.t.ar.helpTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           content: Text(
-            'Mova o aparelho lentamente e aponte para o ambiente para melhorar a localização.',
+            context.t.ar.helpContent,
             style: TextStyle(color: Colors.white.withOpacity(0.8)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: Text(context.t.ar.ok, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -223,13 +223,13 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                 children: [
                   const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 40),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Permissões Necessárias',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                  Text(
+                    context.t.ar.permissionTitle,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Para visualizar a obra, precisamos de acesso à sua câmera e localização.',
+                    context.t.ar.permissionContent,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
                   ),
@@ -244,14 +244,14 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      child: const Text('Permitir Acesso', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: Text(context.t.ar.allowAccess, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
                   const SizedBox(height: 12),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      'Agora não',
+                      context.t.ar.notNow,
                       style: TextStyle(
                         color: Colors.white.withOpacity(0.7),
                         fontWeight: FontWeight.w500,
@@ -308,7 +308,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
             _OnboardingOverlay(onStart: _completeOnboarding),
           if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.localizing) _LocalizingOverlay(),
           if (_cameraGranted && _onboardingDone && _status == ArRuntimeStatus.error)
-            _ErrorOverlay(message: _errorMessage ?? 'Erro na Realidade Aumentada.'),
+            _ErrorOverlay(message: _errorMessage ?? context.t.ar.genericError),
         ],
       ),
     );
@@ -389,8 +389,8 @@ class _ARPlatformView extends StatelessWidget {
       );
     }
 
-    return const Center(
-      child: Text('Realidade Aumentada não suportada nesta plataforma', style: TextStyle(color: Colors.white)),
+    return Center(
+      child: Text(context.t.ar.unsupported, style: const TextStyle(color: Colors.white)),
     );
   }
 }
@@ -430,7 +430,7 @@ class _OnboardingOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Mova o aparelho lentamente para ajudar a Obra a se localizar.', // This should be translated
+                    context.t.ar.onboardingContent,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
@@ -450,9 +450,9 @@ class _OnboardingOverlay extends StatelessWidget {
                         elevation: 0,
                       ),
                       onPressed: onStart,
-                      child: const Text(
-                        'Entendi, vamos começar', // This should be translated
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      child: Text(
+                        context.t.ar.onboardingButton,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   ),
@@ -530,9 +530,9 @@ class _ErrorOverlay extends StatelessWidget {
               children: [
                 const Icon(Icons.error_outline, color: Colors.redAccent, size: 40),
                 const SizedBox(height: 16),
-                const Text(
-                  'Ocorreu um Erro', // Should be translated
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                Text(
+                  context.t.ar.errorTitle,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -551,9 +551,9 @@ class _ErrorOverlay extends StatelessWidget {
                       foregroundColor: Colors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
-                    child: const Text(
-                      'Voltar', // Should be translated
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    child: Text(
+                      context.t.ar.backButton,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
                 ),

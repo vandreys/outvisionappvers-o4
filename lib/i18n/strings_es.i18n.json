@@ -55,6 +55,20 @@
   },
   "ar": {
     "scanInstruction": "Escanea el suelo moviendo el móvil",
-    "tapToPlace": "Toca la pantalla para colocar la obra"
+    "tapToPlace": "Toca la pantalla para colocar la obra",
+    "helpTitle": "Ayuda",
+    "helpContent": "Mueve el dispositivo lentamente y apunta al entorno para mejorar la localización.",
+    "ok": "OK",
+    "permissionTitle": "Permisos Necesarios",
+    "permissionContent": "Para ver la obra, necesitamos acceso a tu cámara y ubicación.",
+    "allowAccess": "Permitir Acceso",
+    "notNow": "Ahora no",
+    "onboardingContent": "Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.",
+    "onboardingButton": "Entendido, empecemos",
+    "errorTitle": "Ocurrió un Error",
+    "backButton": "Volver",
+    "genericError": "Error de Realidad Aumentada.",
+    "eventsError": "Fallo al recibir eventos de Realidad Aumentada.",
+    "unsupported": "Realidad Aumentada no soportada en esta plataforma"
   }
 }

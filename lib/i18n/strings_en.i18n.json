@@ -55,6 +55,20 @@
   },
   "ar": {
     "scanInstruction": "Scan the floor by moving your phone",
-    "tapToPlace": "Tap on screen to place artwork"
+    "tapToPlace": "Tap on screen to place artwork",
+    "helpTitle": "Help",
+    "helpContent": "Move your device slowly and point at the surroundings to improve localization.",
+    "ok": "OK",
+    "permissionTitle": "Permissions Required",
+    "permissionContent": "To view the artwork, we need access to your camera and location.",
+    "allowAccess": "Allow Access",
+    "notNow": "Not now",
+    "onboardingContent": "Move your device slowly to help the Artwork localize itself.",
+    "onboardingButton": "Got it, let's start",
+    "errorTitle": "An Error Occurred",
+    "backButton": "Back",
+    "genericError": "Augmented Reality Error.",
+    "eventsError": "Failed to receive Augmented Reality events.",
+    "unsupported": "Augmented Reality not supported on this platform"
   }
 }

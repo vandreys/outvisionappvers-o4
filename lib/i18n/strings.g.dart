@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 132 (44 per locale)
+/// Strings: 174 (58 per locale)
 ///
-/// Built on 2026-02-18 at 08:49 UTC
+/// Built on 2026-02-18 at 09:44 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -263,6 +263,20 @@ class _StringsArEn {
 	// Translations
 	String get scanInstruction => 'Scan the floor by moving your phone';
 	String get tapToPlace => 'Tap on screen to place artwork';
+	String get helpTitle => 'Help';
+	String get helpContent => 'Move your device slowly and point at the surroundings to improve localization.';
+	String get ok => 'OK';
+	String get permissionTitle => 'Permissions Required';
+	String get permissionContent => 'To view the artwork, we need access to your camera and location.';
+	String get allowAccess => 'Allow Access';
+	String get notNow => 'Not now';
+	String get onboardingContent => 'Move your device slowly to help the Artwork localize itself.';
+	String get onboardingButton => 'Got it, let\'s start';
+	String get errorTitle => 'An Error Occurred';
+	String get backButton => 'Back';
+	String get genericError => 'Augmented Reality Error.';
+	String get eventsError => 'Failed to receive Augmented Reality events.';
+	String get unsupported => 'Augmented Reality not supported on this platform';
 }
 
 // Path: <root>
@@ -403,6 +417,20 @@ class _StringsArEs implements _StringsArEn {
 	// Translations
 	@override String get scanInstruction => 'Escanea el suelo moviendo el móvil';
 	@override String get tapToPlace => 'Toca la pantalla para colocar la obra';
+	@override String get helpTitle => 'Ayuda';
+	@override String get helpContent => 'Mueve el dispositivo lentamente y apunta al entorno para mejorar la localización.';
+	@override String get ok => 'OK';
+	@override String get permissionTitle => 'Permisos Necesarios';
+	@override String get permissionContent => 'Para ver la obra, necesitamos acceso a tu cámara y ubicación.';
+	@override String get allowAccess => 'Permitir Acceso';
+	@override String get notNow => 'Ahora no';
+	@override String get onboardingContent => 'Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.';
+	@override String get onboardingButton => 'Entendido, empecemos';
+	@override String get errorTitle => 'Ocurrió un Error';
+	@override String get backButton => 'Volver';
+	@override String get genericError => 'Error de Realidad Aumentada.';
+	@override String get eventsError => 'Fallo al recibir eventos de Realidad Aumentada.';
+	@override String get unsupported => 'Realidad Aumentada no soportada en esta plataforma';
 }
 
 // Path: <root>
@@ -543,6 +571,20 @@ class _StringsArPt implements _StringsArEn {
 	// Translations
 	@override String get scanInstruction => 'Escaneie o chão movendo o celular';
 	@override String get tapToPlace => 'Toque na tela para posicionar a obra';
+	@override String get helpTitle => 'Ajuda';
+	@override String get helpContent => 'Mova o aparelho lentamente e aponte para o ambiente para melhorar a localização.';
+	@override String get ok => 'OK';
+	@override String get permissionTitle => 'Permissões Necessárias';
+	@override String get permissionContent => 'Para visualizar a obra, precisamos de acesso à sua câmera e localização.';
+	@override String get allowAccess => 'Permitir Acesso';
+	@override String get notNow => 'Agora não';
+	@override String get onboardingContent => 'Mova o aparelho lentamente para ajudar a Obra a se localizar.';
+	@override String get onboardingButton => 'Entendi, vamos começar';
+	@override String get errorTitle => 'Ocorreu um Erro';
+	@override String get backButton => 'Voltar';
+	@override String get genericError => 'Erro na Realidade Aumentada.';
+	@override String get eventsError => 'Falha ao receber eventos de Realidade Aumentada.';
+	@override String get unsupported => 'Realidade Aumentada não suportada nesta plataforma';
 }
 
 /// Flat map(s) containing all translations.
@@ -595,6 +637,20 @@ extension on Translations {
 			case 'bottomNav.settings': return 'Settings';
 			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
 			case 'ar.tapToPlace': return 'Tap on screen to place artwork';
+			case 'ar.helpTitle': return 'Help';
+			case 'ar.helpContent': return 'Move your device slowly and point at the surroundings to improve localization.';
+			case 'ar.ok': return 'OK';
+			case 'ar.permissionTitle': return 'Permissions Required';
+			case 'ar.permissionContent': return 'To view the artwork, we need access to your camera and location.';
+			case 'ar.allowAccess': return 'Allow Access';
+			case 'ar.notNow': return 'Not now';
+			case 'ar.onboardingContent': return 'Move your device slowly to help the Artwork localize itself.';
+			case 'ar.onboardingButton': return 'Got it, let\'s start';
+			case 'ar.errorTitle': return 'An Error Occurred';
+			case 'ar.backButton': return 'Back';
+			case 'ar.genericError': return 'Augmented Reality Error.';
+			case 'ar.eventsError': return 'Failed to receive Augmented Reality events.';
+			case 'ar.unsupported': return 'Augmented Reality not supported on this platform';
 			default: return null;
 		}
 	}
@@ -647,6 +703,20 @@ extension on _StringsEs {
 			case 'bottomNav.settings': return 'Configuración';
 			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
 			case 'ar.tapToPlace': return 'Toca la pantalla para colocar la obra';
+			case 'ar.helpTitle': return 'Ayuda';
+			case 'ar.helpContent': return 'Mueve el dispositivo lentamente y apunta al entorno para mejorar la localización.';
+			case 'ar.ok': return 'OK';
+			case 'ar.permissionTitle': return 'Permisos Necesarios';
+			case 'ar.permissionContent': return 'Para ver la obra, necesitamos acceso a tu cámara y ubicación.';
+			case 'ar.allowAccess': return 'Permitir Acceso';
+			case 'ar.notNow': return 'Ahora no';
+			case 'ar.onboardingContent': return 'Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.';
+			case 'ar.onboardingButton': return 'Entendido, empecemos';
+			case 'ar.errorTitle': return 'Ocurrió un Error';
+			case 'ar.backButton': return 'Volver';
+			case 'ar.genericError': return 'Error de Realidad Aumentada.';
+			case 'ar.eventsError': return 'Fallo al recibir eventos de Realidad Aumentada.';
+			case 'ar.unsupported': return 'Realidad Aumentada no soportada en esta plataforma';
 			default: return null;
 		}
 	}
@@ -699,6 +769,20 @@ extension on _StringsPt {
 			case 'bottomNav.settings': return 'Configurações';
 			case 'ar.scanInstruction': return 'Escaneie o chão movendo o celular';
 			case 'ar.tapToPlace': return 'Toque na tela para posicionar a obra';
+			case 'ar.helpTitle': return 'Ajuda';
+			case 'ar.helpContent': return 'Mova o aparelho lentamente e aponte para o ambiente para melhorar a localização.';
+			case 'ar.ok': return 'OK';
+			case 'ar.permissionTitle': return 'Permissões Necessárias';
+			case 'ar.permissionContent': return 'Para visualizar a obra, precisamos de acesso à sua câmera e localização.';
+			case 'ar.allowAccess': return 'Permitir Acesso';
+			case 'ar.notNow': return 'Agora não';
+			case 'ar.onboardingContent': return 'Mova o aparelho lentamente para ajudar a Obra a se localizar.';
+			case 'ar.onboardingButton': return 'Entendi, vamos começar';
+			case 'ar.errorTitle': return 'Ocorreu um Erro';
+			case 'ar.backButton': return 'Voltar';
+			case 'ar.genericError': return 'Erro na Realidade Aumentada.';
+			case 'ar.eventsError': return 'Falha ao receber eventos de Realidade Aumentada.';
+			case 'ar.unsupported': return 'Realidade Aumentada não suportada nesta plataforma';
 			default: return null;
 		}
 	}
