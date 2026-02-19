@@ -9,7 +9,7 @@ import 'package:outvisionxr/utils/language_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   final languageProvider = LanguageProvider();
   LocaleSettings.setLocale(AppLocale.pt);
 

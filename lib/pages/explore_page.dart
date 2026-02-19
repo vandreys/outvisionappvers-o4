@@ -19,7 +19,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
   Set<Marker> _markers = <Marker>{};
@@ -27,6 +27,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
   bool _isLoading = true;
   String? _locationError;
+
+  // Controle para ocultar o mapa ao abrir AR (evita conflito de GPU)
+  bool _isArActive = false;
 
   // Gate / Obra ativa
   ArtworkPoint? _activeArtwork;
@@ -94,7 +97,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError = 'Serviço de localização desativado.';
+          _locationError = t.map.locationServiceDisabled;
         });
         return;
       }
@@ -108,7 +111,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError = 'Permissão de localização negada.';
+          _locationError = t.map.locationPermissionDenied;
         });
         return;
       }
@@ -117,7 +120,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError = 'Permissão de localização negada permanentemente. Habilite nas configurações.';
+          _locationError = t.map.locationPermissionPermanentlyDenied;
         });
         return;
       }
@@ -139,7 +142,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         if (!mounted) return;
         setState(() {
           _isLoading = false;
-          _locationError = 'Não foi possível obter sua localização. Tente novamente.';
+          _locationError = t.map.locationNotFound;
         });
         return;
       }
@@ -164,7 +167,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _locationError = 'Erro ao iniciar localização.';
+        _locationError = t.map.locationError;
       });
     }
   }
@@ -259,13 +262,31 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     });
   }
 
-  void _openArViewNow() {
+  Future<void> _openArViewNow() async {
     if (_activeArtwork == null) return;
 
-    Navigator.push(
+    // 1. Oculta o mapa para liberar recursos da GPU (SurfaceView)
+    setState(() {
+      _isArActive = true;
+    });
+
+    // Pequeno delay para garantir que o widget do mapa foi desmontado pelo Flutter
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (!mounted) return;
+
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: _activeArtwork!)),
     );
+
+    // 2. Ao voltar, recria o controller e exibe o mapa novamente
+    if (mounted) {
+      _controller = Completer<GoogleMapController>();
+      setState(() {
+        _isArActive = false;
+      });
+    }
   }
 
   @override
@@ -311,7 +332,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                             });
                             _initLocationService();
                           },
-                          child: const Text('Tentar novamente'),
+                          child: Text(t.ar.tryAgain),
                         ),
                       ],
                     ),
@@ -319,7 +340,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                 )
               : Stack(
                   children: [
-                    GoogleMap(
+                    if (!_isArActive)
+                      GoogleMap(
                       mapType: MapType.normal,
                       initialCameraPosition: CameraPosition(
                         target: _currentPosition!,
@@ -335,7 +357,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       zoomControlsEnabled: false,
                       compassEnabled: false,
                       mapToolbarEnabled: false,
-                    ),
+                    )
+                    else
+                      Container(color: const Color(0xFFE5E5E5)), // Placeholder visual enquanto navega
 
                     Positioned(
                       top: 60,

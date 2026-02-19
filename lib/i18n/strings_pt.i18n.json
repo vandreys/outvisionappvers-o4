@@ -45,7 +45,12 @@
     "artworkMon": "Obra AR: MON",
     "artworkOpera": "Obra AR: Ópera de Arame",
     "arrivedTitle": "Você chegou ao local da obra",
-    "openArButton": "Abrir Realidade aumentada"
+    "openArButton": "Abrir Realidade aumentada",
+    "locationServiceDisabled": "Serviço de localização desativado.",
+    "locationPermissionDenied": "Permissão de localização negada.",
+    "locationPermissionPermanentlyDenied": "Permissão de localização negada permanentemente. Habilite nas configurações.",
+    "locationNotFound": "Não foi possível obter sua localização. Tente novamente.",
+    "locationError": "Erro ao iniciar localização."
   },
   "bottomNav": {
     "explore": "Explorar",
@@ -67,7 +72,9 @@
     "onboardingButton": "Entendi, vamos começar",
     "errorTitle": "Ocorreu um Erro",
     "backButton": "Voltar",
+    "tryAgain": "Tentar novamente",
     "genericError": "Erro na Realidade Aumentada.",
+    "localizationTimeoutError": "Não foi possível localizar a obra. Tente reiniciar a experiência AR.",
     "eventsError": "Falha ao receber eventos de Realidade Aumentada.",
     "unsupported": "Realidade Aumentada não suportada nesta plataforma"
   }

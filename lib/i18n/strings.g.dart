@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 174 (58 per locale)
+/// Strings: 192 (64 per locale)
 ///
-/// Built on 2026-02-18 at 09:44 UTC
+/// Built on 2026-02-19 at 07:57 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -166,7 +166,7 @@ class _StringsGalleryEn {
 
 	// Translations
 	String get title => 'Exhibitions';
-	String get tabArtwork => 'Artwork';
+	String get tabArtwork => 'Artworks';
 	String get tabArtists => 'Artists';
 	String get artworkTitle => 'The Garden of Earthly Delights';
 	String get artworkArtist => 'Hieronymus Bosch';
@@ -200,11 +200,11 @@ class _StringsAboutEn {
 	// Translations
 	String get pageTitle => 'About Outvision';
 	String get mainTitle => 'Outvision XR: Art and Augmented Reality';
-	String get description => 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and exhibition visitors like the Curitiba Biennial, our app transforms the way you interact with artworks and artists.';
+	String get description => 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and visitors to exhibitions like the Curitiba Biennial, our app transforms how you interact with artworks and artists.';
 	String get missionTitle => 'Our Mission';
-	String get missionText => 'To connect people to art in unprecedented ways, using technology to enrich the understanding and engagement with contemporary cultural expressions. We believe that AR can break down barriers and make art more accessible and interactive for everyone.';
+	String get missionText => 'To connect people to art in new ways, using technology to enrich understanding and engagement with contemporary cultural expressions. We believe AR can break down barriers and make art more accessible and interactive for everyone.';
 	String get visionTitle => 'Our Vision';
-	String get visionText => 'To be the leading platform for Augmented Reality art curation, recognized for its innovation, accessibility, and the ability to create memorable experiences that transcend the traditional limits of galleries and museums.';
+	String get visionText => 'To be the leading platform for curating art with Augmented Reality, recognized for its innovation, accessibility, and ability to create memorable experiences that transcend the traditional boundaries of galleries and museums.';
 	String get connectTitle => 'Connect With Us';
 	String get website => 'Website';
 	String get email => 'Email';
@@ -221,9 +221,9 @@ class _StringsLanguagePageEn {
 
 	// Translations
 	String get title => 'Language';
-	String get portuguese => 'Português';
+	String get portuguese => 'Portuguese';
 	String get english => 'English';
-	String get spanish => 'Español';
+	String get spanish => 'Spanish';
 }
 
 // Path: map
@@ -239,6 +239,11 @@ class _StringsMapEn {
 	String get artworkOpera => 'AR Artwork: Ópera de Arame';
 	String get arrivedTitle => 'You have arrived at the artwork location';
 	String get openArButton => 'Open Augmented Reality';
+	String get locationServiceDisabled => 'Location service disabled.';
+	String get locationPermissionDenied => 'Location permission denied.';
+	String get locationPermissionPermanentlyDenied => 'Location permission permanently denied. Please enable it in settings.';
+	String get locationNotFound => 'Could not get your location. Please try again.';
+	String get locationError => 'Error initializing location.';
 }
 
 // Path: bottomNav
@@ -262,19 +267,20 @@ class _StringsArEn {
 
 	// Translations
 	String get scanInstruction => 'Scan the floor by moving your phone';
-	String get tapToPlace => 'Tap on screen to place artwork';
+	String get tapToPlace => 'Tap the screen to place the artwork';
 	String get helpTitle => 'Help';
-	String get helpContent => 'Move your device slowly and point at the surroundings to improve localization.';
+	String get helpContent => 'Move the device slowly and point it at your surroundings to improve localization.';
 	String get ok => 'OK';
 	String get permissionTitle => 'Permissions Required';
 	String get permissionContent => 'To view the artwork, we need access to your camera and location.';
 	String get allowAccess => 'Allow Access';
-	String get notNow => 'Not now';
-	String get onboardingContent => 'Move your device slowly to help the Artwork localize itself.';
+	String get notNow => 'Not Now';
+	String get onboardingContent => 'Move the device slowly to help the Artwork localize itself.';
 	String get onboardingButton => 'Got it, let\'s start';
 	String get errorTitle => 'An Error Occurred';
 	String get backButton => 'Back';
-	String get genericError => 'Augmented Reality Error.';
+	String get tryAgain => 'Try again';
+	String get genericError => 'Augmented Reality error.';
 	String get eventsError => 'Failed to receive Augmented Reality events.';
 	String get unsupported => 'Augmented Reality not supported on this platform';
 }
@@ -322,8 +328,8 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get title => 'Exposiciones';
 	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
-	@override String get artworkTitle => 'El Jardín de las Delicias Terrenales';
-	@override String get artworkArtist => 'El Bosco';
+	@override String get artworkTitle => 'El Jardín de las Delicias';
+	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
 	@override String get viewExhibition => 'Ver exposición';
 }
@@ -335,11 +341,11 @@ class _StringsSettingsEs implements _StringsSettingsEn {
 	@override final _StringsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Ajustes';
-	@override String get getHelp => 'Como usar el App';
-	@override String get appSettings => 'Configuración de la Aplicación';
+	@override String get title => 'Configuración';
+	@override String get getHelp => 'Cómo usar la App';
+	@override String get appSettings => 'Configuración de la App';
 	@override String get language => 'Idioma';
-	@override String get about => 'Acerca de Out Vision';
+	@override String get about => 'Sobre Out Vision';
 	@override String get imprint => 'Impresión';
 	@override String get privacyPolicy => 'Política de Privacidad';
 	@override String get termsOfUse => 'Términos de Uso';
@@ -352,13 +358,13 @@ class _StringsAboutEs implements _StringsAboutEn {
 	@override final _StringsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get pageTitle => 'Acerca de Outvision';
+	@override String get pageTitle => 'Sobre Outvision';
 	@override String get mainTitle => 'Outvision XR: Arte y Realidad Aumentada';
-	@override String get description => 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras de arte y artistas.';
+	@override String get description => 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras y artistas.';
 	@override String get missionTitle => 'Nuestra Misión';
-	@override String get missionText => 'Conectar a las personas con el arte de maneras sin precedentes, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer el arte más accesible e interactivo para todos.';
+	@override String get missionText => 'Conectar a las personas con el arte de formas inéditas, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer que el arte sea más accesible e interactivo para todos.';
 	@override String get visionTitle => 'Nuestra Visión';
-	@override String get visionText => 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y los museos.';
+	@override String get visionText => 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y por la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y museos.';
 	@override String get connectTitle => 'Conéctate con Nosotros';
 	@override String get website => 'Sitio Web';
 	@override String get email => 'Correo Electrónico';
@@ -375,7 +381,7 @@ class _StringsLanguagePageEs implements _StringsLanguagePageEn {
 
 	// Translations
 	@override String get title => 'Idioma';
-	@override String get portuguese => 'Português';
+	@override String get portuguese => 'Portugués';
 	@override String get english => 'Inglés';
 	@override String get spanish => 'Español';
 }
@@ -388,11 +394,16 @@ class _StringsMapEs implements _StringsMapEn {
 
 	// Translations
 	@override String get loadingGps => 'Buscando señal de GPS...';
-	@override String get artworkLargo => 'Obra RA: Largo da Ordem';
-	@override String get artworkMon => 'Obra RA: MON';
-	@override String get artworkOpera => 'Obra RA: Ópera de Arame';
+	@override String get artworkLargo => 'Obra AR: Largo da Ordem';
+	@override String get artworkMon => 'Obra AR: MON';
+	@override String get artworkOpera => 'Obra AR: Ópera de Arame';
 	@override String get arrivedTitle => 'Has llegado a la ubicación de la obra';
-	@override String get openArButton => 'Abrir Realidad aumentada';
+	@override String get openArButton => 'Abrir Realidad Aumentada';
+	@override String get locationServiceDisabled => 'Servicio de ubicación desactivado.';
+	@override String get locationPermissionDenied => 'Permiso de ubicación denegado.';
+	@override String get locationPermissionPermanentlyDenied => 'Permiso de ubicación denegado permanentemente. Habilítelo en la configuración.';
+	@override String get locationNotFound => 'No se pudo obtener tu ubicación. Por favor, inténtalo de nuevo.';
+	@override String get locationError => 'Error al iniciar la ubicación.';
 }
 
 // Path: bottomNav
@@ -404,7 +415,7 @@ class _StringsBottomNavEs implements _StringsBottomNavEn {
 	// Translations
 	@override String get explore => 'Explorar';
 	@override String get gallery => 'Exposiciones';
-	@override String get captured => 'Capturado';
+	@override String get captured => 'Capturados';
 	@override String get settings => 'Configuración';
 }
 
@@ -416,21 +427,22 @@ class _StringsArEs implements _StringsArEn {
 
 	// Translations
 	@override String get scanInstruction => 'Escanea el suelo moviendo el móvil';
-	@override String get tapToPlace => 'Toca la pantalla para colocar la obra';
+	@override String get tapToPlace => 'Toca la pantalla para posicionar la obra';
 	@override String get helpTitle => 'Ayuda';
-	@override String get helpContent => 'Mueve el dispositivo lentamente y apunta al entorno para mejorar la localización.';
+	@override String get helpContent => 'Mueve el dispositivo lentamente y apúntalo a tu entorno para mejorar la localización.';
 	@override String get ok => 'OK';
 	@override String get permissionTitle => 'Permisos Necesarios';
-	@override String get permissionContent => 'Para ver la obra, necesitamos acceso a tu cámara y ubicación.';
+	@override String get permissionContent => 'Para visualizar la obra, necesitamos acceso a tu cámara y ubicación.';
 	@override String get allowAccess => 'Permitir Acceso';
 	@override String get notNow => 'Ahora no';
 	@override String get onboardingContent => 'Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.';
 	@override String get onboardingButton => 'Entendido, empecemos';
 	@override String get errorTitle => 'Ocurrió un Error';
 	@override String get backButton => 'Volver';
-	@override String get genericError => 'Error de Realidad Aumentada.';
+	@override String get tryAgain => 'Intentar de nuevo';
+	@override String get genericError => 'Error en la Realidad Aumentada.';
 	@override String get eventsError => 'Fallo al recibir eventos de Realidad Aumentada.';
-	@override String get unsupported => 'Realidad Aumentada no soportada en esta plataforma';
+	@override String get unsupported => 'Realidad Aumentada no compatible en esta plataforma';
 }
 
 // Path: <root>
@@ -547,6 +559,11 @@ class _StringsMapPt implements _StringsMapEn {
 	@override String get artworkOpera => 'Obra AR: Ópera de Arame';
 	@override String get arrivedTitle => 'Você chegou ao local da obra';
 	@override String get openArButton => 'Abrir Realidade aumentada';
+	@override String get locationServiceDisabled => 'Serviço de localização desativado.';
+	@override String get locationPermissionDenied => 'Permissão de localização negada.';
+	@override String get locationPermissionPermanentlyDenied => 'Permissão de localização negada permanentemente. Habilite nas configurações.';
+	@override String get locationNotFound => 'Não foi possível obter sua localização. Tente novamente.';
+	@override String get locationError => 'Erro ao iniciar localização.';
 }
 
 // Path: bottomNav
@@ -582,6 +599,7 @@ class _StringsArPt implements _StringsArEn {
 	@override String get onboardingButton => 'Entendi, vamos começar';
 	@override String get errorTitle => 'Ocorreu um Erro';
 	@override String get backButton => 'Voltar';
+	@override String get tryAgain => 'Tentar novamente';
 	@override String get genericError => 'Erro na Realidade Aumentada.';
 	@override String get eventsError => 'Falha ao receber eventos de Realidade Aumentada.';
 	@override String get unsupported => 'Realidade Aumentada não suportada nesta plataforma';
@@ -594,7 +612,7 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'gallery.title': return 'Exhibitions';
-			case 'gallery.tabArtwork': return 'Artwork';
+			case 'gallery.tabArtwork': return 'Artworks';
 			case 'gallery.tabArtists': return 'Artists';
 			case 'gallery.artworkTitle': return 'The Garden of Earthly Delights';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
@@ -610,11 +628,11 @@ extension on Translations {
 			case 'settings.termsOfUse': return 'Terms of Use';
 			case 'about.pageTitle': return 'About Outvision';
 			case 'about.mainTitle': return 'Outvision XR: Art and Augmented Reality';
-			case 'about.description': return 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and exhibition visitors like the Curitiba Biennial, our app transforms the way you interact with artworks and artists.';
+			case 'about.description': return 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and visitors to exhibitions like the Curitiba Biennial, our app transforms how you interact with artworks and artists.';
 			case 'about.missionTitle': return 'Our Mission';
-			case 'about.missionText': return 'To connect people to art in unprecedented ways, using technology to enrich the understanding and engagement with contemporary cultural expressions. We believe that AR can break down barriers and make art more accessible and interactive for everyone.';
+			case 'about.missionText': return 'To connect people to art in new ways, using technology to enrich understanding and engagement with contemporary cultural expressions. We believe AR can break down barriers and make art more accessible and interactive for everyone.';
 			case 'about.visionTitle': return 'Our Vision';
-			case 'about.visionText': return 'To be the leading platform for Augmented Reality art curation, recognized for its innovation, accessibility, and the ability to create memorable experiences that transcend the traditional limits of galleries and museums.';
+			case 'about.visionText': return 'To be the leading platform for curating art with Augmented Reality, recognized for its innovation, accessibility, and ability to create memorable experiences that transcend the traditional boundaries of galleries and museums.';
 			case 'about.connectTitle': return 'Connect With Us';
 			case 'about.website': return 'Website';
 			case 'about.email': return 'Email';
@@ -622,33 +640,39 @@ extension on Translations {
 			case 'about.share': return 'Share';
 			case 'about.copyright': return 'Outvision XR © 2025. All rights reserved.';
 			case 'languagePage.title': return 'Language';
-			case 'languagePage.portuguese': return 'Português';
+			case 'languagePage.portuguese': return 'Portuguese';
 			case 'languagePage.english': return 'English';
-			case 'languagePage.spanish': return 'Español';
+			case 'languagePage.spanish': return 'Spanish';
 			case 'map.loadingGps': return 'Searching for GPS signal...';
 			case 'map.artworkLargo': return 'AR Artwork: Largo da Ordem';
 			case 'map.artworkMon': return 'AR Artwork: MON';
 			case 'map.artworkOpera': return 'AR Artwork: Ópera de Arame';
 			case 'map.arrivedTitle': return 'You have arrived at the artwork location';
 			case 'map.openArButton': return 'Open Augmented Reality';
+			case 'map.locationServiceDisabled': return 'Location service disabled.';
+			case 'map.locationPermissionDenied': return 'Location permission denied.';
+			case 'map.locationPermissionPermanentlyDenied': return 'Location permission permanently denied. Please enable it in settings.';
+			case 'map.locationNotFound': return 'Could not get your location. Please try again.';
+			case 'map.locationError': return 'Error initializing location.';
 			case 'bottomNav.explore': return 'Explore';
 			case 'bottomNav.gallery': return 'Exhibitions';
 			case 'bottomNav.captured': return 'Captured';
 			case 'bottomNav.settings': return 'Settings';
 			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
-			case 'ar.tapToPlace': return 'Tap on screen to place artwork';
+			case 'ar.tapToPlace': return 'Tap the screen to place the artwork';
 			case 'ar.helpTitle': return 'Help';
-			case 'ar.helpContent': return 'Move your device slowly and point at the surroundings to improve localization.';
+			case 'ar.helpContent': return 'Move the device slowly and point it at your surroundings to improve localization.';
 			case 'ar.ok': return 'OK';
 			case 'ar.permissionTitle': return 'Permissions Required';
 			case 'ar.permissionContent': return 'To view the artwork, we need access to your camera and location.';
 			case 'ar.allowAccess': return 'Allow Access';
-			case 'ar.notNow': return 'Not now';
-			case 'ar.onboardingContent': return 'Move your device slowly to help the Artwork localize itself.';
+			case 'ar.notNow': return 'Not Now';
+			case 'ar.onboardingContent': return 'Move the device slowly to help the Artwork localize itself.';
 			case 'ar.onboardingButton': return 'Got it, let\'s start';
 			case 'ar.errorTitle': return 'An Error Occurred';
 			case 'ar.backButton': return 'Back';
-			case 'ar.genericError': return 'Augmented Reality Error.';
+			case 'ar.tryAgain': return 'Try again';
+			case 'ar.genericError': return 'Augmented Reality error.';
 			case 'ar.eventsError': return 'Failed to receive Augmented Reality events.';
 			case 'ar.unsupported': return 'Augmented Reality not supported on this platform';
 			default: return null;
@@ -662,25 +686,25 @@ extension on _StringsEs {
 			case 'gallery.title': return 'Exposiciones';
 			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
-			case 'gallery.artworkTitle': return 'El Jardín de las Delicias Terrenales';
-			case 'gallery.artworkArtist': return 'El Bosco';
+			case 'gallery.artworkTitle': return 'El Jardín de las Delicias';
+			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
 			case 'gallery.viewExhibition': return 'Ver exposición';
-			case 'settings.title': return 'Ajustes';
-			case 'settings.getHelp': return 'Como usar el App';
-			case 'settings.appSettings': return 'Configuración de la Aplicación';
+			case 'settings.title': return 'Configuración';
+			case 'settings.getHelp': return 'Cómo usar la App';
+			case 'settings.appSettings': return 'Configuración de la App';
 			case 'settings.language': return 'Idioma';
-			case 'settings.about': return 'Acerca de Out Vision';
+			case 'settings.about': return 'Sobre Out Vision';
 			case 'settings.imprint': return 'Impresión';
 			case 'settings.privacyPolicy': return 'Política de Privacidad';
 			case 'settings.termsOfUse': return 'Términos de Uso';
-			case 'about.pageTitle': return 'Acerca de Outvision';
+			case 'about.pageTitle': return 'Sobre Outvision';
 			case 'about.mainTitle': return 'Outvision XR: Arte y Realidad Aumentada';
-			case 'about.description': return 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras de arte y artistas.';
+			case 'about.description': return 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras y artistas.';
 			case 'about.missionTitle': return 'Nuestra Misión';
-			case 'about.missionText': return 'Conectar a las personas con el arte de maneras sin precedentes, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer el arte más accesible e interactivo para todos.';
+			case 'about.missionText': return 'Conectar a las personas con el arte de formas inéditas, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer que el arte sea más accesible e interactivo para todos.';
 			case 'about.visionTitle': return 'Nuestra Visión';
-			case 'about.visionText': return 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y los museos.';
+			case 'about.visionText': return 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y por la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y museos.';
 			case 'about.connectTitle': return 'Conéctate con Nosotros';
 			case 'about.website': return 'Sitio Web';
 			case 'about.email': return 'Correo Electrónico';
@@ -688,35 +712,41 @@ extension on _StringsEs {
 			case 'about.share': return 'Compartir';
 			case 'about.copyright': return 'Outvision XR © 2025. Todos los derechos reservados.';
 			case 'languagePage.title': return 'Idioma';
-			case 'languagePage.portuguese': return 'Português';
+			case 'languagePage.portuguese': return 'Portugués';
 			case 'languagePage.english': return 'Inglés';
 			case 'languagePage.spanish': return 'Español';
 			case 'map.loadingGps': return 'Buscando señal de GPS...';
-			case 'map.artworkLargo': return 'Obra RA: Largo da Ordem';
-			case 'map.artworkMon': return 'Obra RA: MON';
-			case 'map.artworkOpera': return 'Obra RA: Ópera de Arame';
+			case 'map.artworkLargo': return 'Obra AR: Largo da Ordem';
+			case 'map.artworkMon': return 'Obra AR: MON';
+			case 'map.artworkOpera': return 'Obra AR: Ópera de Arame';
 			case 'map.arrivedTitle': return 'Has llegado a la ubicación de la obra';
-			case 'map.openArButton': return 'Abrir Realidad aumentada';
+			case 'map.openArButton': return 'Abrir Realidad Aumentada';
+			case 'map.locationServiceDisabled': return 'Servicio de ubicación desactivado.';
+			case 'map.locationPermissionDenied': return 'Permiso de ubicación denegado.';
+			case 'map.locationPermissionPermanentlyDenied': return 'Permiso de ubicación denegado permanentemente. Habilítelo en la configuración.';
+			case 'map.locationNotFound': return 'No se pudo obtener tu ubicación. Por favor, inténtalo de nuevo.';
+			case 'map.locationError': return 'Error al iniciar la ubicación.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Exposiciones';
-			case 'bottomNav.captured': return 'Capturado';
+			case 'bottomNav.captured': return 'Capturados';
 			case 'bottomNav.settings': return 'Configuración';
 			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
-			case 'ar.tapToPlace': return 'Toca la pantalla para colocar la obra';
+			case 'ar.tapToPlace': return 'Toca la pantalla para posicionar la obra';
 			case 'ar.helpTitle': return 'Ayuda';
-			case 'ar.helpContent': return 'Mueve el dispositivo lentamente y apunta al entorno para mejorar la localización.';
+			case 'ar.helpContent': return 'Mueve el dispositivo lentamente y apúntalo a tu entorno para mejorar la localización.';
 			case 'ar.ok': return 'OK';
 			case 'ar.permissionTitle': return 'Permisos Necesarios';
-			case 'ar.permissionContent': return 'Para ver la obra, necesitamos acceso a tu cámara y ubicación.';
+			case 'ar.permissionContent': return 'Para visualizar la obra, necesitamos acceso a tu cámara y ubicación.';
 			case 'ar.allowAccess': return 'Permitir Acceso';
 			case 'ar.notNow': return 'Ahora no';
 			case 'ar.onboardingContent': return 'Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.';
 			case 'ar.onboardingButton': return 'Entendido, empecemos';
 			case 'ar.errorTitle': return 'Ocurrió un Error';
 			case 'ar.backButton': return 'Volver';
-			case 'ar.genericError': return 'Error de Realidad Aumentada.';
+			case 'ar.tryAgain': return 'Intentar de nuevo';
+			case 'ar.genericError': return 'Error en la Realidad Aumentada.';
 			case 'ar.eventsError': return 'Fallo al recibir eventos de Realidad Aumentada.';
-			case 'ar.unsupported': return 'Realidad Aumentada no soportada en esta plataforma';
+			case 'ar.unsupported': return 'Realidad Aumentada no compatible en esta plataforma';
 			default: return null;
 		}
 	}
@@ -763,6 +793,11 @@ extension on _StringsPt {
 			case 'map.artworkOpera': return 'Obra AR: Ópera de Arame';
 			case 'map.arrivedTitle': return 'Você chegou ao local da obra';
 			case 'map.openArButton': return 'Abrir Realidade aumentada';
+			case 'map.locationServiceDisabled': return 'Serviço de localização desativado.';
+			case 'map.locationPermissionDenied': return 'Permissão de localização negada.';
+			case 'map.locationPermissionPermanentlyDenied': return 'Permissão de localização negada permanentemente. Habilite nas configurações.';
+			case 'map.locationNotFound': return 'Não foi possível obter sua localização. Tente novamente.';
+			case 'map.locationError': return 'Erro ao iniciar localização.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Exposições';
 			case 'bottomNav.captured': return 'Capturados';
@@ -780,6 +815,7 @@ extension on _StringsPt {
 			case 'ar.onboardingButton': return 'Entendi, vamos começar';
 			case 'ar.errorTitle': return 'Ocorreu um Erro';
 			case 'ar.backButton': return 'Voltar';
+			case 'ar.tryAgain': return 'Tentar novamente';
 			case 'ar.genericError': return 'Erro na Realidade Aumentada.';
 			case 'ar.eventsError': return 'Falha ao receber eventos de Realidade Aumentada.';
 			case 'ar.unsupported': return 'Realidade Aumentada não suportada nesta plataforma';

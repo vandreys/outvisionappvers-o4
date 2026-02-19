@@ -1,7 +1,7 @@
 {
   "gallery": {
     "title": "Exhibitions",
-    "tabArtwork": "Artwork",
+    "tabArtwork": "Artworks",
     "tabArtists": "Artists",
     "artworkTitle": "The Garden of Earthly Delights",
     "artworkArtist": "Hieronymus Bosch",
@@ -21,11 +21,11 @@
   "about": {
     "pageTitle": "About Outvision",
     "mainTitle": "Outvision XR: Art and Augmented Reality",
-    "description": "Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and exhibition visitors like the Curitiba Biennial, our app transforms the way you interact with artworks and artists.",
+    "description": "Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and visitors to exhibitions like the Curitiba Biennial, our app transforms how you interact with artworks and artists.",
     "missionTitle": "Our Mission",
-    "missionText": "To connect people to art in unprecedented ways, using technology to enrich the understanding and engagement with contemporary cultural expressions. We believe that AR can break down barriers and make art more accessible and interactive for everyone.",
+    "missionText": "To connect people to art in new ways, using technology to enrich understanding and engagement with contemporary cultural expressions. We believe AR can break down barriers and make art more accessible and interactive for everyone.",
     "visionTitle": "Our Vision",
-    "visionText": "To be the leading platform for Augmented Reality art curation, recognized for its innovation, accessibility, and the ability to create memorable experiences that transcend the traditional limits of galleries and museums.",
+    "visionText": "To be the leading platform for curating art with Augmented Reality, recognized for its innovation, accessibility, and ability to create memorable experiences that transcend the traditional boundaries of galleries and museums.",
     "connectTitle": "Connect With Us",
     "website": "Website",
     "email": "Email",
@@ -35,9 +35,9 @@
   },
   "languagePage": {
     "title": "Language",
-    "portuguese": "Português",
+    "portuguese": "Portuguese",
     "english": "English",
-    "spanish": "Español"
+    "spanish": "Spanish"
   },
   "map": {
     "loadingGps": "Searching for GPS signal...",
@@ -45,7 +45,12 @@
     "artworkMon": "AR Artwork: MON",
     "artworkOpera": "AR Artwork: Ópera de Arame",
     "arrivedTitle": "You have arrived at the artwork location",
-    "openArButton": "Open Augmented Reality"
+    "openArButton": "Open Augmented Reality",
+    "locationServiceDisabled": "Location service disabled.",
+    "locationPermissionDenied": "Location permission denied.",
+    "locationPermissionPermanentlyDenied": "Location permission permanently denied. Please enable it in settings.",
+    "locationNotFound": "Could not get your location. Please try again.",
+    "locationError": "Error initializing location."
   },
   "bottomNav": {
     "explore": "Explore",
@@ -55,19 +60,21 @@
   },
   "ar": {
     "scanInstruction": "Scan the floor by moving your phone",
-    "tapToPlace": "Tap on screen to place artwork",
+    "tapToPlace": "Tap the screen to place the artwork",
     "helpTitle": "Help",
-    "helpContent": "Move your device slowly and point at the surroundings to improve localization.",
+    "helpContent": "Move the device slowly and point it at your surroundings to improve localization.",
     "ok": "OK",
     "permissionTitle": "Permissions Required",
     "permissionContent": "To view the artwork, we need access to your camera and location.",
     "allowAccess": "Allow Access",
-    "notNow": "Not now",
-    "onboardingContent": "Move your device slowly to help the Artwork localize itself.",
+    "notNow": "Not Now",
+    "onboardingContent": "Move the device slowly to help the Artwork localize itself.",
     "onboardingButton": "Got it, let's start",
     "errorTitle": "An Error Occurred",
     "backButton": "Back",
-    "genericError": "Augmented Reality Error.",
+    "tryAgain": "Try again",
+    "genericError": "Augmented Reality error.",
+    "localizationTimeoutError": "Could not localize the artwork. Try restarting the AR experience.",
     "eventsError": "Failed to receive Augmented Reality events.",
     "unsupported": "Augmented Reality not supported on this platform"
   }
