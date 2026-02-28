@@ -1,6 +1,12 @@
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.
 #
+analyzer:
+  exclude:
+    # Exclui arquivos gerados (terminados em .g.dart) da análise estática.
+    # Isso evita que avisos em código gerado, como o do slang, apareçam.
+    - '**/*.g.dart'
+
 # The issues identified by the analyzer are surfaced in the UI of Dart-enabled
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.

@@ -9,7 +9,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.about.pageTitle,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
             color: Colors.black, // Cor do texto do AppBar
@@ -36,7 +36,7 @@ class AboutPage extends StatelessWidget {
 
             // 2. Título Principal
             Text(t.about.mainTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -46,7 +46,7 @@ class AboutPage extends StatelessWidget {
 
             // 3. Descrição Geral
             Text(t.about.pageTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -56,7 +56,7 @@ class AboutPage extends StatelessWidget {
 
             // 4. Seção: Nossa Missão
             Text(t.about.missionTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -64,7 +64,7 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(t.about.missionText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -74,7 +74,7 @@ class AboutPage extends StatelessWidget {
 
             // 5. Seção: Nossa Visão
             Text(t.about.visionTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -82,7 +82,7 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(t.about.visionText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
@@ -92,7 +92,7 @@ class AboutPage extends StatelessWidget {
 
             // 6. Seção: Conecte-se Conosco (Exemplo de ícones sociais)
             Text(t.about.connectTitle,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -114,7 +114,7 @@ class AboutPage extends StatelessWidget {
             Center(
               child: Text(t.about.copyright,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
@@ -142,7 +142,7 @@ class AboutPage extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
             color: Colors.black87,
           ),

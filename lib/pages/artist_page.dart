@@ -36,7 +36,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
           if (snapshot.hasError) {
             return Center(
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Icon(
+                const Icon(
                   Icons.error,
                   size: 75,
                 ),
@@ -61,7 +61,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
           }
 
           if (snapshot.data!.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -69,10 +69,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
                     Icons.mood_bad,
                     size: 75,
                   ),
-                  const SizedBox(height: 5.0),
+                  SizedBox(height: 5.0),
                   Text(
                     "Nenhum artista encontrado", // Idealmente adicionar ao i18n
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),

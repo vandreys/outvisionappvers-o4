@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Cor cinza mais clara para os containers, conforme a imagem
-    final Color groupColor = Colors.white;
+    const Color groupColor = Colors.white;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),

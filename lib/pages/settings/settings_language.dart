@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
-import 'package:outvisionxr/widgets/language_switcher.dart';
 
 
 class LanguagePage extends StatelessWidget {

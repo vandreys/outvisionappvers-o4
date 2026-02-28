@@ -57,7 +57,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             if (currentIndex != 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ArtistsPage()),
+                MaterialPageRoute(builder: (context) => const ArtistsPage()),
               );
             }
           },

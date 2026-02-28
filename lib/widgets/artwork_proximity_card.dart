@@ -94,7 +94,7 @@ class ArtworkProximityCard extends StatelessWidget {
             top: 12,
             right: 12,
             child: CircleAvatar(
-              backgroundColor: Colors.black.withOpacity(0.6),
+              backgroundColor: Colors.black.withValues(alpha: 0.6),
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white, size: 20),
                 onPressed: onClose,

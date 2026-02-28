@@ -10,7 +10,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 
 import 'package:outvisionxr/models/artwork_point.dart';
-import 'package:outvisionxr/widgets/rounded_square_button.dart';
 
 enum ArRuntimeStatus { localizing, ready, error }
 
@@ -248,7 +247,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       builder: (_) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: AlertDialog(
-          backgroundColor: const Color(0xFF2C2C2E).withOpacity(0.9),
+          backgroundColor: const Color(0xFF2C2C2E).withValues(alpha: 0.9),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
           title: Text(
             context.t.ar.helpTitle,
@@ -256,7 +255,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
           ),
           content: Text(
             context.t.ar.helpContent,
-            style: TextStyle(color: Colors.white.withOpacity(0.8)),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
           ),
           actions: [
             TextButton(
@@ -320,7 +319,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
           ),
           if (_hasPermissions && !_onboardingDone)
             _OnboardingOverlay(onStart: _completeOnboarding),
-          if (_hasPermissions && _onboardingDone && _status == ArRuntimeStatus.localizing) _LocalizingOverlay(),
+          if (_hasPermissions && _onboardingDone && _status == ArRuntimeStatus.localizing) const _LocalizingOverlay(),
           if (_hasPermissions && _onboardingDone && _status == ArRuntimeStatus.error)
             _ErrorOverlay(message: _errorMessage ?? context.t.ar.genericError),
         ],
@@ -345,7 +344,7 @@ class _CameraPermissionOverlay extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withValues(alpha: 0.5),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400), // Tablet: Limita a largura máxima
@@ -370,7 +369,7 @@ class _CameraPermissionOverlay extends StatelessWidget {
                     Text(
                       context.t.ar.permissionContent,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 15),
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
@@ -391,7 +390,7 @@ class _CameraPermissionOverlay extends StatelessWidget {
                       onPressed: onClose,
                       child: Text(
                         context.t.ar.notNow,
-                        style: TextStyle(color: Colors.white.withOpacity(0.7), fontWeight: FontWeight.w500),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
@@ -421,9 +420,9 @@ class _GlassmorphicButton extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withValues(alpha: 0.15),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
           ),
           child: IconButton(
             padding: EdgeInsets.zero,
@@ -500,7 +499,7 @@ class _OnboardingOverlay extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withValues(alpha: 0.5),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400), // Tablet: Limita a largura máxima
@@ -529,7 +528,7 @@ class _OnboardingOverlay extends StatelessWidget {
                       context.t.ar.onboardingContent,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
@@ -574,7 +573,7 @@ class _LocalizingOverlay extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(100), // Pill shape
             ),
             child: Row(
@@ -615,7 +614,7 @@ class _ErrorOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.7),
+        color: Colors.black.withValues(alpha: 0.7),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400), // Tablet: Limita a largura máxima
@@ -640,7 +639,7 @@ class _ErrorOverlay extends StatelessWidget {
                   Text(
                     message,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15),
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 15),
                   ),
                   const SizedBox(height: 24),
                   SizedBox(
