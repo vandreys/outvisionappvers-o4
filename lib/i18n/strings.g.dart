@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 192 (64 per locale)
+/// Strings: 201 (67 per locale)
 ///
-/// Built on 2026-02-19 at 07:57 UTC
+/// Built on 2026-02-27 at 00:19 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -244,6 +244,8 @@ class _StringsMapEn {
 	String get locationPermissionPermanentlyDenied => 'Location permission permanently denied. Please enable it in settings.';
 	String get locationNotFound => 'Could not get your location. Please try again.';
 	String get locationError => 'Error initializing location.';
+	String get helpTitle => 'Map Help';
+	String get helpContent => 'Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.';
 }
 
 // Path: bottomNav
@@ -281,6 +283,7 @@ class _StringsArEn {
 	String get backButton => 'Back';
 	String get tryAgain => 'Try again';
 	String get genericError => 'Augmented Reality error.';
+	String get localizationTimeoutError => 'Could not localize the artwork. Try restarting the AR experience.';
 	String get eventsError => 'Failed to receive Augmented Reality events.';
 	String get unsupported => 'Augmented Reality not supported on this platform';
 }
@@ -404,6 +407,8 @@ class _StringsMapEs implements _StringsMapEn {
 	@override String get locationPermissionPermanentlyDenied => 'Permiso de ubicación denegado permanentemente. Habilítelo en la configuración.';
 	@override String get locationNotFound => 'No se pudo obtener tu ubicación. Por favor, inténtalo de nuevo.';
 	@override String get locationError => 'Error al iniciar la ubicación.';
+	@override String get helpTitle => 'Ayuda del Mapa';
+	@override String get helpContent => 'Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual.';
 }
 
 // Path: bottomNav
@@ -441,6 +446,7 @@ class _StringsArEs implements _StringsArEn {
 	@override String get backButton => 'Volver';
 	@override String get tryAgain => 'Intentar de nuevo';
 	@override String get genericError => 'Error en la Realidad Aumentada.';
+	@override String get localizationTimeoutError => 'No se pudo localizar la obra. Intenta reiniciar la experiencia de RA.';
 	@override String get eventsError => 'Fallo al recibir eventos de Realidad Aumentada.';
 	@override String get unsupported => 'Realidad Aumentada no compatible en esta plataforma';
 }
@@ -564,6 +570,8 @@ class _StringsMapPt implements _StringsMapEn {
 	@override String get locationPermissionPermanentlyDenied => 'Permissão de localização negada permanentemente. Habilite nas configurações.';
 	@override String get locationNotFound => 'Não foi possível obter sua localização. Tente novamente.';
 	@override String get locationError => 'Erro ao iniciar localização.';
+	@override String get helpTitle => 'Ajuda do Mapa';
+	@override String get helpContent => 'Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.';
 }
 
 // Path: bottomNav
@@ -601,6 +609,7 @@ class _StringsArPt implements _StringsArEn {
 	@override String get backButton => 'Voltar';
 	@override String get tryAgain => 'Tentar novamente';
 	@override String get genericError => 'Erro na Realidade Aumentada.';
+	@override String get localizationTimeoutError => 'Não foi possível localizar a obra. Tente reiniciar a experiência AR.';
 	@override String get eventsError => 'Falha ao receber eventos de Realidade Aumentada.';
 	@override String get unsupported => 'Realidade Aumentada não suportada nesta plataforma';
 }
@@ -654,6 +663,8 @@ extension on Translations {
 			case 'map.locationPermissionPermanentlyDenied': return 'Location permission permanently denied. Please enable it in settings.';
 			case 'map.locationNotFound': return 'Could not get your location. Please try again.';
 			case 'map.locationError': return 'Error initializing location.';
+			case 'map.helpTitle': return 'Map Help';
+			case 'map.helpContent': return 'Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.';
 			case 'bottomNav.explore': return 'Explore';
 			case 'bottomNav.gallery': return 'Exhibitions';
 			case 'bottomNav.captured': return 'Captured';
@@ -673,6 +684,7 @@ extension on Translations {
 			case 'ar.backButton': return 'Back';
 			case 'ar.tryAgain': return 'Try again';
 			case 'ar.genericError': return 'Augmented Reality error.';
+			case 'ar.localizationTimeoutError': return 'Could not localize the artwork. Try restarting the AR experience.';
 			case 'ar.eventsError': return 'Failed to receive Augmented Reality events.';
 			case 'ar.unsupported': return 'Augmented Reality not supported on this platform';
 			default: return null;
@@ -726,6 +738,8 @@ extension on _StringsEs {
 			case 'map.locationPermissionPermanentlyDenied': return 'Permiso de ubicación denegado permanentemente. Habilítelo en la configuración.';
 			case 'map.locationNotFound': return 'No se pudo obtener tu ubicación. Por favor, inténtalo de nuevo.';
 			case 'map.locationError': return 'Error al iniciar la ubicación.';
+			case 'map.helpTitle': return 'Ayuda del Mapa';
+			case 'map.helpContent': return 'Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Exposiciones';
 			case 'bottomNav.captured': return 'Capturados';
@@ -745,6 +759,7 @@ extension on _StringsEs {
 			case 'ar.backButton': return 'Volver';
 			case 'ar.tryAgain': return 'Intentar de nuevo';
 			case 'ar.genericError': return 'Error en la Realidad Aumentada.';
+			case 'ar.localizationTimeoutError': return 'No se pudo localizar la obra. Intenta reiniciar la experiencia de RA.';
 			case 'ar.eventsError': return 'Fallo al recibir eventos de Realidad Aumentada.';
 			case 'ar.unsupported': return 'Realidad Aumentada no compatible en esta plataforma';
 			default: return null;
@@ -798,6 +813,8 @@ extension on _StringsPt {
 			case 'map.locationPermissionPermanentlyDenied': return 'Permissão de localização negada permanentemente. Habilite nas configurações.';
 			case 'map.locationNotFound': return 'Não foi possível obter sua localização. Tente novamente.';
 			case 'map.locationError': return 'Erro ao iniciar localização.';
+			case 'map.helpTitle': return 'Ajuda do Mapa';
+			case 'map.helpContent': return 'Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Exposições';
 			case 'bottomNav.captured': return 'Capturados';
@@ -817,6 +834,7 @@ extension on _StringsPt {
 			case 'ar.backButton': return 'Voltar';
 			case 'ar.tryAgain': return 'Tentar novamente';
 			case 'ar.genericError': return 'Erro na Realidade Aumentada.';
+			case 'ar.localizationTimeoutError': return 'Não foi possível localizar a obra. Tente reiniciar a experiência AR.';
 			case 'ar.eventsError': return 'Falha ao receber eventos de Realidade Aumentada.';
 			case 'ar.unsupported': return 'Realidade Aumentada não suportada nesta plataforma';
 			default: return null;

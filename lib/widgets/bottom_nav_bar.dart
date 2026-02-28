@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
-import 'package:outvisionxr/pages/gallery_page.dart';
-import 'package:outvisionxr/pages/settings_page.dart';
+import 'package:outvisionxr/pages/artist_page.dart';
+import 'package:outvisionxr/pages/exhibitions_page.dart';
 import 'package:outvisionxr/widgets/nav_item.dart';
 import 'package:outvisionxr/pages/explore_page.dart'; // Importe seu mapa para o Explore
 
@@ -40,24 +40,24 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             if (currentIndex != 1) {
               Navigator.push(
                 context,
-                // CORREÇÃO AQUI: Mudamos de ArtistPage para GalleryPage
-                MaterialPageRoute(builder: (context) => const GalleryPage()),
+                // CORREÇÃO AQUI: Mudamos para ExhibitionsPage
+                MaterialPageRoute(builder: (context) => const ExhibitionsPage()),
               );
             }
           },
         ),
         
-        // Settings - Index 3
+        // Artists - Index 2
         navItem(
-          Icons.settings, 
-          context.t.bottomNav.settings, 
-          currentIndex == 3, 
-          currentIndex == 3 ? Colors.pinkAccent : Colors.grey, 
+          Icons.person, 
+          context.t.gallery.tabArtists, 
+          currentIndex == 2, 
+          currentIndex == 2 ? Colors.pinkAccent : Colors.grey, 
           () {
-            if (currentIndex != 3) {
+            if (currentIndex != 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                MaterialPageRoute(builder: (context) => ArtistsPage()),
               );
             }
           },

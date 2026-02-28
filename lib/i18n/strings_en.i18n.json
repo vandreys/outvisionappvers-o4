@@ -50,7 +50,9 @@
     "locationPermissionDenied": "Location permission denied.",
     "locationPermissionPermanentlyDenied": "Location permission permanently denied. Please enable it in settings.",
     "locationNotFound": "Could not get your location. Please try again.",
-    "locationError": "Error initializing location."
+    "locationError": "Error initializing location.",
+    "helpTitle": "Map Help",
+    "helpContent": "Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position."
   },
   "bottomNav": {
     "explore": "Explore",

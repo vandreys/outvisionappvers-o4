@@ -10,6 +10,8 @@ import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
 import 'package:outvisionxr/widgets/artwork_proximity_card.dart';
+import 'package:outvisionxr/pages/settings_page.dart'; // Ajuste o caminho conforme necessário
+
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -216,6 +218,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         final secondsInside = now.difference(_enteredRadiusAt!).inSeconds;
 
         if (secondsInside >= _minDwellSeconds) {
+          // OTIMIZAÇÃO: Só chama setState se o gate ainda não estava aberto ou se a obra mudou
+          if (_gateOpen && _activeArtwork?.id == nearest.id) return;
+
           setState(() {
             _gateOpen = true;
             _activeArtwork = nearest;
@@ -234,6 +239,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     // Gate aberto: fecha com histerese
     if (minDist >= _exitRadiusMeters) {
+      // OTIMIZAÇÃO: Só chama setState se o gate estava aberto
+      if (!_gateOpen) return;
+
       setState(() {
         _gateOpen = false;
         _activeArtwork = null;
@@ -364,29 +372,35 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                     Positioned(
                       top: 60,
                       left: 20,
-                      child: roundedSquareButton(Icons.help_outline, Colors.black, () {}),
+                      child: roundedSquareButton(Icons.menu, Colors.black, () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const SettingsPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(-1.0, 0.0);
+                              const end = Offset.zero;        // Termina no centro
+                              const curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      }),
                     ),
 
                     Positioned(
                       top: 60,
                       right: 20,
-                      child: Column(
-                        children: [
-                          roundedSquareButton(Icons.add, Colors.black, () async {
-                            final controller = await _controller.future;
-                            controller.animateCamera(CameraUpdate.zoomIn());
-                          }),
-                          const SizedBox(height: 10),
-                          roundedSquareButton(Icons.remove, Colors.black, () async {
-                            final controller = await _controller.future;
-                            controller.animateCamera(CameraUpdate.zoomOut());
-                          }),
-                          const SizedBox(height: 10),
-                          roundedSquareButton(Icons.navigation, Colors.black, () {
-                            if (_currentPosition != null) _moveCameraToPosition(_currentPosition!);
-                          }),
-                        ],
-                      ),
+                      child: roundedSquareButton(Icons.navigation, Colors.black, () {
+                        if (_currentPosition != null)
+                          _moveCameraToPosition(_currentPosition!);
+                      }),
                     ),
 
                     if (_nearbyArtwork != null)
@@ -407,7 +421,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       ),
                   ],
                 ),
-      bottomNavigationBar: bottomNavBar(context, 0),
+      bottomNavigationBar: SafeArea(
+        child: bottomNavBar(context, 0),
+      ),
     );
   }
 

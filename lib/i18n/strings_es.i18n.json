@@ -50,7 +50,9 @@
     "locationPermissionDenied": "Permiso de ubicación denegado.",
     "locationPermissionPermanentlyDenied": "Permiso de ubicación denegado permanentemente. Habilítelo en la configuración.",
     "locationNotFound": "No se pudo obtener tu ubicación. Por favor, inténtalo de nuevo.",
-    "locationError": "Error al iniciar la ubicación."
+    "locationError": "Error al iniciar la ubicación.",
+    "helpTitle": "Ayuda del Mapa",
+    "helpContent": "Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual."
   },
   "bottomNav": {
     "explore": "Explorar",

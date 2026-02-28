@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,15 @@ void main() async {
   await Firebase.initializeApp();
   final languageProvider = LanguageProvider();
   LocaleSettings.setLocale(AppLocale.pt);
+
+  // Configura a barra de status e navegação para serem transparentes/modernas
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent, // Deixa a barra de baixo transparente em Androids modernos
+  ));
+
+  // Ativa o modo imersivo (esconde as barras do sistema e só mostra ao deslizar)
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   runApp(
     MultiProvider(
