@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/artist_page.dart';
-import 'package:outvisionxr/pages/exhibitions_page.dart';
+import 'package:outvisionxr/pages/artwork_page.dart';
 import 'package:outvisionxr/widgets/nav_item.dart';
 import 'package:outvisionxr/pages/explore_page.dart'; // Importe seu mapa para o Explore
 
@@ -40,8 +40,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             if (currentIndex != 1) {
               Navigator.push(
                 context,
-                // CORREÇÃO AQUI: Mudamos para ExhibitionsPage
-                MaterialPageRoute(builder: (context) => const ExhibitionsPage()),
+                MaterialPageRoute(builder: (context) => const ArtworkPage()),
               );
             }
           },

@@ -1,13 +1,13 @@
 {
   "gallery": {
-    "title": "Exposiciones",
+    "title": "Obras",
     "tabArtwork": "Obras",
     "tabArtists": "Artistas",
     "search": "Buscar...",
     "artworkTitle": "El Jardín de las Delicias",
     "artworkArtist": "Hieronymus Bosch",
     "artistSubtitle": "Bienal de Curitiba 2025",
-    "viewExhibition": "Ver exposición"
+    "viewExhibition": "Ver obra"
   },
   "settings": {
     "title": "Configuración",
@@ -58,7 +58,7 @@
   },
   "bottomNav": {
     "explore": "Explorar",
-    "gallery": "Exposiciones",
+    "gallery": "Obras",
     "captured": "Capturados",
     "settings": "Configuración"
   },

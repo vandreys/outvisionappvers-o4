@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +10,7 @@ import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/widgets/artwork_proximity_card.dart';
 import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:provider/provider.dart';
@@ -27,10 +27,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
-  double _currentAccuracy = 0;
   Set<Marker> _markers = <Marker>{};
   StreamSubscription<Position>? _positionStream;
-  StreamSubscription<List<Map<String, dynamic>>>? _artworkSubscription;
+  StreamSubscription<List<Artwork>>? _artworkSubscription;
 
 
   bool _isLoading = true;
@@ -43,8 +42,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   ArtworkPoint? _activeArtwork;
   bool _gateOpen = false;
   DateTime? _enteredRadiusAt;
-  List<ArtworkPoint> _artworks = []; // Lista processada para o mapa
-  List<Map<String, dynamic>> _rawArtworks = []; // Lista crua vinda do Firebase
+  List<ArtworkPoint> _artworkPoints = []; // Lista processada para o mapa
+  List<Artwork> _rawArtworks = []; // Lista de models vinda do Service
   Map<String, dynamic>? _nearbyArtwork;
 
   // Config do gate
@@ -78,47 +77,32 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
   void _listenToArtworks() {
     final artworkService = Provider.of<ArtworkService>(context, listen: false);
-    _artworkSubscription = artworkService.getArtworkStream().listen((artworkDataList) {
+    _artworkSubscription = artworkService.getArtworkStream().listen((artworks) {
       if (!mounted) return;
       setState(() {
-        _rawArtworks = artworkDataList;
+        _rawArtworks = artworks;
       });
       _processAndSetArtworks();
     }, onError: (error) {
-      print("Erro ao buscar obras de arte: $error");
+      debugPrint("Erro ao buscar obras de arte: $error");
       // Aqui você pode mostrar um erro para o usuário, se desejar
     });
   }
 
   void _processAndSetArtworks() {
-    final currentLang = LocaleSettings.currentLocale.languageCode;
-
-    final artworks = _rawArtworks.map((data) {
-      // Validação dos dados vindos do Firebase
-      final GeoPoint? location = data['location'] as GeoPoint?;
-      final String id = data['id'] ?? '';
-
-      if (location == null || id.isEmpty) {
-        return null; // Ignora obras com dados inválidos
-      }
-
-      String title;
-      if (data['title'] is Map) {
-        title = data['title'][currentLang] ?? data['title']['en'] ?? 'Artwork';
-      } else {
-        title = data['title']?.toString() ?? 'Artwork';
-      }
-
+    // Converte o modelo Artwork para o modelo ArtworkPoint, usado pelo mapa/gate.
+    // A lógica de localização do título agora está no modelo Artwork.
+    final artworkPoints = _rawArtworks.map((artwork) {
       return ArtworkPoint(
-        id: id,
-        title: title,
-        lat: location.latitude,
-        lng: location.longitude,
+        id: artwork.id,
+        title: artwork.localizedTitle, // Usa o getter do modelo
+        lat: artwork.location.latitude,
+        lng: artwork.location.longitude,
         arrivalRadiusMeters: _entryRadiusMeters,
       );
-    }).whereType<ArtworkPoint>().toList(); // Filtra os nulos
+    }).toList();
 
-    setState(() => _artworks = artworks);
+    setState(() => _artworkPoints = artworkPoints);
     _updateMarkers();
   }
 
@@ -183,7 +167,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
       setState(() {
         _currentPosition = LatLng(pos!.latitude, pos.longitude);
-        _currentAccuracy = pos.accuracy;
         _isLoading = false;
         _locationError = null;
       });
@@ -217,7 +200,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
         setState(() {
           _currentPosition = LatLng(position.latitude, position.longitude);
-          _currentAccuracy = position.accuracy;
         });
 
         // ✅ Atualiza gate
@@ -227,12 +209,12 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   void _updateArrivalGate(Position p) {
-    if (_artworks.isEmpty) return;
+    if (_artworkPoints.isEmpty) return;
 
-    ArtworkPoint nearest = _artworks.first;
+    ArtworkPoint nearest = _artworkPoints.first;
     double minDist = double.infinity;
 
-    for (final a in _artworks) {
+    for (final a in _artworkPoints) {
       final d = Geolocator.distanceBetween(p.latitude, p.longitude, a.lat, a.lng);
       if (d < minDist) {
         minDist = d;
@@ -251,19 +233,21 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
           // OTIMIZAÇÃO: Só chama setState se o gate ainda não estava aberto ou se a obra mudou
           if (_gateOpen && _activeArtwork?.id == nearest.id) return;
 
-          final fullArtworkData = _rawArtworks.firstWhere(
-            (raw) => raw['id'] == nearest.id,
-            orElse: () => <String, dynamic>{},
-          );
+          Artwork? fullArtworkModel;
+          try {
+            fullArtworkModel = _rawArtworks.firstWhere((raw) => raw.id == nearest.id);
+          } catch (e) {
+            fullArtworkModel = null;
+          }
 
-          if (fullArtworkData.isNotEmpty) {
+          if (fullArtworkModel != null) {
             setState(() {
               _gateOpen = true;
               _activeArtwork = nearest;
               _nearbyArtwork = {
-                'id': fullArtworkData['id'],
+                'id': fullArtworkModel.id,
                 'name': nearest.title, // Passa o título já localizado para o card
-                'imageUrl': fullArtworkData['imageUrl'] ?? '',
+                'imageUrl': fullArtworkModel.imageUrl ?? '',
               };
             });
           }
@@ -296,7 +280,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   void _updateMarkers() {
     // Recria o Set de marcadores para garantir que o Google Maps detecte a mudança
     setState(() {
-      _markers = _artworks.map((artwork) {
+      _markers = _artworkPoints.map((artwork) {
       return Marker(
         markerId: MarkerId(artwork.id),
         position: LatLng(artwork.lat, artwork.lng),
@@ -308,7 +292,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   Future<void> _openArViewNow() async {
-    if (_activeArtwork == null) return;
+    final artworkToOpen = _activeArtwork;
+    if (artworkToOpen == null) return;
 
     // 1. Oculta o mapa para liberar recursos da GPU (SurfaceView)
     setState(() {
@@ -322,14 +307,18 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: _activeArtwork!)),
+      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: artworkToOpen)),
     );
 
-    // 2. Ao voltar, recria o controller e exibe o mapa novamente
+    // 2. Ao voltar da experiência AR, reexibe o mapa e reseta o estado do gate.
     if (mounted) {
       _controller = Completer<GoogleMapController>();
       setState(() {
         _isArActive = false;
+        _gateOpen = false;
+        _activeArtwork = null;
+        _enteredRadiusAt = null;
+        _nearbyArtwork = null;
       });
     }
   }
@@ -459,13 +448,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                           },
                           onOpenAr: () {
                             _openArViewNow();
-                            // Também reseta o estado ao abrir o AR para permitir que o card reapareça ao voltar
-                            setState(() {
-                              _gateOpen = false;
-                              _activeArtwork = null;
-                              _enteredRadiusAt = null;
-                              _nearbyArtwork = null;
-                            });
                           },
                         ),
                       ),
@@ -494,7 +476,7 @@ class UserLocationDot extends StatelessWidget {
         height: 28,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.blue.withOpacity(0.2), // aura azul
+          color: Colors.blue.withAlpha(51), // aura azul
         ),
         child: Center(
           child: Container(

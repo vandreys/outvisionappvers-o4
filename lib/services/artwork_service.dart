@@ -1,18 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
 
 class ArtworkService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<List<Map<String, dynamic>>> getArtworkStream() {
-    // Supondo que sua coleção de obras de arte se chame 'artworks'
+  Stream<List<Artwork>> getArtworkStream() {
     return _firestore.collection("artworks").snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        // É uma boa prática incluir o ID do documento junto com os dados
-        var data = doc.data();
-        data['id'] = doc.id;
-        return data;
-      }).toList();
+      return snapshot.docs
+          .map((doc) => Artwork.fromFirestore(doc))
+          .whereType<Artwork>() // Filtra os nulos de forma elegante
+          .toList();
     });
+  }
+
+  Future<Artwork?> getArtworkById(String id) async {
+    final doc = await _firestore.collection("artworks").doc(id).get();
+    if (doc.exists) {
+      return Artwork.fromFirestore(doc);
+    }
+    return null;
   }
 }

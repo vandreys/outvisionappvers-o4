@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
-import 'package:outvisionxr/services/exhibition_service.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
+import 'package:outvisionxr/services/artwork_service.dart';
+import 'package:outvisionxr/pages/artwork_details_page.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 
-class ExhibitionsPage extends StatefulWidget {
-  const ExhibitionsPage({super.key});
+class ArtworkPage extends StatefulWidget {
+  const ArtworkPage({super.key});
 
   @override
-  State<ExhibitionsPage> createState() => _ExhibitionsPageState();
+  State<ArtworkPage> createState() => _ArtworkPageState();
 }
 
-class _ExhibitionsPageState extends State<ExhibitionsPage> {
-  final ExhibitionService _exhibitionService = ExhibitionService();
+class _ArtworkPageState extends State<ArtworkPage> {
+  final ArtworkService _artworkService = ArtworkService();
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
@@ -67,7 +69,7 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Text(
-              t.gallery.title,
+              t.gallery.tabArtwork,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -76,8 +78,8 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
             ),
           ),
           Expanded(
-            child: StreamBuilder(
-              stream: _exhibitionService.getExhibitionsStream(),
+            child: StreamBuilder<List<Artwork>>(
+              stream: _artworkService.getArtworkStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(
@@ -101,19 +103,23 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
                   );
                 }
 
-                final exhibitions = snapshot.data!.where((exhibition) =>
-                    exhibition["title"].toString().toLowerCase().contains(_query.toLowerCase()) ||
-                    exhibition["artist"].toString().toLowerCase().contains(_query.toLowerCase())).toList();
+                final List<Artwork> data = snapshot.data ?? [];
+                final artworks = data.where((artwork) {
+                  final title = artwork.localizedTitle.toLowerCase();
+                  final artist = (artwork.artist ?? '').toLowerCase();
+                  final query = _query.toLowerCase();
+                  return title.contains(query) || artist.contains(query);
+                }).toList();
 
-                if (exhibitions.isEmpty) {
-                  return Center(
+                if (artworks.isEmpty) {
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.mood_bad, size: 75),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'Nenhuma exposição encontrada',
+                        Icon(Icons.mood_bad, size: 75),
+                        SizedBox(height: 5),
+                        Text(
+                          'Nenhuma obra encontrada',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ],
@@ -123,9 +129,9 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
 
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  itemCount: exhibitions.length,
+                  itemCount: artworks.length,
                   itemBuilder: (context, index) {
-                    return _buildExhibitionCard(exhibitions[index], context);
+                    return _buildArtworkCard(artworks[index], context);
                   },
                 );
               },
@@ -139,7 +145,7 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
     );
   }
 
-  Widget _buildExhibitionCard(Map<String, dynamic> exhibitionData, BuildContext context) {
+  Widget _buildArtworkCard(Artwork artwork, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -154,45 +160,17 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
                 decoration: BoxDecoration(
                   color: const Color(0xFFEDEBE7),
                   borderRadius: BorderRadius.circular(5),
-                  image: exhibitionData["imageUrl"] != null
+                  image: artwork.imageUrl != null
                       ? DecorationImage(
-                          image: NetworkImage(exhibitionData["imageUrl"]),
+                          image: NetworkImage(artwork.imageUrl!),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
-                child: exhibitionData["imageUrl"] == null
+                child: artwork.imageUrl == null
                     ? const Icon(Icons.image, size: 50, color: Colors.grey)
                     : null,
               ),
-              // BADGE DE LOCALIZAÇÃO
-              if (exhibitionData["location"] != null)
-                Positioned(
-                  top: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.menu, size: 14, color: Colors.grey[700]),
-                        const SizedBox(width: 4),
-                        Text(
-                          exhibitionData["location"],
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey[800],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
             ],
           ),
 
@@ -202,7 +180,7 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              exhibitionData["title"] ?? 'Título não disponível',
+              artwork.localizedTitle,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -221,7 +199,7 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
                 Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
                 const SizedBox(width: 4),
                 Text(
-                  exhibitionData["artist"] ?? 'Artista desconhecido',
+                  artwork.artist ?? 'Artista desconhecido',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[700],
@@ -237,7 +215,7 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  exhibitionData["year"] ?? '2025',
+                  artwork.year ?? '2025',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[500],
@@ -262,7 +240,14 @@ class _ExhibitionsPageState extends State<ExhibitionsPage> {
                 ),
               ),
               onPressed: () {
-                // Navegação para detalhes da obra
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArtworkDetailsPage(
+                      artworkId: artwork.id,
+                    ),
+                  ),
+                );
               },
               child: Text(
                 t.gallery.viewExhibition,

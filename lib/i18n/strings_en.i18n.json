@@ -1,13 +1,13 @@
 {
   "gallery": {
-    "title": "Exhibitions",
+    "title": "Artworks",
     "tabArtwork": "Artworks",
     "tabArtists": "Artists",
     "search": "Search...",
     "artworkTitle": "The Garden of Earthly Delights",
     "artworkArtist": "Hieronymus Bosch",
     "artistSubtitle": "Curitiba Biennial 2025",
-    "viewExhibition": "View exhibition"
+    "viewExhibition": "View artwork"
   },
   "settings": {
     "title": "Settings",
@@ -58,7 +58,7 @@
   },
   "bottomNav": {
     "explore": "Explore",
-    "gallery": "Exhibitions",
+    "gallery": "Artworks",
     "captured": "Captured",
     "settings": "Settings"
   },

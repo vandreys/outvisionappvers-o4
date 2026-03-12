@@ -106,13 +106,13 @@ class _ArtistsPageState extends State<ArtistsPage> {
                     artist["name"].toString().toLowerCase().contains(_query.toLowerCase())).toList();
 
                 if (artists.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.mood_bad, size: 75),
-                        const SizedBox(height: 5),
-                        const Text(
+                        Icon(Icons.mood_bad, size: 75),
+                        SizedBox(height: 5),
+                        Text(
                           'Nenhum artista encontrado',
                           style: TextStyle(color: Colors.grey),
                         ),
