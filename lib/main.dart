@@ -6,6 +6,8 @@ import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
+import 'package:outvisionxr/services/artist_service.dart';
+import 'package:outvisionxr/services/artwork_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +30,12 @@ void main() async {
       providers: [
         ChangeNotifierProvider<LanguageProvider>.value(
           value: languageProvider,
+        ),
+        ChangeNotifierProvider<ArtistService>(
+          create: (_) => ArtistService(),
+        ),
+        ChangeNotifierProvider<ArtworkService>(
+          create: (_) => ArtworkService(),
         ),
       ],
       child: TranslationProvider(

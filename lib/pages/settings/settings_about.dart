@@ -27,7 +27,7 @@ class AboutPage extends StatelessWidget {
             // 1. Imagem/Logo Principal (se houver na foto)
             Center(
               child: Image.asset(
-                'assets/images/outvision_logo.png', // Substitua pelo seu logo
+                'assets/images/bienal_ar_es.png', // Substitua pelo seu logo
                 height: 120,
                 fit: BoxFit.contain,
               ),

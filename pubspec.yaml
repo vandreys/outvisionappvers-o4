@@ -38,9 +38,17 @@ dev_dependencies:
   # DEPENDÊNCIAS DE DESENVOLVIMENTO DO SLANG (ATUALIZADAS)
   build_runner: ^2.4.8
   slang_build_runner: ^3.30.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
   assets:
     - assets/3dmodels/stateofbeing.glb
     - assets/3dmodels/dress.usdz
+    - assets/images/bienal_ar_es.png
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/bienal_ar_es.png"
+  min_sdk_android: 21

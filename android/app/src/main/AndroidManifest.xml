@@ -14,7 +14,7 @@
     <application
         android:label="outvisionxr"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <!-- 🔴 DESATIVA O IMPELLER (CORREÇÃO DO mali_gralloc / tela preta) -->
         <meta-data

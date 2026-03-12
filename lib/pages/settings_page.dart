@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/pages/settings/settings_about.dart';
+import 'package:outvisionxr/pages/settings/settings_about_app.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -72,6 +73,18 @@ class SettingsPage extends StatelessWidget {
                         );
                       },
                     ),
+                    Divider(height: 1, color: Colors.grey[300]),
+                    _tile(
+                      icon: Icons.app_settings_alt,
+                      iconBackgroundColor: Colors.red,
+                      title: context.t.settings.aboutApp,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AboutAppPage()),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -79,9 +92,9 @@ class SettingsPage extends StatelessWidget {
                   groupColor,
                   [
                     _tile(
-                      icon: Icons.article_outlined,
+                      icon: Icons.public,
                       iconBackgroundColor: Colors.grey,
-                      title: context.t.settings.imprint,
+                      title: context.t.settings.website,
                       isExternal: true,
                       onTap: () {},
                     ),

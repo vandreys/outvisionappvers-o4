@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 201 (67 per locale)
+/// Strings: 207 (69 per locale)
 ///
-/// Built on 2026-02-28 at 21:52 UTC
+/// Built on 2026-03-07 at 19:09 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -168,6 +168,7 @@ class _StringsGalleryEn {
 	String get title => 'Exhibitions';
 	String get tabArtwork => 'Artworks';
 	String get tabArtists => 'Artists';
+	String get search => 'Search...';
 	String get artworkTitle => 'The Garden of Earthly Delights';
 	String get artworkArtist => 'Hieronymus Bosch';
 	String get artistSubtitle => 'Curitiba Biennial 2025';
@@ -185,8 +186,9 @@ class _StringsSettingsEn {
 	String get getHelp => 'How to use the App';
 	String get appSettings => 'App Settings';
 	String get language => 'Language';
-	String get about => 'About Out Vision';
-	String get imprint => 'Imprint';
+	String get about => '16th International Biennial of Curitiba';
+	String get website => 'Website';
+	String get aboutApp => 'About the App';
 	String get privacyPolicy => 'Privacy Policy';
 	String get termsOfUse => 'Terms of Use';
 }
@@ -331,6 +333,7 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get title => 'Exposiciones';
 	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
+	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'El Jardín de las Delicias';
 	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
@@ -348,8 +351,9 @@ class _StringsSettingsEs implements _StringsSettingsEn {
 	@override String get getHelp => 'Cómo usar la App';
 	@override String get appSettings => 'Configuración de la App';
 	@override String get language => 'Idioma';
-	@override String get about => 'Sobre Out Vision';
-	@override String get imprint => 'Impresión';
+	@override String get about => '16ª Bienal Internacional de Curitiba';
+	@override String get website => 'Sitio Web';
+	@override String get aboutApp => 'Sobre la App';
 	@override String get privacyPolicy => 'Política de Privacidad';
 	@override String get termsOfUse => 'Términos de Uso';
 }
@@ -494,6 +498,7 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override String get title => 'Exposições';
 	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
+	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'O Jardim das Delícias Terrenas';
 	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
@@ -511,8 +516,9 @@ class _StringsSettingsPt implements _StringsSettingsEn {
 	@override String get getHelp => 'Como usar o App';
 	@override String get appSettings => 'Configurações do App';
 	@override String get language => 'Idioma';
-	@override String get about => 'Sobre Out Vision';
-	@override String get imprint => 'Impressão';
+	@override String get about => '16ª Bienal Internacional de Curitiba';
+	@override String get website => 'Website';
+	@override String get aboutApp => 'Sobre o App';
 	@override String get privacyPolicy => 'Política de Privacidade';
 	@override String get termsOfUse => 'Termos de Uso';
 }
@@ -623,6 +629,7 @@ extension on Translations {
 			case 'gallery.title': return 'Exhibitions';
 			case 'gallery.tabArtwork': return 'Artworks';
 			case 'gallery.tabArtists': return 'Artists';
+			case 'gallery.search': return 'Search...';
 			case 'gallery.artworkTitle': return 'The Garden of Earthly Delights';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Curitiba Biennial 2025';
@@ -631,8 +638,9 @@ extension on Translations {
 			case 'settings.getHelp': return 'How to use the App';
 			case 'settings.appSettings': return 'App Settings';
 			case 'settings.language': return 'Language';
-			case 'settings.about': return 'About Out Vision';
-			case 'settings.imprint': return 'Imprint';
+			case 'settings.about': return '16th International Biennial of Curitiba';
+			case 'settings.website': return 'Website';
+			case 'settings.aboutApp': return 'About the App';
 			case 'settings.privacyPolicy': return 'Privacy Policy';
 			case 'settings.termsOfUse': return 'Terms of Use';
 			case 'about.pageTitle': return 'About Outvision';
@@ -698,6 +706,7 @@ extension on _StringsEs {
 			case 'gallery.title': return 'Exposiciones';
 			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
+			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'El Jardín de las Delicias';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
@@ -706,8 +715,9 @@ extension on _StringsEs {
 			case 'settings.getHelp': return 'Cómo usar la App';
 			case 'settings.appSettings': return 'Configuración de la App';
 			case 'settings.language': return 'Idioma';
-			case 'settings.about': return 'Sobre Out Vision';
-			case 'settings.imprint': return 'Impresión';
+			case 'settings.about': return '16ª Bienal Internacional de Curitiba';
+			case 'settings.website': return 'Sitio Web';
+			case 'settings.aboutApp': return 'Sobre la App';
 			case 'settings.privacyPolicy': return 'Política de Privacidad';
 			case 'settings.termsOfUse': return 'Términos de Uso';
 			case 'about.pageTitle': return 'Sobre Outvision';
@@ -773,6 +783,7 @@ extension on _StringsPt {
 			case 'gallery.title': return 'Exposições';
 			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
+			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'O Jardim das Delícias Terrenas';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
@@ -781,8 +792,9 @@ extension on _StringsPt {
 			case 'settings.getHelp': return 'Como usar o App';
 			case 'settings.appSettings': return 'Configurações do App';
 			case 'settings.language': return 'Idioma';
-			case 'settings.about': return 'Sobre Out Vision';
-			case 'settings.imprint': return 'Impressão';
+			case 'settings.about': return '16ª Bienal Internacional de Curitiba';
+			case 'settings.website': return 'Website';
+			case 'settings.aboutApp': return 'Sobre o App';
 			case 'settings.privacyPolicy': return 'Política de Privacidade';
 			case 'settings.termsOfUse': return 'Termos de Uso';
 			case 'about.pageTitle': return 'Sobre Outvision';

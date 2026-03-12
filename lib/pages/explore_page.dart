@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
 import 'package:outvisionxr/widgets/artwork_proximity_card.dart';
-import 'package:outvisionxr/pages/settings_page.dart'; // Ajuste o caminho conforme necessário
+import 'package:outvisionxr/pages/settings_page.dart';
+import 'package:provider/provider.dart';
 
 
 class ExplorePage extends StatefulWidget {
@@ -24,8 +27,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
+  double _currentAccuracy = 0;
   Set<Marker> _markers = <Marker>{};
   StreamSubscription<Position>? _positionStream;
+  StreamSubscription<List<Map<String, dynamic>>>? _artworkSubscription;
+
 
   bool _isLoading = true;
   String? _locationError;
@@ -37,7 +43,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   ArtworkPoint? _activeArtwork;
   bool _gateOpen = false;
   DateTime? _enteredRadiusAt;
-  List<ArtworkPoint> _artworks = [];
+  List<ArtworkPoint> _artworks = []; // Lista processada para o mapa
+  List<Map<String, dynamic>> _rawArtworks = []; // Lista crua vinda do Firebase
   Map<String, dynamic>? _nearbyArtwork;
 
   // Config do gate
@@ -50,45 +57,68 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     super.initState();
 
     _initLocationService();
+    _listenToArtworks();
   }
 
   @override
   void dispose() {
     _positionStream?.cancel();
+    _artworkSubscription?.cancel();
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Atualiza as obras e marcadores sempre que as dependências (como idioma) mudam
-    _updateArtworksData();
+    // Se já tivermos os dados, reprocessa para atualizar os títulos com o idioma atual
+    if (_rawArtworks.isNotEmpty) {
+      _processAndSetArtworks();
+    }
   }
 
-  void _updateArtworksData() {
-    _artworks = [
-      ArtworkPoint(
-        id: 'obra_largo',
-        title: t.map.artworkLargo,
-        lat: -26.294514160515284,
-        lng: -48.85139160184969,
+  void _listenToArtworks() {
+    final artworkService = Provider.of<ArtworkService>(context, listen: false);
+    _artworkSubscription = artworkService.getArtworkStream().listen((artworkDataList) {
+      if (!mounted) return;
+      setState(() {
+        _rawArtworks = artworkDataList;
+      });
+      _processAndSetArtworks();
+    }, onError: (error) {
+      print("Erro ao buscar obras de arte: $error");
+      // Aqui você pode mostrar um erro para o usuário, se desejar
+    });
+  }
+
+  void _processAndSetArtworks() {
+    final currentLang = LocaleSettings.currentLocale.languageCode;
+
+    final artworks = _rawArtworks.map((data) {
+      // Validação dos dados vindos do Firebase
+      final GeoPoint? location = data['location'] as GeoPoint?;
+      final String id = data['id'] ?? '';
+
+      if (location == null || id.isEmpty) {
+        return null; // Ignora obras com dados inválidos
+      }
+
+      String title;
+      if (data['title'] is Map) {
+        title = data['title'][currentLang] ?? data['title']['en'] ?? 'Artwork';
+      } else {
+        title = data['title']?.toString() ?? 'Artwork';
+      }
+
+      return ArtworkPoint(
+        id: id,
+        title: title,
+        lat: location.latitude,
+        lng: location.longitude,
         arrivalRadiusMeters: _entryRadiusMeters,
-      ),
-      ArtworkPoint(
-        id: 'obra_mon',
-        title: t.map.artworkMon,
-        lat: -25.431707398660244,
-        lng: -49.28053248220991,
-        arrivalRadiusMeters: _entryRadiusMeters,
-      ),
-      ArtworkPoint(
-        id: 'obra_opera',
-        title: t.map.artworkOpera,
-        lat: -25.384375553058913,
-        lng: -49.27629471973898,
-        arrivalRadiusMeters: _entryRadiusMeters,
-      ),
-    ];
+      );
+    }).whereType<ArtworkPoint>().toList(); // Filtra os nulos
+
+    setState(() => _artworks = artworks);
     _updateMarkers();
   }
 
@@ -153,6 +183,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
       setState(() {
         _currentPosition = LatLng(pos!.latitude, pos.longitude);
+        _currentAccuracy = pos.accuracy;
         _isLoading = false;
         _locationError = null;
       });
@@ -184,11 +215,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       (Position position) {
         if (!mounted) return;
 
-        // OTIMIZAÇÃO: Atualizamos a variável sem setState para evitar rebuilds desnecessários do Mapa.
-        _currentPosition = LatLng(position.latitude, position.longitude);
-
-        // ✅ Não move mais a câmera automaticamente (evita “grudar”)
-        // _moveCameraToPosition(_currentPosition!);
+        setState(() {
+          _currentPosition = LatLng(position.latitude, position.longitude);
+          _currentAccuracy = position.accuracy;
+        });
 
         // ✅ Atualiza gate
         _updateArrivalGate(position);
@@ -221,15 +251,22 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
           // OTIMIZAÇÃO: Só chama setState se o gate ainda não estava aberto ou se a obra mudou
           if (_gateOpen && _activeArtwork?.id == nearest.id) return;
 
-          setState(() {
-            _gateOpen = true;
-            _activeArtwork = nearest;
-            _nearbyArtwork = {
-              'id': nearest.id,
-              'name': nearest.title,
-              // 'imageUrl': '', // Futuramente você preencherá isso com dados do Firebase
-            };
-          });
+          final fullArtworkData = _rawArtworks.firstWhere(
+            (raw) => raw['id'] == nearest.id,
+            orElse: () => <String, dynamic>{},
+          );
+
+          if (fullArtworkData.isNotEmpty) {
+            setState(() {
+              _gateOpen = true;
+              _activeArtwork = nearest;
+              _nearbyArtwork = {
+                'id': fullArtworkData['id'],
+                'name': nearest.title, // Passa o título já localizado para o card
+                'imageUrl': fullArtworkData['imageUrl'] ?? '',
+              };
+            });
+          }
         }
       } else {
         _enteredRadiusAt = null;
@@ -412,11 +449,23 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                         child: ArtworkProximityCard(
                           artworkData: _nearbyArtwork!,
                           onClose: () {
-                            setState(() => _nearbyArtwork = null);
+                            // Reseta completamente o estado do gate para que ele possa ser reativado
+                            setState(() {
+                              _gateOpen = false;
+                              _activeArtwork = null;
+                              _enteredRadiusAt = null;
+                              _nearbyArtwork = null;
+                            });
                           },
                           onOpenAr: () {
                             _openArViewNow();
-                            setState(() => _nearbyArtwork = null);
+                            // Também reseta o estado ao abrir o AR para permitir que o card reapareça ao voltar
+                            setState(() {
+                              _gateOpen = false;
+                              _activeArtwork = null;
+                              _enteredRadiusAt = null;
+                              _nearbyArtwork = null;
+                            });
                           },
                         ),
                       ),
@@ -432,4 +481,42 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     {"featureType": "all", "stylers": [{"saturation": -100}, {"lightness": 40}, {"gamma": 0.5}]},
     {"featureType": "poi", "stylers": [{"visibility": "off"}]},
   ]);
+}
+
+class UserLocationDot extends StatelessWidget {
+  const UserLocationDot({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue.withOpacity(0.2), // aura azul
+        ),
+        child: Center(
+          child: Container(
+            width: 16,
+            height: 16,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: Center(
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
