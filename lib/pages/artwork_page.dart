@@ -82,6 +82,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
               stream: _artworkService.getArtworkStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
+                  debugPrint("Erro Firebase (Obras): ${snapshot.error}");
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

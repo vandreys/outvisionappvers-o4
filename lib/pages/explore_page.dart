@@ -85,7 +85,16 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       _processAndSetArtworks();
     }, onError: (error) {
       debugPrint("Erro ao buscar obras de arte: $error");
-      // Aqui você pode mostrar um erro para o usuário, se desejar
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro de conexão: $error"),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
     });
   }
 
@@ -245,8 +254,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
               _gateOpen = true;
               _activeArtwork = nearest;
               _nearbyArtwork = {
-                'id': fullArtworkModel.id,
-                'name': nearest.title, // Passa o título já localizado para o card
+                'id': fullArtworkModel!.id,
+                'name': nearest.title,
                 'imageUrl': fullArtworkModel.imageUrl ?? '',
               };
             });
@@ -292,8 +301,16 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   Future<void> _openArViewNow() async {
-    final artworkToOpen = _activeArtwork;
-    if (artworkToOpen == null) return;
+    final point = _activeArtwork;
+    if (point == null) return;
+
+    // Busca o objeto Artwork completo (com URL do modelo 3D) na lista carregada
+    Artwork? artworkModel;
+    try {
+      artworkModel = _rawArtworks.firstWhere((a) => a.id == point.id);
+    } catch (_) {
+      return; // Segurança: Se não encontrar a obra na lista, não abre
+    }
 
     // 1. Oculta o mapa para liberar recursos da GPU (SurfaceView)
     setState(() {
@@ -307,7 +324,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: artworkToOpen)),
+      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: artworkModel!)),
     );
 
     // 2. Ao voltar da experiência AR, reexibe o mapa e reseta o estado do gate.

@@ -8,11 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final languageProvider = LanguageProvider();
   LocaleSettings.setLocale(AppLocale.pt);
 

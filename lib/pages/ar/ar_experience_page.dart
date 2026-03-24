@@ -9,12 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 
-import 'package:outvisionxr/models/artwork_point.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
 
 enum ArRuntimeStatus { localizing, ready, error }
 
 class ARExperiencePage extends StatefulWidget {
-  final ArtworkPoint artwork;
+  final Artwork artwork;
 
   const ARExperiencePage({
     super.key,
@@ -436,7 +436,7 @@ class _GlassmorphicButton extends StatelessWidget {
 }
 
 class _ARPlatformView extends StatelessWidget {
-  final ArtworkPoint artwork;
+  final Artwork artwork;
   final String viewType;
   final void Function(int) onCreated;
 
@@ -450,12 +450,12 @@ class _ARPlatformView extends StatelessWidget {
   Widget build(BuildContext context) {
     final creationParams = <String, dynamic>{
       'artworkId': artwork.id,
-      'title': artwork.title,
-      'lat': artwork.lat,
-      'lng': artwork.lng,
-      'arrivalRadiusMeters': artwork.arrivalRadiusMeters,
-      'eyeLevelOffsetMeters': artwork.eyeLevelOffsetMeters,
-      'faceUser': artwork.faceUser,
+      'title': artwork.localizedTitle,
+      'lat': artwork.location.latitude,
+      'lng': artwork.location.longitude,
+      'arrivalRadiusMeters': 20.0, // Valor padrão de entrada
+      'eyeLevelOffsetMeters': artwork.eyeLevelOffsetMeters ?? 0.0,
+      'faceUser': artwork.faceUser ?? false,
       // Tenta usar o modelo específico da obra, senão usa o fallback
       'androidGlbAsset': artwork.androidGlbUrl ?? 'assets/3dmodels/stateofbeing.glb',
       'iosUsdzAsset': artwork.iosUsdzUrl ?? 'assets/3dmodels/stateofbeing.usdz',
