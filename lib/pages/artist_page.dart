@@ -158,10 +158,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
           child: CircleAvatar(
             radius: 42,
             backgroundColor: Colors.grey[200],
-            backgroundImage: artistData["imageUrl"] != null
-                ? NetworkImage(artistData["imageUrl"])
+            backgroundImage: artistData["artist_photo"] != null
+                ? NetworkImage(artistData["artist_photo"])
                 : null,
-            child: artistData["imageUrl"] == null
+            child: artistData["artist_photo"] == null
                 ? const Icon(Icons.person, size: 40, color: Colors.grey)
                 : null,
           ),

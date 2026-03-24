@@ -19,6 +19,7 @@ class ArtworkProximityCard extends StatelessWidget {
     // Extrai os dados para facilitar a leitura, com valores padrão para segurança.
     final String imageUrl = artworkData['imageUrl'] ?? ''; // URL da imagem da obra
     final String artworkName = artworkData['name'] ?? context.t.map.arrivedTitle; // Nome da obra
+    final String? artistName = artworkData['artist']; // Nome do artista (opcional)
 
     return Material(
       color: Colors.white,
@@ -71,7 +72,17 @@ class ArtworkProximityCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 24),
+                    if (artistName != null && artistName.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        artistName,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: onOpenAr,
                       style: ElevatedButton.styleFrom(
