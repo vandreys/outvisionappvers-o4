@@ -41,24 +41,28 @@ class _ArtworkPageState extends State<ArtworkPage> {
         toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
+        titleSpacing: -10,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 18, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Container(
           height: 40,
+          margin: const EdgeInsets.only(right: 30),
           decoration: BoxDecoration(
             color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
           ),
           child: TextField(
             controller: _searchController,
+            textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
               hintText: t.gallery.search,
-              hintStyle: TextStyle(color: Colors.grey[500]),
+              hintStyle: TextStyle(fontSize: 10, color: Colors.grey[700]),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              isDense: true,
             ),
           ),
         ),

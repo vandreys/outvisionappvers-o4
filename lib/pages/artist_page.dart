@@ -39,23 +39,28 @@ class _ArtistsPageState extends State<ArtistsPage> {
         toolbarHeight: 80,
         backgroundColor: Colors.white,
         elevation: 0,
+        titleSpacing: -10,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 18, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Container(
           height: 40,
+          margin: const EdgeInsets.only(right: 30),
           decoration: BoxDecoration(
             color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5), // Menos arredondado (era 20)
           ),
           child: TextField(
             controller: _searchController,
+            textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20), // Ícone menor/centralizado
               hintText: t.gallery.search,
+              hintStyle: TextStyle(fontSize: 10, color: Colors.grey[700]), // Hint menor
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15), // Padding para centralizar
+              isDense: true, // Compacta o campo
             ),
           ),
         ),
@@ -128,7 +133,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                       crossAxisCount: 3,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 20,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 0.7,
                     ),
                     itemCount: artists.length,
                     itemBuilder: (context, index) {
