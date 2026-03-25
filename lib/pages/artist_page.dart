@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
+import 'package:outvisionxr/pages/details_artist_page.dart';
 
 class ArtistsPage extends StatefulWidget {
   const ArtistsPage({super.key});
@@ -153,36 +154,46 @@ class _ArtistsPageState extends State<ArtistsPage> {
   }
 
   Widget _buildArtistGridItem(Map<String, dynamic> artistData) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey[300]!, width: 1.5),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailsArtistPage(artistData: artistData),
           ),
-          child: CircleAvatar(
-            radius: 42,
-            backgroundColor: Colors.grey[200],
-            backgroundImage: artistData["artist_photo"] != null
-                ? NetworkImage(artistData["artist_photo"])
-                : null,
-            child: artistData["artist_photo"] == null
-                ? const Icon(Icons.person, size: 40, color: Colors.grey)
-                : null,
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey[300]!, width: 1.5),
+            ),
+            child: CircleAvatar(
+              radius: 42,
+              backgroundColor: Colors.grey[200],
+              backgroundImage: artistData["artist_photo"] != null
+                  ? NetworkImage(artistData["artist_photo"])
+                  : null,
+              child: artistData["artist_photo"] == null
+                  ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                  : null,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          artistData["name"],
-          style: const TextStyle(
-            fontSize: 13,
-            color: Colors.black,
+          const SizedBox(height: 8),
+          Text(
+            artistData["name"],
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

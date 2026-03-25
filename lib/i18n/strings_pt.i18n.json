@@ -7,7 +7,9 @@
     "artworkTitle": "O Jardim das Delícias Terrenas",
     "artworkArtist": "Hieronymus Bosch",
     "artistSubtitle": "Bienal de Curitiba 2025",
-    "viewExhibition": "Ver obra"
+    "viewExhibition": "Ver obra",
+    "artistDetails": "Detalhes do Artista",
+    "works": "Obras"
   },
   "settings": {
     "title": "Configurações",

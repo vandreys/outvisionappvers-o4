@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 207 (69 per locale)
+/// Strings: 213 (71 per locale)
 ///
-/// Built on 2026-03-07 at 19:09 UTC
+/// Built on 2026-03-25 at 15:27 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -165,14 +165,16 @@ class _StringsGalleryEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Exhibitions';
+	String get title => 'Artworks';
 	String get tabArtwork => 'Artworks';
 	String get tabArtists => 'Artists';
 	String get search => 'Search...';
 	String get artworkTitle => 'The Garden of Earthly Delights';
 	String get artworkArtist => 'Hieronymus Bosch';
 	String get artistSubtitle => 'Curitiba Biennial 2025';
-	String get viewExhibition => 'View exhibition';
+	String get viewExhibition => 'View artwork';
+	String get artistDetails => 'Artist Details';
+	String get works => 'Works';
 }
 
 // Path: settings
@@ -258,7 +260,7 @@ class _StringsBottomNavEn {
 
 	// Translations
 	String get explore => 'Explore';
-	String get gallery => 'Exhibitions';
+	String get gallery => 'Artworks';
 	String get captured => 'Captured';
 	String get settings => 'Settings';
 }
@@ -330,14 +332,16 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override final _StringsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Exposiciones';
+	@override String get title => 'Obras';
 	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
 	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'El Jardín de las Delicias';
 	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
-	@override String get viewExhibition => 'Ver exposición';
+	@override String get viewExhibition => 'Ver obra';
+	@override String get artistDetails => 'Detalles del Artista';
+	@override String get works => 'Obras';
 }
 
 // Path: settings
@@ -423,7 +427,7 @@ class _StringsBottomNavEs implements _StringsBottomNavEn {
 
 	// Translations
 	@override String get explore => 'Explorar';
-	@override String get gallery => 'Exposiciones';
+	@override String get gallery => 'Obras';
 	@override String get captured => 'Capturados';
 	@override String get settings => 'Configuración';
 }
@@ -495,14 +499,16 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override final _StringsPt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Exposições';
+	@override String get title => 'Obras';
 	@override String get tabArtwork => 'Obras';
 	@override String get tabArtists => 'Artistas';
 	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'O Jardim das Delícias Terrenas';
 	@override String get artworkArtist => 'Hieronymus Bosch';
 	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
-	@override String get viewExhibition => 'Ver exposição';
+	@override String get viewExhibition => 'Ver obra';
+	@override String get artistDetails => 'Detalhes do Artista';
+	@override String get works => 'Obras';
 }
 
 // Path: settings
@@ -588,7 +594,7 @@ class _StringsBottomNavPt implements _StringsBottomNavEn {
 
 	// Translations
 	@override String get explore => 'Explorar';
-	@override String get gallery => 'Exposições';
+	@override String get gallery => 'Obras';
 	@override String get captured => 'Capturados';
 	@override String get settings => 'Configurações';
 }
@@ -626,14 +632,16 @@ class _StringsArPt implements _StringsArEn {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Exhibitions';
+			case 'gallery.title': return 'Artworks';
 			case 'gallery.tabArtwork': return 'Artworks';
 			case 'gallery.tabArtists': return 'Artists';
 			case 'gallery.search': return 'Search...';
 			case 'gallery.artworkTitle': return 'The Garden of Earthly Delights';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Curitiba Biennial 2025';
-			case 'gallery.viewExhibition': return 'View exhibition';
+			case 'gallery.viewExhibition': return 'View artwork';
+			case 'gallery.artistDetails': return 'Artist Details';
+			case 'gallery.works': return 'Works';
 			case 'settings.title': return 'Settings';
 			case 'settings.getHelp': return 'How to use the App';
 			case 'settings.appSettings': return 'App Settings';
@@ -674,7 +682,7 @@ extension on Translations {
 			case 'map.helpTitle': return 'Map Help';
 			case 'map.helpContent': return 'Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.';
 			case 'bottomNav.explore': return 'Explore';
-			case 'bottomNav.gallery': return 'Exhibitions';
+			case 'bottomNav.gallery': return 'Artworks';
 			case 'bottomNav.captured': return 'Captured';
 			case 'bottomNav.settings': return 'Settings';
 			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
@@ -703,14 +711,16 @@ extension on Translations {
 extension on _StringsEs {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Exposiciones';
+			case 'gallery.title': return 'Obras';
 			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
 			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'El Jardín de las Delicias';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
-			case 'gallery.viewExhibition': return 'Ver exposición';
+			case 'gallery.viewExhibition': return 'Ver obra';
+			case 'gallery.artistDetails': return 'Detalles del Artista';
+			case 'gallery.works': return 'Obras';
 			case 'settings.title': return 'Configuración';
 			case 'settings.getHelp': return 'Cómo usar la App';
 			case 'settings.appSettings': return 'Configuración de la App';
@@ -751,7 +761,7 @@ extension on _StringsEs {
 			case 'map.helpTitle': return 'Ayuda del Mapa';
 			case 'map.helpContent': return 'Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual.';
 			case 'bottomNav.explore': return 'Explorar';
-			case 'bottomNav.gallery': return 'Exposiciones';
+			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';
 			case 'bottomNav.settings': return 'Configuración';
 			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
@@ -780,14 +790,16 @@ extension on _StringsEs {
 extension on _StringsPt {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'gallery.title': return 'Exposições';
+			case 'gallery.title': return 'Obras';
 			case 'gallery.tabArtwork': return 'Obras';
 			case 'gallery.tabArtists': return 'Artistas';
 			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'O Jardim das Delícias Terrenas';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
 			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
-			case 'gallery.viewExhibition': return 'Ver exposição';
+			case 'gallery.viewExhibition': return 'Ver obra';
+			case 'gallery.artistDetails': return 'Detalhes do Artista';
+			case 'gallery.works': return 'Obras';
 			case 'settings.title': return 'Configurações';
 			case 'settings.getHelp': return 'Como usar o App';
 			case 'settings.appSettings': return 'Configurações do App';
@@ -828,7 +840,7 @@ extension on _StringsPt {
 			case 'map.helpTitle': return 'Ajuda do Mapa';
 			case 'map.helpContent': return 'Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.';
 			case 'bottomNav.explore': return 'Explorar';
-			case 'bottomNav.gallery': return 'Exposições';
+			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';
 			case 'bottomNav.settings': return 'Configurações';
 			case 'ar.scanInstruction': return 'Escaneie o chão movendo o celular';

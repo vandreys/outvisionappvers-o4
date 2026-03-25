@@ -56,7 +56,7 @@ class OutvisionApp extends StatelessWidget {
     return MaterialApp(
       locale: TranslationProvider.of(context).flutterLocale,
       debugShowCheckedModeBanner: false,
-      title: 'Out Vision XR App',
+      title: 'Bienal de Curitiba App',
 
       theme: ThemeData(
         useMaterial3: true,
