@@ -1,16 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permissões necessárias para AR + Geospatial -->
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- AR opcional (IMPORTANTE para devices Lenovo / Galaxy A15 / Mali) -->
-    <uses-feature
-        android:name="android.hardware.camera.ar"
-        android:required="false" />
 
     <application
         android:label="outvisionxr"
@@ -26,12 +18,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD-6SfQ7dWgYzPwgI7LR31oV7AJINjPKUw" />
-
-        <!-- ARCore como OPTIONAL -->
-        <meta-data
-            android:name="com.google.ar.core"
-            android:value="optional"
-            tools:replace="android:value" />
 
         <activity
             android:name=".MainActivity"
