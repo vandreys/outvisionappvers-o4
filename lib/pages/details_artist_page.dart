@@ -1,77 +1,242 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/models/artist_model.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
+import 'package:outvisionxr/services/artwork_service.dart';
 
-class DetailsArtistPage extends StatelessWidget {
+class DetailsArtistPage extends StatefulWidget {
   final Artist artist;
 
   const DetailsArtistPage({super.key, required this.artist});
 
   @override
+  State<DetailsArtistPage> createState() => _DetailsArtistPageState();
+}
+
+class _DetailsArtistPageState extends State<DetailsArtistPage> {
+  bool _bioExpanded = false;
+  final ArtworkService _artworkService = ArtworkService();
+
+  static const int _bioPreviewLength = 220;
+
+  @override
   Widget build(BuildContext context) {
+    final artist = widget.artist;
+    final bio = artist.bio;
+    final bioIsTruncated = bio.length > _bioPreviewLength;
+    final bioText = (!_bioExpanded && bioIsTruncated)
+        ? bio.substring(0, _bioPreviewLength)
+        : bio;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF2F2F2),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF2F2F2),
         elevation: 0,
+        scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
+          icon: const Icon(Icons.chevron_left, size: 30, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          artist.name,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border, color: Colors.black),
+            onPressed: () {},
           ),
-        ),
-        centerTitle: true,
+          IconButton(
+            icon: const Icon(Icons.ios_share, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: artist.artistPhoto.isNotEmpty
-                    ? NetworkImage(artist.artistPhoto)
-                    : null,
-                child: artist.artistPhoto.isEmpty
-                    ? const Icon(Icons.person, size: 80, color: Colors.grey)
-                    : null,
-              ),
+            const SizedBox(height: 8),
+
+            // Foto circular
+            CircleAvatar(
+              radius: 82,
+              backgroundColor: Colors.grey[300],
+              backgroundImage: artist.artistPhoto.isNotEmpty
+                  ? NetworkImage(artist.artistPhoto)
+                  : null,
+              child: artist.artistPhoto.isEmpty
+                  ? const Icon(Icons.person, size: 80, color: Colors.grey)
+                  : null,
             ),
+
             const SizedBox(height: 24),
+
+            // Nome
             Text(
               artist.name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
+
+            // Localização / subtítulo
             if (artist.location.isNotEmpty) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 artist.location,
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
-                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, color: Colors.grey[600]),
               ),
             ],
-            const SizedBox(height: 32),
-            if (artist.bio.isNotEmpty)
-              Text(
-                artist.bio,
-                style: const TextStyle(
-                  fontSize: 16,
-                  height: 1.5,
-                  color: Colors.black87,
+
+            const SizedBox(height: 24),
+
+            // Bio com "more"
+            if (bio.isNotEmpty) ...[
+              GestureDetector(
+                onTap: bioIsTruncated
+                    ? () => setState(() => _bioExpanded = !_bioExpanded)
+                    : null,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.6,
+                      color: Colors.grey[800],
+                    ),
+                    children: [
+                      TextSpan(text: bioText),
+                      if (!_bioExpanded && bioIsTruncated)
+                        const TextSpan(
+                          text: ' more',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                textAlign: TextAlign.justify,
               ),
+              const SizedBox(height: 32),
+              const Divider(height: 1, color: Color(0xFFD8D8D8)),
+              const SizedBox(height: 32),
+            ],
+
+            // Highlights
+            const Text(
+              'Highlights',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            StreamBuilder<List<Artwork>>(
+              stream: _artworkService.getArtworkStream(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+
+                final artworks = snapshot.data!
+                    .where((a) => a.displayArtist == artist.name)
+                    .toList();
+
+                if (artworks.isEmpty) return const SizedBox.shrink();
+
+                final highlights = artworks.take(4).toList();
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 28,
+                        childAspectRatio: 0.78,
+                      ),
+                      itemCount: highlights.length,
+                      itemBuilder: (context, index) {
+                        final artwork = highlights[index];
+                        return _HighlightCard(artwork: artwork);
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.black, width: 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'View all',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+
+            const SizedBox(height: 40),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HighlightCard extends StatelessWidget {
+  final Artwork artwork;
+
+  const _HighlightCard({required this.artwork});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox.expand(
+              child: (artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty)
+                  ? Image.network(
+                      artwork.imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Container(color: Colors.grey[300]),
+                    )
+                  : Container(color: Colors.grey[300]),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          artwork.localizedTitle,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }

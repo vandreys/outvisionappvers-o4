@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dart run:*)",
+      "Bash(flutter pub:*)",
+      "Bash(where flutter:*)",
+      "Read(//c/Users/victo/AppData/Local/Programs//**)",
+      "Read(//c/flutter/**)",
+      "Bash(\"/c/Users/victo/OneDrive/Documentos/outvisionxr/flutter/bin/flutter\" pub:*)"
+    ]
+  }
+}
