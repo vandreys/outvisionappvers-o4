@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:outvisionxr/models/artist_model.dart';
 
 class DetailsArtistPage extends StatelessWidget {
-  final Map<String, dynamic> artistData;
+  final Artist artist;
 
-  const DetailsArtistPage({super.key, required this.artistData});
+  const DetailsArtistPage({super.key, required this.artist});
 
   @override
   Widget build(BuildContext context) {
-    // Extrai dados básicos que já temos
-    final String name = artistData['name'] ?? 'Artista';
-    final String? photoUrl = artistData['artist_photo'];
-    final String? location = artistData['location_artist'];
-    final String? bio = artistData['text_about_artist'];
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -23,7 +18,7 @@ class DetailsArtistPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          name,
+          artist.name,
           style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -41,33 +36,32 @@ class DetailsArtistPage extends StatelessWidget {
               child: CircleAvatar(
                 radius: 80,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-                child: photoUrl == null
+                backgroundImage: artist.artistPhoto.isNotEmpty
+                    ? NetworkImage(artist.artistPhoto)
+                    : null,
+                child: artist.artistPhoto.isEmpty
                     ? const Icon(Icons.person, size: 80, color: Colors.grey)
                     : null,
               ),
             ),
             const SizedBox(height: 24),
             Text(
-              name,
+              artist.name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            if (location != null) ...[
+            if (artist.location.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
-                location,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                artist.location,
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ],
             const SizedBox(height: 32),
-            if (bio != null) ...[
+            if (artist.bio.isNotEmpty)
               Text(
-                bio,
+                artist.bio,
                 style: const TextStyle(
                   fontSize: 16,
                   height: 1.5,
@@ -75,7 +69,6 @@ class DetailsArtistPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.justify,
               ),
-            ],
           ],
         ),
       ),

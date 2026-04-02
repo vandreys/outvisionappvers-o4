@@ -5,11 +5,17 @@ import 'package:outvisionxr/i18n/strings.g.dart';
 class Artwork {
   final String id;
   final Map<String, dynamic> title;
-  final String? artist;
+  final String? artist;       // campo legado: 'artist' ou 'artist_id'
+  final String? artistName;   // novo: 'artist_name' (denormalizado)
   final String? year;
+  final String? description;
+  final String? locationName;
   final String? imageUrl;
+  final List<String> artworkImages;
   final GeoPoint location;
-  
+  final double arrivalRadiusMeters;
+  final String availability;
+
   // Campos de Realidade Aumentada
   final String? androidGlbUrl;
   final String? iosUsdzUrl;
@@ -20,43 +26,56 @@ class Artwork {
     required this.id,
     required this.title,
     this.artist,
+    this.artistName,
     this.year,
+    this.description,
+    this.locationName,
     this.imageUrl,
+    this.artworkImages = const [],
     required this.location,
+    this.arrivalRadiusMeters = 20.0,
+    this.availability = 'active',
     this.androidGlbUrl,
     this.iosUsdzUrl,
     this.eyeLevelOffsetMeters,
     this.faceUser,
   });
 
-  // Getter para o título localizado, simplifica o uso na UI
+  /// Nome do artista: prefere artist_name (novo schema), fallback para artist (legado)
+  String get displayArtist => artistName ?? artist ?? '';
+
+  /// Título localizado: suporte a i18n (Map) ou string simples
   String get localizedTitle {
     final currentLang = LocaleSettings.currentLocale.languageCode;
-    // Fallback para 'en' e depois para um título genérico
-    return title[currentLang] ?? title['en'] ?? 'Artwork';
+    return title[currentLang] ?? title['en'] ?? title['pt'] ?? 'Artwork';
   }
 
-  // Factory constructor para criar uma instância de Artwork a partir de um documento do Firestore
   static Artwork? fromFirestore(DocumentSnapshot doc) {
     try {
       final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) return null;
 
-      if (data == null) {
-        return null;
+      // --- Leitura de localização: 3 formatos suportados ---
+      GeoPoint? location;
+
+      // 1. Novo schema: latitude/longitude como doubles top-level
+      final dynamic rawLat = data['latitude'];
+      final dynamic rawLng = data['longitude'];
+      if (rawLat is num && rawLng is num) {
+        location = GeoPoint(rawLat.toDouble(), rawLng.toDouble());
       }
 
-      // --- CORREÇÃO: Tenta ler location como GeoPoint ou Map (latitude/longitude) ---
-      GeoPoint? location;
-      
-      if (data['location'] is GeoPoint) {
+      // 2. GeoPoint direto no campo 'location'
+      if (location == null && data['location'] is GeoPoint) {
         location = data['location'] as GeoPoint;
-      } else if (data['location'] is Map) {
-        // Suporte para dados importados como JSON simples (ex: {latitude: 10, longitude: 20})
+      }
+
+      // 3. Map aninhado { latitude, longitude } ou { coordenadas: "-25.4, -49.2" }
+      if (location == null && data['location'] is Map) {
         final locMap = data['location'] as Map;
         dynamic lat = locMap['latitude'] ?? locMap['lat'];
         dynamic lng = locMap['longitude'] ?? locMap['lng'];
-        
-        // Suporte para campo 'coordenadas' em string (ex: "-25.43, -49.28")
+
         if (lat == null || lng == null) {
           final coords = locMap['coordenadas'];
           if (coords is String) {
@@ -67,42 +86,61 @@ class Artwork {
             }
           }
         }
-        
         if (lat is num && lng is num) {
           location = GeoPoint(lat.toDouble(), lng.toDouble());
         }
       }
 
-      final dynamic titleData = data['title'];
-
       if (location == null) {
-        debugPrint('⚠️ Obra ignorada (${doc.id}): Campo "location" inválido ou ausente. Recebido: ${data['location']}');
-        return null;
-      }
-      
-      if (titleData == null) {
-        debugPrint('⚠️ Obra ignorada (${doc.id}): Campo "title" ausente.');
+        debugPrint('⚠️ Obra ignorada (${doc.id}): localização inválida.');
         return null;
       }
 
-      Map<String, dynamic> titleMap;
-      if (titleData is Map) {
-        titleMap = Map<String, dynamic>.from(titleData);
-      } else {
-        titleMap = {'en': titleData.toString()};
+      // --- Título: string simples ou Map i18n ---
+      final dynamic titleData = data['title'];
+      if (titleData == null) {
+        debugPrint('⚠️ Obra ignorada (${doc.id}): campo "title" ausente.');
+        return null;
       }
+      final Map<String, dynamic> titleMap = titleData is Map
+          ? Map<String, dynamic>.from(titleData)
+          : {'pt': titleData.toString(), 'en': titleData.toString()};
+
+      // --- Imagem: snake_case (novo) e camelCase (legado) ---
+      final String? imageUrl =
+          (data['image_url'] ?? data['imageUrl'] ?? data['ImageURL']) as String?;
+
+      // --- URLs 3D: snake_case (novo) e camelCase (legado) ---
+      final String? androidGlbUrl =
+          (data['android_glb_url'] ?? data['androidGlbUrl']) as String?;
+      final String? iosUsdzUrl =
+          (data['ios_usdz_url'] ?? data['iosUsdzUrl']) as String?;
+
+      // --- AR params: snake_case (novo) e camelCase (legado) ---
+      final double? eyeLevel =
+          ((data['eye_level_offset_meters'] ?? data['eyeLevelOffsetMeters']) as num?)
+              ?.toDouble();
+      final bool? faceUser =
+          (data['face_user'] ?? data['faceUser']) as bool?;
 
       return Artwork(
         id: doc.id,
         title: titleMap,
         artist: (data['artist'] ?? data['artist_id']) as String?,
+        artistName: data['artist_name'] as String?,
         year: (data['year'] ?? data['Year'])?.toString(),
-        imageUrl: (data['imageUrl'] ?? data['ImageURL']) as String?,
+        description: data['description'] as String?,
+        locationName: data['location_name'] as String?,
+        imageUrl: imageUrl?.isNotEmpty == true ? imageUrl : null,
+        artworkImages: List<String>.from(data['artwork_images'] ?? []),
         location: location,
-        androidGlbUrl: data['androidGlbUrl'] as String?,
-        iosUsdzUrl: data['iosUsdzUrl'] as String?,
-        eyeLevelOffsetMeters: (data['eyeLevelOffsetMeters'] as num?)?.toDouble(),
-        faceUser: data['faceUser'] as bool?,
+        arrivalRadiusMeters:
+            (data['arrival_radius_meters'] as num?)?.toDouble() ?? 20.0,
+        availability: data['availability'] as String? ?? 'active',
+        androidGlbUrl: androidGlbUrl?.isNotEmpty == true ? androidGlbUrl : null,
+        iosUsdzUrl: iosUsdzUrl?.isNotEmpty == true ? iosUsdzUrl : null,
+        eyeLevelOffsetMeters: eyeLevel,
+        faceUser: faceUser,
       );
     } catch (e) {
       debugPrint('❌ Erro ao processar obra (${doc.id}): $e');

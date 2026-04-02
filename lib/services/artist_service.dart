@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:outvisionxr/models/artist_model.dart';
 
 class ArtistService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<List<Map<String, dynamic>>> getArtistStream() {
-    return _firestore.collection("artists").snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => doc.data())
-          .toList();
-    });
+  Stream<List<Artist>> getArtistStream() {
+    return _firestore
+        .collection('artists')
+        .orderBy('name')
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Artist.fromFirestore(doc)).toList());
   }
 }

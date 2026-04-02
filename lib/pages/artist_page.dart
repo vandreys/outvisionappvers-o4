@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/pages/details_artist_page.dart';
@@ -50,18 +51,18 @@ class _ArtistsPageState extends State<ArtistsPage> {
           margin: const EdgeInsets.only(right: 30),
           decoration: BoxDecoration(
             color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(5), // Menos arredondado (era 20)
+            borderRadius: BorderRadius.circular(5),
           ),
           child: TextField(
             controller: _searchController,
             textAlignVertical: TextAlignVertical.center,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20), // Ícone menor/centralizado
+              prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
               hintText: t.gallery.search,
-              hintStyle: TextStyle(fontSize: 10, color: Colors.grey[700]), // Hint menor
+              hintStyle: TextStyle(fontSize: 10, color: Colors.grey[700]),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15), // Padding para centralizar
-              isDense: true, // Compacta o campo
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              isDense: true,
             ),
           ),
         ),
@@ -83,7 +84,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
           ),
           const SizedBox(height: 30),
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<List<Artist>>(
               stream: _artistService.getArtistStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -93,23 +94,19 @@ class _ArtistsPageState extends State<ArtistsPage> {
                       children: [
                         const Icon(Icons.error, size: 75),
                         const SizedBox(height: 5),
-                        Text(
-                          t.ar.errorTitle,
-                          style: const TextStyle(color: Colors.grey),
-                        ),
+                        Text(t.ar.errorTitle, style: const TextStyle(color: Colors.grey)),
                       ],
                     ),
                   );
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
 
-                final artists = snapshot.data!.where((artist) =>
-                    artist["name"].toString().toLowerCase().contains(_query.toLowerCase())).toList();
+                final artists = (snapshot.data ?? [])
+                    .where((a) => a.name.toLowerCase().contains(_query.toLowerCase()))
+                    .toList();
 
                 if (artists.isEmpty) {
                   return const Center(
@@ -118,10 +115,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                       children: [
                         Icon(Icons.mood_bad, size: 75),
                         SizedBox(height: 5),
-                        Text(
-                          'Nenhum artista encontrado',
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                        Text('Nenhum artista encontrado', style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   );
@@ -137,9 +131,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                       childAspectRatio: 0.7,
                     ),
                     itemCount: artists.length,
-                    itemBuilder: (context, index) {
-                      return _buildArtistGridItem(artists[index]);
-                    },
+                    itemBuilder: (context, index) => _buildArtistGridItem(artists[index]),
                   ),
                 );
               },
@@ -147,19 +139,17 @@ class _ArtistsPageState extends State<ArtistsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        child: bottomNavBar(context, 2),
-      ),
+      bottomNavigationBar: SafeArea(child: bottomNavBar(context, 2)),
     );
   }
 
-  Widget _buildArtistGridItem(Map<String, dynamic> artistData) {
+  Widget _buildArtistGridItem(Artist artist) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailsArtistPage(artistData: artistData),
+            builder: (context) => DetailsArtistPage(artist: artist),
           ),
         );
       },
@@ -173,21 +163,18 @@ class _ArtistsPageState extends State<ArtistsPage> {
             child: CircleAvatar(
               radius: 42,
               backgroundColor: Colors.grey[200],
-              backgroundImage: artistData["artist_photo"] != null
-                  ? NetworkImage(artistData["artist_photo"])
+              backgroundImage: artist.artistPhoto.isNotEmpty
+                  ? NetworkImage(artist.artistPhoto)
                   : null,
-              child: artistData["artist_photo"] == null
+              child: artist.artistPhoto.isEmpty
                   ? const Icon(Icons.person, size: 40, color: Colors.grey)
                   : null,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            artistData["name"],
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-            ),
+            artist.name,
+            style: const TextStyle(fontSize: 13, color: Colors.black),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
