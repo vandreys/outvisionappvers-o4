@@ -43,8 +43,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/3dmodels/stateofbeing.glb
-    - assets/3dmodels/dress.usdz
     - assets/images/bienal_ar_es.png
 
 flutter_launcher_icons:

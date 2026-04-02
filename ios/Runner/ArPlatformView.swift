@@ -13,6 +13,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     private let eventChannel: FlutterEventChannel
     private var eventSink: FlutterEventSink?
     private let locationManager = CLLocationManager()
+    private let viewId: Int64
 
     // Creation params
     private let targetLat: Double
@@ -29,6 +30,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     private var userLocation: CLLocation?
 
     init(frame: CGRect, viewId: Int64, args: Any?, messenger: FlutterBinaryMessenger) {
+        self.viewId = viewId
         let params = args as? [String: Any]
         targetLat = params?["lat"] as? Double ?? 0
         targetLng = params?["lng"] as? Double ?? 0
@@ -171,6 +173,15 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     }
 
     private func loadModel(completion: @escaping (SCNNode?) -> Void) {
+        if iosAsset.hasPrefix("http") {
+            guard let url = URL(string: iosAsset) else {
+                completion(nil)
+                return
+            }
+            downloadAndLoadModel(from: url, completion: completion)
+            return
+        }
+
         let assetKey = FlutterDartProject.lookupKey(forAsset: iosAsset)
 
         guard let assetURL = Bundle.main.url(forResource: assetKey,
@@ -181,14 +192,36 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
         }
 
         NSLog("\(TAG): Loading model from \(assetURL.lastPathComponent)")
+        loadModelFromURL(assetURL, completion: completion)
+    }
 
+    private func downloadAndLoadModel(from url: URL, completion: @escaping (SCNNode?) -> Void) {
+        NSLog("\(TAG): Downloading model from \(url.lastPathComponent)")
+        URLSession.shared.downloadTask(with: url) { [weak self] tempURL, _, error in
+            guard let self = self else { return }
+            guard let tempURL = tempURL, error == nil else {
+                NSLog("\(self.TAG): Download failed: \(error?.localizedDescription ?? "unknown")")
+                completion(nil)
+                return
+            }
+            let destURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("\(self.viewId)_model.usdz")
+            try? FileManager.default.removeItem(at: destURL)
+            do {
+                try FileManager.default.moveItem(at: tempURL, to: destURL)
+                self.loadModelFromURL(destURL, completion: completion)
+            } catch {
+                NSLog("\(self.TAG): File move failed: \(error)")
+                completion(nil)
+            }
+        }.resume()
+    }
+
+    private func loadModelFromURL(_ url: URL, completion: @escaping (SCNNode?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
 
-            // Try SCNScene first (supports .scn, .dae, .usdz, .obj)
-            if let scene = try? SCNScene(url: assetURL, options: [
-                .checkConsistency: true
-            ]) {
+            if let scene = try? SCNScene(url: url, options: [.checkConsistency: true]) {
                 let container = SCNNode()
                 for child in scene.rootNode.childNodes {
                     container.addChildNode(child.clone())
@@ -199,8 +232,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
 
             NSLog("\(self.TAG): SCNScene failed, trying MDLAsset...")
 
-            // Fallback: MDLAsset (supports .usdz, .obj, .ply, .stl, .abc)
-            let mdlAsset = MDLAsset(url: assetURL)
+            let mdlAsset = MDLAsset(url: url)
             mdlAsset.loadTextures()
 
             if mdlAsset.count > 0 {
@@ -213,7 +245,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
                 return
             }
 
-            NSLog("\(self.TAG): All loaders failed for \(assetURL.lastPathComponent)")
+            NSLog("\(self.TAG): All loaders failed for \(url.lastPathComponent)")
             completion(nil)
         }
     }

@@ -23,6 +23,7 @@ import io.github.sceneview.model.ModelInstance
 import io.github.sceneview.node.ModelNode
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URL
 import kotlin.math.atan2
 
 class ArPlatformView(
@@ -184,44 +185,47 @@ class ArPlatformView(
     // GERAR OBRA (APÓS CÂMERA ATIVA)
     // ─────────────────────────────────────────────
     private fun placeArtwork(earth: Earth, altitude: Double) {
-        val cacheFile = try {
-            copyFlutterAssetToCache(
-                androidGlbAsset,
-                "${viewId}_model.glb"
-            )
-        } catch (e: Exception) {
-            emitError("Erro ao copiar GLB: ${e.message}")
-            return
-        }
-
-        val uri = cacheFile.toURI().toString()
-        Log.i(TAG, "Loading model AFTER camera tracking")
-
-        arSceneView.modelLoader.loadModelInstanceAsync(uri) { instance ->
-            if (instance == null) {
-                emitError("Falha ao carregar modelo")
-                return@loadModelInstanceAsync
+        Thread {
+            val cacheFile = try {
+                if (androidGlbAsset.startsWith("http")) {
+                    downloadToCache(androidGlbAsset, "${viewId}_model.glb")
+                } else {
+                    copyFlutterAssetToCache(androidGlbAsset, "${viewId}_model.glb")
+                }
+            } catch (e: Exception) {
+                emitError("Erro ao carregar GLB: ${e.message}")
+                return@Thread
             }
 
-            modelInstance = instance
-            modelNode = ModelNode(
-                modelInstance = instance,
-                autoAnimate = true,
-                scaleToUnits = 1.0f
-            )
+            val uri = cacheFile.toURI().toString()
+            Log.i(TAG, "Loading model from: $uri")
 
-            anchor = earth.createAnchor(
-                lat, lng, altitude,
-                0f, 0f, 0f, 1f
-            )
+            arSceneView.modelLoader.loadModelInstanceAsync(uri) { instance ->
+                if (instance == null) {
+                    emitError("Falha ao carregar modelo")
+                    return@loadModelInstanceAsync
+                }
 
-            anchorNode = AnchorNode(arSceneView.engine, anchor!!)
-            arSceneView.addChildNode(anchorNode!!)
-            anchorNode!!.addChildNode(modelNode!!)
+                modelInstance = instance
+                modelNode = ModelNode(
+                    modelInstance = instance,
+                    autoAnimate = true,
+                    scaleToUnits = 1.0f
+                )
 
-            modelPlaced = true
-            Log.i(TAG, "Artwork placed")
-        }
+                anchor = earth.createAnchor(
+                    lat, lng, altitude,
+                    0f, 0f, 0f, 1f
+                )
+
+                anchorNode = AnchorNode(arSceneView.engine, anchor!!)
+                arSceneView.addChildNode(anchorNode!!)
+                anchorNode!!.addChildNode(modelNode!!)
+
+                modelPlaced = true
+                Log.i(TAG, "Artwork placed")
+            }
+        }.start()
     }
 
     // ─────────────────────────────────────────────
@@ -243,6 +247,19 @@ class ArPlatformView(
     // ─────────────────────────────────────────────
     // UTILS
     // ─────────────────────────────────────────────
+    private fun downloadToCache(url: String, outFileName: String): File {
+        val outFile = File(context.cacheDir, outFileName)
+        if (outFile.exists()) return outFile
+
+        URL(url).openStream().use { input ->
+            FileOutputStream(outFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        Log.i(TAG, "Downloaded $outFileName from network")
+        return outFile
+    }
+
     private fun copyFlutterAssetToCache(
         flutterAssetPath: String,
         outFileName: String

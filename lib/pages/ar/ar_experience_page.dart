@@ -456,9 +456,8 @@ class _ARPlatformView extends StatelessWidget {
       'arrivalRadiusMeters': 20.0, // Valor padrão de entrada
       'eyeLevelOffsetMeters': artwork.eyeLevelOffsetMeters ?? 0.0,
       'faceUser': artwork.faceUser ?? false,
-      // Tenta usar o modelo específico da obra, senão usa o fallback
-      'androidGlbAsset': artwork.androidGlbUrl ?? 'assets/3dmodels/stateofbeing.glb',
-      'iosUsdzAsset': artwork.iosUsdzUrl ?? 'assets/3dmodels/stateofbeing.usdz',
+      'androidGlbAsset': artwork.androidGlbUrl ?? '',
+      'iosUsdzAsset': artwork.iosUsdzUrl ?? '',
     };
 
     if (Platform.isAndroid) {
