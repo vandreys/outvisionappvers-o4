@@ -123,10 +123,15 @@ class Artwork {
       final bool? faceUser =
           (data['face_user'] ?? data['faceUser']) as bool?;
 
+      // artist: tenta string simples; ignora DocumentReference (usa artistName nesses casos)
+      String? artist;
+      final rawArtist = data['artist'];
+      if (rawArtist is String && rawArtist.isNotEmpty) artist = rawArtist;
+
       return Artwork(
         id: doc.id,
         title: titleMap,
-        artist: (data['artist'] ?? data['artist_id']) as String?,
+        artist: artist,
         artistName: data['artist_name'] as String?,
         year: (data['year'] ?? data['Year'])?.toString(),
         description: data['description'] as String?,
