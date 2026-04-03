@@ -30,6 +30,7 @@ dependencies:
   cloud_firestore: ^6.1.2
   firebase_auth: ^6.1.4
   model_viewer_plus: ^1.10.0
+  webview_flutter: ^4.0.0
   firebase_data_connect: ^0.2.2+2
 
 dev_dependencies:

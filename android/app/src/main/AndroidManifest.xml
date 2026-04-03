@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -44,6 +45,11 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- ARCore: "optional" permite instalar o app em devices sem AR -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
+
     </application>
 
     <queries>
@@ -51,10 +57,14 @@
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />
         </intent>
-        <!-- Scene Viewer para model_viewer_plus -->
+        <!-- Scene Viewer para model_viewer_plus (https e intent://) -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="intent" />
         </intent>
     </queries>
 

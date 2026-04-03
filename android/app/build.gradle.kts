@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.example.outvisionxr"
 
-        minSdk = 21
+        minSdk = flutter.minSdkVersion
 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
