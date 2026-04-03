@@ -23,7 +23,7 @@ class CreateMovieVariablesBuilder {
 class CreateMovieMovieInsert {
   final String id;
   CreateMovieMovieInsert.fromJson(dynamic json):
-  
+
   id = nativeFromJson<String>(json['id']);
   @override
   bool operator ==(Object other) {
@@ -36,11 +36,11 @@ class CreateMovieMovieInsert {
 
     final CreateMovieMovieInsert otherTyped = other as CreateMovieMovieInsert;
     return id == otherTyped.id;
-    
+
   }
   @override
   int get hashCode => id.hashCode;
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -48,17 +48,17 @@ class CreateMovieMovieInsert {
     return json;
   }
 
-  CreateMovieMovieInsert({
+  const CreateMovieMovieInsert({
     required this.id,
   });
 }
 
 @immutable
 class CreateMovieData {
-  final CreateMovieMovieInsert movie_insert;
+  final CreateMovieMovieInsert movieInsert;
   CreateMovieData.fromJson(dynamic json):
-  
-  movie_insert = CreateMovieMovieInsert.fromJson(json['movie_insert']);
+
+  movieInsert = CreateMovieMovieInsert.fromJson(json['movie_insert']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -69,21 +69,21 @@ class CreateMovieData {
     }
 
     final CreateMovieData otherTyped = other as CreateMovieData;
-    return movie_insert == otherTyped.movie_insert;
-    
+    return movieInsert == otherTyped.movieInsert;
+
   }
   @override
-  int get hashCode => movie_insert.hashCode;
-  
+  int get hashCode => movieInsert.hashCode;
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['movie_insert'] = movie_insert.toJson();
+    json['movie_insert'] = movieInsert.toJson();
     return json;
   }
 
-  CreateMovieData({
-    required this.movie_insert,
+  const CreateMovieData({
+    required this.movieInsert,
   });
 }
 
@@ -94,7 +94,7 @@ class CreateMovieVariables {
   final String imageUrl;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   CreateMovieVariables.fromJson(Map<String, dynamic> json):
-  
+
   title = nativeFromJson<String>(json['title']),
   genre = nativeFromJson<String>(json['genre']),
   imageUrl = nativeFromJson<String>(json['imageUrl']);
@@ -108,14 +108,14 @@ class CreateMovieVariables {
     }
 
     final CreateMovieVariables otherTyped = other as CreateMovieVariables;
-    return title == otherTyped.title && 
-    genre == otherTyped.genre && 
+    return title == otherTyped.title &&
+    genre == otherTyped.genre &&
     imageUrl == otherTyped.imageUrl;
-    
+
   }
   @override
   int get hashCode => Object.hashAll([title.hashCode, genre.hashCode, imageUrl.hashCode]);
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -125,7 +125,7 @@ class CreateMovieVariables {
     return json;
   }
 
-  CreateMovieVariables({
+  const CreateMovieVariables({
     required this.title,
     required this.genre,
     required this.imageUrl,

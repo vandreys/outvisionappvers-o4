@@ -24,7 +24,7 @@ class AddReviewReviewUpsert {
   final String userId;
   final String movieId;
   AddReviewReviewUpsert.fromJson(dynamic json):
-  
+
   userId = nativeFromJson<String>(json['userId']),
   movieId = nativeFromJson<String>(json['movieId']);
   @override
@@ -37,13 +37,13 @@ class AddReviewReviewUpsert {
     }
 
     final AddReviewReviewUpsert otherTyped = other as AddReviewReviewUpsert;
-    return userId == otherTyped.userId && 
+    return userId == otherTyped.userId &&
     movieId == otherTyped.movieId;
-    
+
   }
   @override
   int get hashCode => Object.hashAll([userId.hashCode, movieId.hashCode]);
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -52,7 +52,7 @@ class AddReviewReviewUpsert {
     return json;
   }
 
-  AddReviewReviewUpsert({
+  const AddReviewReviewUpsert({
     required this.userId,
     required this.movieId,
   });
@@ -60,10 +60,10 @@ class AddReviewReviewUpsert {
 
 @immutable
 class AddReviewData {
-  final AddReviewReviewUpsert review_upsert;
+  final AddReviewReviewUpsert reviewUpsert;
   AddReviewData.fromJson(dynamic json):
-  
-  review_upsert = AddReviewReviewUpsert.fromJson(json['review_upsert']);
+
+  reviewUpsert = AddReviewReviewUpsert.fromJson(json['review_upsert']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -74,21 +74,21 @@ class AddReviewData {
     }
 
     final AddReviewData otherTyped = other as AddReviewData;
-    return review_upsert == otherTyped.review_upsert;
-    
+    return reviewUpsert == otherTyped.reviewUpsert;
+
   }
   @override
-  int get hashCode => review_upsert.hashCode;
-  
+  int get hashCode => reviewUpsert.hashCode;
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['review_upsert'] = review_upsert.toJson();
+    json['review_upsert'] = reviewUpsert.toJson();
     return json;
   }
 
-  AddReviewData({
-    required this.review_upsert,
+  const AddReviewData({
+    required this.reviewUpsert,
   });
 }
 
@@ -99,7 +99,7 @@ class AddReviewVariables {
   final String reviewText;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   AddReviewVariables.fromJson(Map<String, dynamic> json):
-  
+
   movieId = nativeFromJson<String>(json['movieId']),
   rating = nativeFromJson<int>(json['rating']),
   reviewText = nativeFromJson<String>(json['reviewText']);
@@ -113,14 +113,14 @@ class AddReviewVariables {
     }
 
     final AddReviewVariables otherTyped = other as AddReviewVariables;
-    return movieId == otherTyped.movieId && 
-    rating == otherTyped.rating && 
+    return movieId == otherTyped.movieId &&
+    rating == otherTyped.rating &&
     reviewText == otherTyped.reviewText;
-    
+
   }
   @override
   int get hashCode => Object.hashAll([movieId.hashCode, rating.hashCode, reviewText.hashCode]);
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -130,7 +130,7 @@ class AddReviewVariables {
     return json;
   }
 
-  AddReviewVariables({
+  const AddReviewVariables({
     required this.movieId,
     required this.rating,
     required this.reviewText,

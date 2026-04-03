@@ -21,7 +21,7 @@ class UpsertUserVariablesBuilder {
 class UpsertUserUserUpsert {
   final String id;
   UpsertUserUserUpsert.fromJson(dynamic json):
-  
+
   id = nativeFromJson<String>(json['id']);
   @override
   bool operator ==(Object other) {
@@ -34,11 +34,11 @@ class UpsertUserUserUpsert {
 
     final UpsertUserUserUpsert otherTyped = other as UpsertUserUserUpsert;
     return id == otherTyped.id;
-    
+
   }
   @override
   int get hashCode => id.hashCode;
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -46,17 +46,17 @@ class UpsertUserUserUpsert {
     return json;
   }
 
-  UpsertUserUserUpsert({
+  const UpsertUserUserUpsert({
     required this.id,
   });
 }
 
 @immutable
 class UpsertUserData {
-  final UpsertUserUserUpsert user_upsert;
+  final UpsertUserUserUpsert userUpsert;
   UpsertUserData.fromJson(dynamic json):
-  
-  user_upsert = UpsertUserUserUpsert.fromJson(json['user_upsert']);
+
+  userUpsert = UpsertUserUserUpsert.fromJson(json['user_upsert']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -67,21 +67,21 @@ class UpsertUserData {
     }
 
     final UpsertUserData otherTyped = other as UpsertUserData;
-    return user_upsert == otherTyped.user_upsert;
-    
+    return userUpsert == otherTyped.userUpsert;
+
   }
   @override
-  int get hashCode => user_upsert.hashCode;
-  
+  int get hashCode => userUpsert.hashCode;
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['user_upsert'] = user_upsert.toJson();
+    json['user_upsert'] = userUpsert.toJson();
     return json;
   }
 
-  UpsertUserData({
-    required this.user_upsert,
+  const UpsertUserData({
+    required this.userUpsert,
   });
 }
 
@@ -90,7 +90,7 @@ class UpsertUserVariables {
   final String username;
   @Deprecated('fromJson is deprecated for Variable classes as they are no longer required for deserialization.')
   UpsertUserVariables.fromJson(Map<String, dynamic> json):
-  
+
   username = nativeFromJson<String>(json['username']);
   @override
   bool operator ==(Object other) {
@@ -103,11 +103,11 @@ class UpsertUserVariables {
 
     final UpsertUserVariables otherTyped = other as UpsertUserVariables;
     return username == otherTyped.username;
-    
+
   }
   @override
   int get hashCode => username.hashCode;
-  
+
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
@@ -115,7 +115,7 @@ class UpsertUserVariables {
     return json;
   }
 
-  UpsertUserVariables({
+  const UpsertUserVariables({
     required this.username,
   });
 }
