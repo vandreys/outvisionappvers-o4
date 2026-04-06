@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -113,6 +114,63 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     setState(() => _artworkPoints = artworkPoints);
     _updateMarkers();
+  }
+
+  Future<BitmapDescriptor> _buildDiamondMarker(String? imageUrl) async {
+    const double size = 45;
+    const double border = 3;
+    const double radius = size / 2;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+
+    final center = Offset(radius, radius);
+
+    // Sombra
+    canvas.drawCircle(center, radius, Paint()
+      ..color = Colors.black26
+      ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 3));
+
+    // Borda branca
+    canvas.drawCircle(center, radius, Paint()..color = Colors.white);
+
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      try {
+        final imageProvider = NetworkImage(imageUrl);
+        final imageStream = imageProvider.resolve(ImageConfiguration.empty);
+        final completer = Completer<ui.Image>();
+        late ImageStreamListener listener;
+        listener = ImageStreamListener(
+          (info, _) {
+            completer.complete(info.image);
+            imageStream.removeListener(listener);
+          },
+          onError: (e, _) {
+            if (!completer.isCompleted) completer.completeError(e);
+            imageStream.removeListener(listener);
+          },
+        );
+        imageStream.addListener(listener);
+
+        final image = await completer.future.timeout(const Duration(seconds: 6));
+
+        canvas.save();
+        canvas.clipPath(Path()..addOval(Rect.fromCircle(center: center, radius: radius - border)));
+        final src = Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble());
+        final dst = Rect.fromLTWH(border, border, size - border * 2, size - border * 2);
+        canvas.drawImageRect(image, src, dst, Paint());
+        canvas.restore();
+      } catch (_) {
+        canvas.drawCircle(center, radius - border, Paint()..color = const Color(0xFF7B52FF));
+      }
+    } else {
+      canvas.drawCircle(center, radius - border, Paint()..color = const Color(0xFF7B52FF));
+    }
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(size.toInt(), size.toInt());
+    final bytes = await img.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.bytes(bytes!.buffer.asUint8List());
   }
 
   Future<void> _initLocationService() async {
@@ -291,18 +349,20 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     controller.animateCamera(CameraUpdate.newLatLngZoom(position, 17.0));
   }
 
-  void _updateMarkers() {
-    // Recria o Set de marcadores para garantir que o Google Maps detecte a mudança
-    setState(() {
-      _markers = _artworkPoints.map((artwork) {
-      return Marker(
-        markerId: MarkerId(artwork.id),
-        position: LatLng(artwork.lat, artwork.lng),
-        infoWindow: InfoWindow(title: artwork.title),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-      );
-      }).toSet();
-    });
+  Future<void> _updateMarkers() async {
+    final newMarkers = <Marker>{};
+    for (final point in _artworkPoints) {
+      final raw = _rawArtworks.where((a) => a.id == point.id).firstOrNull;
+      final imageUrl = raw?.imageUrl ?? raw?.artworkImages.firstOrNull;
+      final icon = await _buildDiamondMarker(imageUrl);
+      newMarkers.add(Marker(
+        markerId: MarkerId(point.id),
+        position: LatLng(point.lat, point.lng),
+        infoWindow: InfoWindow(title: point.title),
+        icon: icon,
+      ));
+    }
+    if (mounted) setState(() => _markers = newMarkers);
   }
 
   Future<void> _openArViewNow() async {
