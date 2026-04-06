@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
@@ -61,7 +63,8 @@ class _ArtworkPageState extends State<ArtworkPage> {
               hintText: t.gallery.search,
               hintStyle: TextStyle(fontSize: 10, color: Colors.grey[700]),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               isDense: true,
             ),
           ),
@@ -103,9 +106,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 final List<Artwork> data = snapshot.data ?? [];
@@ -133,7 +134,8 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   itemCount: artworks.length,
                   itemBuilder: (context, index) {
                     return _buildArtworkCard(artworks[index], context);
@@ -170,25 +172,14 @@ class _ArtworkPageState extends State<ArtworkPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // IMAGEM
+              // CAROUSEL DE IMAGENS
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                child: SizedBox(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(4)),
+                child: _ArtworkImageCarousel(
+                  images: artwork.artworkImages,
+                  fallbackUrl: artwork.imageUrl,
                   height: imageHeight,
-                  width: double.infinity,
-                  child: artwork.imageUrl != null
-                      ? Image.network(
-                          artwork.imageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            color: const Color(0xFFEDEBE7),
-                            child: const Icon(Icons.image, size: 50, color: Colors.grey),
-                          ),
-                        )
-                      : Container(
-                          color: const Color(0xFFEDEBE7),
-                          child: const Icon(Icons.image, size: 50, color: Colors.grey),
-                        ),
                 ),
               ),
 
@@ -212,20 +203,23 @@ class _ArtworkPageState extends State<ArtworkPage> {
                     // ARTISTA + ANO
                     Row(
                       children: [
-                        Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
+                        Icon(Icons.person_outline,
+                            size: 16, color: Colors.grey[600]),
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             artwork.displayArtist.isNotEmpty
                                 ? artwork.displayArtist
                                 : 'Artista desconhecido',
-                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(
                           ' • ${artwork.year ?? ''}',
-                          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                          style: TextStyle(
+                              fontSize: 14, color: Colors.grey[500]),
                         ),
                       ],
                     ),
@@ -271,6 +265,120 @@ class _ArtworkPageState extends State<ArtworkPage> {
           ),
         );
       },
+    );
+  }
+}
+
+class _ArtworkImageCarousel extends StatefulWidget {
+  final List<String> images;
+  final String? fallbackUrl;
+  final double height;
+
+  const _ArtworkImageCarousel({
+    required this.images,
+    this.fallbackUrl,
+    required this.height,
+  });
+
+  @override
+  State<_ArtworkImageCarousel> createState() => _ArtworkImageCarouselState();
+}
+
+class _ArtworkImageCarouselState extends State<_ArtworkImageCarousel> {
+  late PageController _pageController;
+  Timer? _timer;
+  int _currentPage = 0;
+
+  List<String> get _effectiveImages {
+    if (widget.images.isNotEmpty) return widget.images;
+    if (widget.fallbackUrl != null && widget.fallbackUrl!.isNotEmpty) {
+      return [widget.fallbackUrl!];
+    }
+    return [];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    final imgs = _effectiveImages;
+    if (imgs.length > 1) {
+      _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+        if (!mounted) return;
+        final next = (_currentPage + 1) % imgs.length;
+        _pageController.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final imgs = _effectiveImages;
+
+    if (imgs.isEmpty) {
+      return Container(
+        height: widget.height,
+        width: double.infinity,
+        color: const Color(0xFFEDEBE7),
+        child: const Icon(Icons.image, size: 50, color: Colors.grey),
+      );
+    }
+
+    return SizedBox(
+      height: widget.height,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: imgs.length,
+            onPageChanged: (i) => setState(() => _currentPage = i),
+            itemBuilder: (_, i) => Image.network(
+              imgs[i],
+              fit: BoxFit.cover,
+              width: double.infinity,
+              errorBuilder: (_, __, ___) => Container(
+                color: const Color(0xFFEDEBE7),
+                child: const Icon(Icons.image, size: 50, color: Colors.grey),
+              ),
+            ),
+          ),
+          if (imgs.length > 1)
+            Positioned(
+              bottom: 10,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  imgs.length,
+                  (i) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: _currentPage == i ? 16 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: _currentPage == i ? Colors.white : Colors.white60,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

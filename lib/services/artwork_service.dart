@@ -11,13 +11,10 @@ class ArtworkService extends ChangeNotifier {
         .where('availability', isEqualTo: 'active')
         .snapshots()
         .map((snapshot) {
-      debugPrint('🔥 Firestore snapshot: ${snapshot.docs.length} docs, fromCache=${snapshot.metadata.isFromCache}');
-      final list = snapshot.docs
+      return snapshot.docs
           .map((doc) => Artwork.fromFirestore(doc))
           .whereType<Artwork>()
           .toList();
-      debugPrint('🎨 Obras parseadas: ${list.length}');
-      return list;
     });
   }
 

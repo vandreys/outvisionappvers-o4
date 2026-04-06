@@ -261,6 +261,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                 'name': nearest.title,
                 'artist': fullArtworkModel.displayArtist,
                 'imageUrl': fullArtworkModel.imageUrl ?? '',
+                'artworkImages': fullArtworkModel.artworkImages,
               };
             });
           }
