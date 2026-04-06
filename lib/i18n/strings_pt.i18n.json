@@ -9,7 +9,12 @@
     "artistSubtitle": "Bienal de Curitiba 2025",
     "viewExhibition": "Ver obra",
     "artistDetails": "Detalhes do Artista",
-    "works": "Obras"
+    "works": "Obras",
+    "noArtworkFound": "Nenhuma obra encontrada",
+    "noArtistFound": "Nenhum artista encontrado",
+    "highlights": "Destaques",
+    "viewAll": "Ver tudo",
+    "bioMore": " mais"
   },
   "settings": {
     "title": "Configurações",
@@ -82,6 +87,8 @@
     "genericError": "Erro na Realidade Aumentada.",
     "localizationTimeoutError": "Não foi possível localizar a obra. Tente reiniciar a experiência AR.",
     "eventsError": "Falha ao receber eventos de Realidade Aumentada.",
-    "unsupported": "Realidade Aumentada não suportada nesta plataforma"
+    "unsupported": "Realidade Aumentada não suportada nesta plataforma",
+    "openAr": "Abrir AR",
+    "modelUnavailable": "Modelo 3D não disponível\npara esta obra."
   }
 }

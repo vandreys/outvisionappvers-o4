@@ -214,6 +214,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         // ✅ Atualiza gate
         _updateArrivalGate(position);
       },
+      onError: (error) {
+        debugPrint('❌ Erro no stream de localização: $error');
+      },
     );
   }
 

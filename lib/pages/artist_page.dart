@@ -109,13 +109,13 @@ class _ArtistsPageState extends State<ArtistsPage> {
                     .toList();
 
                 if (artists.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.mood_bad, size: 75),
-                        SizedBox(height: 5),
-                        Text('Nenhum artista encontrado', style: TextStyle(color: Colors.grey)),
+                        const Icon(Icons.mood_bad, size: 75),
+                        const SizedBox(height: 5),
+                        Text(t.gallery.noArtistFound, style: const TextStyle(color: Colors.grey)),
                       ],
                     ),
                   );

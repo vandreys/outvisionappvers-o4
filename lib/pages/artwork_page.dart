@@ -117,15 +117,15 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 }).toList();
 
                 if (artworks.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.mood_bad, size: 75),
-                        SizedBox(height: 5),
+                        const Icon(Icons.mood_bad, size: 75),
+                        const SizedBox(height: 5),
                         Text(
-                          'Nenhuma obra encontrada',
-                          style: TextStyle(color: Colors.grey),
+                          t.gallery.noArtworkFound,
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),

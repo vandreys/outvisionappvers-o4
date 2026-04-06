@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
@@ -106,9 +107,9 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                     children: [
                       TextSpan(text: bioText),
                       if (!_bioExpanded && bioIsTruncated)
-                        const TextSpan(
-                          text: ' more',
-                          style: TextStyle(
+                        TextSpan(
+                          text: t.gallery.bioMore,
+                          style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
@@ -123,9 +124,9 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
             ],
 
             // Highlights
-            const Text(
-              'Highlights',
-              style: TextStyle(
+            Text(
+              t.gallery.highlights,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -177,9 +178,9 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          'View all',
-                          style: TextStyle(
+                        child: Text(
+                          t.gallery.viewAll,
+                          style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
                             fontSize: 15,

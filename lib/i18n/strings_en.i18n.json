@@ -9,7 +9,12 @@
     "artistSubtitle": "Curitiba Biennial 2025",
     "viewExhibition": "View artwork",
     "artistDetails": "Artist Details",
-    "works": "Works"
+    "works": "Works",
+    "noArtworkFound": "No artwork found",
+    "noArtistFound": "No artist found",
+    "highlights": "Highlights",
+    "viewAll": "View all",
+    "bioMore": " more"
   },
   "settings": {
     "title": "Settings",
@@ -82,6 +87,8 @@
     "genericError": "Augmented Reality error.",
     "localizationTimeoutError": "Could not localize the artwork. Try restarting the AR experience.",
     "eventsError": "Failed to receive Augmented Reality events.",
-    "unsupported": "Augmented Reality not supported on this platform"
+    "unsupported": "Augmented Reality not supported on this platform",
+    "openAr": "Open AR",
+    "modelUnavailable": "3D model not available\nfor this artwork."
   }
 }

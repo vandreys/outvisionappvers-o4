@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 
 class ARExperiencePage extends StatefulWidget {
@@ -151,7 +152,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                         ElevatedButton.icon(
                           onPressed: _openAR,
                           icon: const Icon(Icons.view_in_ar),
-                          label: const Text('Abrir AR'),
+                          label: Text(t.ar.openAr),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
@@ -167,17 +168,16 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                         ),
                     ],
                   )
-                : const Column(
+                : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.view_in_ar,
+                      const Icon(Icons.view_in_ar,
                           color: Colors.white54, size: 80),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
-                        'Modelo 3D não disponível\npara esta obra.',
+                        t.ar.modelUnavailable,
                         textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Colors.white70, fontSize: 16),
+                        style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),

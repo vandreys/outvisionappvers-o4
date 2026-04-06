@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 213 (71 per locale)
+/// Strings: 234 (78 per locale)
 ///
-/// Built on 2026-03-25 at 15:27 UTC
+/// Built on 2026-04-06 at 04:48 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -175,6 +175,11 @@ class _StringsGalleryEn {
 	String get viewExhibition => 'View artwork';
 	String get artistDetails => 'Artist Details';
 	String get works => 'Works';
+	String get noArtworkFound => 'No artwork found';
+	String get noArtistFound => 'No artist found';
+	String get highlights => 'Highlights';
+	String get viewAll => 'View all';
+	String get bioMore => ' more';
 }
 
 // Path: settings
@@ -290,6 +295,8 @@ class _StringsArEn {
 	String get localizationTimeoutError => 'Could not localize the artwork. Try restarting the AR experience.';
 	String get eventsError => 'Failed to receive Augmented Reality events.';
 	String get unsupported => 'Augmented Reality not supported on this platform';
+	String get openAr => 'Open AR';
+	String get modelUnavailable => '3D model not available\nfor this artwork.';
 }
 
 // Path: <root>
@@ -342,6 +349,11 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get viewExhibition => 'Ver obra';
 	@override String get artistDetails => 'Detalles del Artista';
 	@override String get works => 'Obras';
+	@override String get noArtworkFound => 'Ninguna obra encontrada';
+	@override String get noArtistFound => 'Ningún artista encontrado';
+	@override String get highlights => 'Destacados';
+	@override String get viewAll => 'Ver todo';
+	@override String get bioMore => ' más';
 }
 
 // Path: settings
@@ -457,6 +469,8 @@ class _StringsArEs implements _StringsArEn {
 	@override String get localizationTimeoutError => 'No se pudo localizar la obra. Intenta reiniciar la experiencia de RA.';
 	@override String get eventsError => 'Fallo al recibir eventos de Realidad Aumentada.';
 	@override String get unsupported => 'Realidad Aumentada no compatible en esta plataforma';
+	@override String get openAr => 'Abrir RA';
+	@override String get modelUnavailable => 'Modelo 3D no disponible\npara esta obra.';
 }
 
 // Path: <root>
@@ -509,6 +523,11 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override String get viewExhibition => 'Ver obra';
 	@override String get artistDetails => 'Detalhes do Artista';
 	@override String get works => 'Obras';
+	@override String get noArtworkFound => 'Nenhuma obra encontrada';
+	@override String get noArtistFound => 'Nenhum artista encontrado';
+	@override String get highlights => 'Destaques';
+	@override String get viewAll => 'Ver tudo';
+	@override String get bioMore => ' mais';
 }
 
 // Path: settings
@@ -624,6 +643,8 @@ class _StringsArPt implements _StringsArEn {
 	@override String get localizationTimeoutError => 'Não foi possível localizar a obra. Tente reiniciar a experiência AR.';
 	@override String get eventsError => 'Falha ao receber eventos de Realidade Aumentada.';
 	@override String get unsupported => 'Realidade Aumentada não suportada nesta plataforma';
+	@override String get openAr => 'Abrir AR';
+	@override String get modelUnavailable => 'Modelo 3D não disponível\npara esta obra.';
 }
 
 /// Flat map(s) containing all translations.
@@ -642,6 +663,11 @@ extension on Translations {
 			case 'gallery.viewExhibition': return 'View artwork';
 			case 'gallery.artistDetails': return 'Artist Details';
 			case 'gallery.works': return 'Works';
+			case 'gallery.noArtworkFound': return 'No artwork found';
+			case 'gallery.noArtistFound': return 'No artist found';
+			case 'gallery.highlights': return 'Highlights';
+			case 'gallery.viewAll': return 'View all';
+			case 'gallery.bioMore': return ' more';
 			case 'settings.title': return 'Settings';
 			case 'settings.getHelp': return 'How to use the App';
 			case 'settings.appSettings': return 'App Settings';
@@ -703,6 +729,8 @@ extension on Translations {
 			case 'ar.localizationTimeoutError': return 'Could not localize the artwork. Try restarting the AR experience.';
 			case 'ar.eventsError': return 'Failed to receive Augmented Reality events.';
 			case 'ar.unsupported': return 'Augmented Reality not supported on this platform';
+			case 'ar.openAr': return 'Open AR';
+			case 'ar.modelUnavailable': return '3D model not available\nfor this artwork.';
 			default: return null;
 		}
 	}
@@ -721,6 +749,11 @@ extension on _StringsEs {
 			case 'gallery.viewExhibition': return 'Ver obra';
 			case 'gallery.artistDetails': return 'Detalles del Artista';
 			case 'gallery.works': return 'Obras';
+			case 'gallery.noArtworkFound': return 'Ninguna obra encontrada';
+			case 'gallery.noArtistFound': return 'Ningún artista encontrado';
+			case 'gallery.highlights': return 'Destacados';
+			case 'gallery.viewAll': return 'Ver todo';
+			case 'gallery.bioMore': return ' más';
 			case 'settings.title': return 'Configuración';
 			case 'settings.getHelp': return 'Cómo usar la App';
 			case 'settings.appSettings': return 'Configuración de la App';
@@ -782,6 +815,8 @@ extension on _StringsEs {
 			case 'ar.localizationTimeoutError': return 'No se pudo localizar la obra. Intenta reiniciar la experiencia de RA.';
 			case 'ar.eventsError': return 'Fallo al recibir eventos de Realidad Aumentada.';
 			case 'ar.unsupported': return 'Realidad Aumentada no compatible en esta plataforma';
+			case 'ar.openAr': return 'Abrir RA';
+			case 'ar.modelUnavailable': return 'Modelo 3D no disponible\npara esta obra.';
 			default: return null;
 		}
 	}
@@ -800,6 +835,11 @@ extension on _StringsPt {
 			case 'gallery.viewExhibition': return 'Ver obra';
 			case 'gallery.artistDetails': return 'Detalhes do Artista';
 			case 'gallery.works': return 'Obras';
+			case 'gallery.noArtworkFound': return 'Nenhuma obra encontrada';
+			case 'gallery.noArtistFound': return 'Nenhum artista encontrado';
+			case 'gallery.highlights': return 'Destaques';
+			case 'gallery.viewAll': return 'Ver tudo';
+			case 'gallery.bioMore': return ' mais';
 			case 'settings.title': return 'Configurações';
 			case 'settings.getHelp': return 'Como usar o App';
 			case 'settings.appSettings': return 'Configurações do App';
@@ -861,6 +901,8 @@ extension on _StringsPt {
 			case 'ar.localizationTimeoutError': return 'Não foi possível localizar a obra. Tente reiniciar a experiência AR.';
 			case 'ar.eventsError': return 'Falha ao receber eventos de Realidade Aumentada.';
 			case 'ar.unsupported': return 'Realidade Aumentada não suportada nesta plataforma';
+			case 'ar.openAr': return 'Abrir AR';
+			case 'ar.modelUnavailable': return 'Modelo 3D não disponível\npara esta obra.';
 			default: return null;
 		}
 	}
