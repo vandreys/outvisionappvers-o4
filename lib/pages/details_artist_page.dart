@@ -38,16 +38,6 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
           icon: const Icon(Icons.chevron_left, size: 30, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite_border, color: Colors.black),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.ios_share, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),

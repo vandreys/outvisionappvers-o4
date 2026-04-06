@@ -8,20 +8,20 @@ Widget roundedSquareButton(
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      width: 50,
-      height: 50,
+      width: 58,
+      height: 58,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12), // não pode ser const
+        borderRadius: BorderRadius.circular(14),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            blurRadius: 8,
+            offset: Offset(0, 3),
           ),
         ],
       ),
-      child: Icon(icon, color: color), // não pode ser const
+      child: Icon(icon, color: color, size: 26),
     ),
   );
 }

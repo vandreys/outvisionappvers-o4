@@ -121,18 +121,49 @@ class _ArtistsPageState extends State<ArtistsPage> {
                   );
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: artists.length,
-                    itemBuilder: (context, index) => _buildArtistGridItem(artists[index]),
-                  ),
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isTablet = constraints.maxWidth >= 600;
+
+                    if (isTablet) {
+                      const padding = 16.0;
+                      const spacing = 12.0;
+                      const crossAxisCount = 3;
+                      final cellWidth = (constraints.maxWidth - padding * 2 - spacing * (crossAxisCount - 1)) / crossAxisCount;
+                      final circleRadius = cellWidth * 0.43;
+                      final cellHeight = circleRadius * 2 + 8 + 50.0;
+                      final aspectRatio = cellWidth / cellHeight;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: padding),
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: spacing,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: aspectRatio,
+                          ),
+                          itemCount: artists.length,
+                          itemBuilder: (context, index) => _buildArtistGridItem(artists[index], circleRadius),
+                        ),
+                      );
+                    }
+
+                    // Celular: valores originais
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: artists.length,
+                        itemBuilder: (context, index) => _buildArtistGridItem(artists[index], 42),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -143,7 +174,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
     );
   }
 
-  Widget _buildArtistGridItem(Artist artist) {
+  Widget _buildArtistGridItem(Artist artist, double circleRadius) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -161,13 +192,13 @@ class _ArtistsPageState extends State<ArtistsPage> {
               border: Border.all(color: Colors.grey[300]!, width: 1.5),
             ),
             child: CircleAvatar(
-              radius: 42,
+              radius: circleRadius,
               backgroundColor: Colors.grey[200],
               backgroundImage: artist.artistPhoto.isNotEmpty
                   ? NetworkImage(artist.artistPhoto)
                   : null,
               child: artist.artistPhoto.isEmpty
-                  ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                  ? Icon(Icons.person, size: circleRadius * 0.9, color: Colors.grey)
                   : null,
             ),
           ),

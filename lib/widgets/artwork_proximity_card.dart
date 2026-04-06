@@ -17,103 +17,88 @@ class ArtworkProximityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Extrai os dados para facilitar a leitura, com valores padrão para segurança.
-    final String imageUrl = artworkData['imageUrl'] ?? ''; // URL da imagem da obra
     final String artworkName = artworkData['name'] ?? context.t.map.arrivedTitle; // Nome da obra
     final String? artistName = artworkData['artist']; // Nome do artista (opcional)
 
     return Material(
       color: Colors.white,
-      elevation: 8, // Uma sombra sutil para destacar o card do mapa
-      child: Stack( // Usamos Stack para posicionar o botão de fechar sobre o conteúdo
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 1. Imagem da Obra (com tratamento de loading e erro)
-              if (imageUrl.isNotEmpty)
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator(color: Colors.black));
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.broken_image, color: Colors.grey, size: 48);
-                    },
-                  ),
-                ),
-
-              // 2. Conteúdo de Texto e Botão
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      context.t.map.arrivedTitle,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      artworkName,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (artistName != null && artistName.isNotEmpty) ...[
-                      const SizedBox(height: 4),
+      elevation: 12,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Linha: título chegou + botão fechar
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        artistName,
-                        style: TextStyle(
+                        context.t.map.arrivedTitle,
+                        style: const TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[700],
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: onOpenAr,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      const SizedBox(height: 8),
+                      Text(
+                        artworkName,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      child: Text(context.t.map.openArButton),
-                    ),
-                  ],
+                      if (artistName != null && artistName.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          artistName,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-
-          // 3. Botão de Fechar
-          Positioned(
-            top: 12,
-            right: 12,
-            child: CircleAvatar(
-              backgroundColor: Colors.black.withValues(alpha: 0.6),
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white, size: 20),
-                onPressed: onClose,
-                tooltip: 'Fechar',
-              ),
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onTap: onClose,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.close, size: 18, color: Colors.black),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: onOpenAr,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              child: Text(context.t.map.openArButton),
+            ),
+          ],
+        ),
       ),
     );
   }

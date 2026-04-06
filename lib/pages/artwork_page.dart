@@ -151,121 +151,126 @@ class _ArtworkPageState extends State<ArtworkPage> {
   }
 
   Widget _buildArtworkCard(Artwork artwork, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // IMAGEM COM BADGE
-          Stack(
-            children: [
-              Container(
-                height: 220,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEDEBE7),
-                  borderRadius: BorderRadius.circular(5),
-                  image: artwork.imageUrl != null
-                      ? DecorationImage(
-                          image: NetworkImage(artwork.imageUrl!),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                ),
-                child: artwork.imageUrl == null
-                    ? const Icon(Icons.image, size: 50, color: Colors.grey)
-                    : null,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final imageHeight = constraints.maxWidth * 0.65;
+        return Container(
+          margin: const EdgeInsets.only(bottom: 28),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.07),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-
-          const SizedBox(height: 12),
-
-          // TÍTULO DA OBRA
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              artwork.localizedTitle,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 6),
-
-          // ARTISTA + ANO
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
-                const SizedBox(width: 4),
-                Text(
-                  artwork.artist ?? 'Artista desconhecido',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  '·',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[500],
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  artwork.year ?? '2025',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // BOTÃO "View artwork"
-          SizedBox(
-            width: double.infinity,
-            height: 44,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // IMAGEM
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                child: SizedBox(
+                  height: imageHeight,
+                  width: double.infinity,
+                  child: artwork.imageUrl != null
+                      ? Image.network(
+                          artwork.imageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: const Color(0xFFEDEBE7),
+                            child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                          ),
+                        )
+                      : Container(
+                          color: const Color(0xFFEDEBE7),
+                          child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                        ),
                 ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ArtworkDetailsPage(
-                      artworkId: artwork.id,
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // TÍTULO
+                    Text(
+                      artwork.localizedTitle,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Text(
-                t.gallery.viewExhibition,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+
+                    const SizedBox(height: 8),
+
+                    // ARTISTA + ANO
+                    Row(
+                      children: [
+                        Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            artwork.displayArtist.isNotEmpty
+                                ? artwork.displayArtist
+                                : 'Artista desconhecido',
+                            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          ' • ${artwork.year ?? ''}',
+                          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // BOTÃO
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ArtworkDetailsPage(
+                                artworkId: artwork.id,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          t.gallery.viewExhibition,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
