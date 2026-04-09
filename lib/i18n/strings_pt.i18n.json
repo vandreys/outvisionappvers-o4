@@ -14,7 +14,10 @@
     "noArtistFound": "Nenhum artista encontrado",
     "highlights": "Destaques",
     "viewAll": "Ver tudo",
-    "bioMore": " mais"
+    "bioMore": " mais",
+    "showOnMap": "Ver no mapa",
+    "makeAvailableOffline": "Disponibilizar offline",
+    "artist": "Artista"
   },
   "settings": {
     "title": "Configurações",

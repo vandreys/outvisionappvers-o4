@@ -3,15 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Artist {
   final String id;
   final String name;
-  final String bio;
+  final Map<String, String> bioMap;
   final String artistPhoto;
   final String location;
   final String website;
 
-  const Artist({
+  Artist({
     required this.id,
     required this.name,
-    this.bio = '',
+    this.bioMap = const {'en': '', 'pt': '', 'es': ''},
     this.artistPhoto = '',
     this.location = '',
     this.website = '',
@@ -19,26 +19,50 @@ class Artist {
 
   factory Artist.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
+
+    Map<String, String> bioMap = {'en': '', 'pt': '', 'es': ''};
+    final rawBio = data['bio'] ?? data['text_about_artist'] ?? '';
+    if (rawBio is String) {
+      // Formato legado: string única — usa em todos os idiomas
+      bioMap = {'en': rawBio, 'pt': rawBio, 'es': rawBio};
+    } else if (rawBio is Map) {
+      // Formato novo: mapa {en, pt, es}
+      bioMap = {
+        'en': (rawBio['en'] ?? '') as String,
+        'pt': (rawBio['pt'] ?? '') as String,
+        'es': (rawBio['es'] ?? '') as String,
+      };
+    }
+
     return Artist(
       id: doc.id,
       name: data['name'] as String? ?? '',
-      // Suporta campo novo 'bio' e campo legado 'text_about_artist'
-      bio: (data['bio'] ?? data['text_about_artist'] ?? '') as String,
+      bioMap: bioMap,
       artistPhoto: (data['artist_photo'] ?? '') as String,
-      // Suporta campo novo 'location' e campo legado 'location_artist'
       location: (data['location'] ?? data['location_artist'] ?? '') as String,
       website: (data['website'] ?? '') as String,
     );
   }
 
-  /// Converte para Map para compatibilidade com páginas que ainda usam Map<String, dynamic>
+  /// Retorna o bio no idioma solicitado, com fallback para EN e depois qualquer disponível.
+  String getBio(String languageCode) {
+    final text = bioMap[languageCode] ?? '';
+    if (text.isNotEmpty) return text;
+    final en = bioMap['en'] ?? '';
+    if (en.isNotEmpty) return en;
+    return bioMap.values.firstWhere((v) => v.isNotEmpty, orElse: () => '');
+  }
+
+  /// Acesso direto ao bio (usa EN como padrão) — mantém compatibilidade.
+  String get bio => getBio('en');
+
   Map<String, dynamic> toMap() => {
-    'name': name,
-    'bio': bio,
-    'text_about_artist': bio,
-    'artist_photo': artistPhoto,
-    'location': location,
-    'location_artist': location,
-    'website': website,
-  };
+        'name': name,
+        'bio': bioMap,
+        'text_about_artist': bio,
+        'artist_photo': artistPhoto,
+        'location': location,
+        'location_artist': location,
+        'website': website,
+      };
 }

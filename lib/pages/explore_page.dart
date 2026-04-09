@@ -12,9 +12,9 @@ import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
-import 'package:outvisionxr/widgets/artwork_proximity_card.dart';
 import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class ExplorePage extends StatefulWidget {
@@ -45,7 +45,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   DateTime? _enteredRadiusAt;
   List<ArtworkPoint> _artworkPoints = []; // Lista processada para o mapa
   List<Artwork> _rawArtworks = []; // Lista de models vinda do Service
-  Map<String, dynamic>? _nearbyArtwork;
+
+  // Marcador selecionado por toque
+  String? _selectedArtworkId;
+  Map<String, dynamic>? _selectedArtworkData;
 
   // Config do gate
   static const int _minDwellSeconds = 3;
@@ -116,7 +119,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     _updateMarkers();
   }
 
-  Future<BitmapDescriptor> _buildDiamondMarker(String? imageUrl) async {
+  Future<BitmapDescriptor> _buildDiamondMarker(String? imageUrl, {bool isSelected = false}) async {
     const double size = 45;
     const double border = 3;
     const double radius = size / 2;
@@ -131,8 +134,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       ..color = Colors.black26
       ..maskFilter = const ui.MaskFilter.blur(ui.BlurStyle.normal, 3));
 
-    // Borda branca
-    canvas.drawCircle(center, radius, Paint()..color = Colors.white);
+    // Borda: preta se selecionado, cinza se não
+    final borderColor = isSelected ? Colors.black : const Color(0xFFBBBBBB);
+    canvas.drawCircle(center, radius, Paint()..color = borderColor);
 
     if (imageUrl != null && imageUrl.isNotEmpty) {
       try {
@@ -314,14 +318,19 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
             setState(() {
               _gateOpen = true;
               _activeArtwork = nearest;
-              _nearbyArtwork = {
+              // Unifica com o card de toque
+              _selectedArtworkId = nearest.id;
+              _selectedArtworkData = {
                 'id': fullArtworkModel!.id,
                 'name': nearest.title,
                 'artist': fullArtworkModel.displayArtist,
                 'imageUrl': fullArtworkModel.imageUrl ?? '',
-                'artworkImages': fullArtworkModel.artworkImages,
+                'locationName': fullArtworkModel.locationName ?? '',
+                'lat': nearest.lat,
+                'lng': nearest.lng,
               };
             });
+            _updateMarkers();
           }
         }
       } else {
@@ -339,8 +348,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         _gateOpen = false;
         _activeArtwork = null;
         _enteredRadiusAt = null;
-        _nearbyArtwork = null;
+
+        _selectedArtworkId = null;
+        _selectedArtworkData = null;
       });
+      _updateMarkers();
     }
   }
 
@@ -354,15 +366,33 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     for (final point in _artworkPoints) {
       final raw = _rawArtworks.where((a) => a.id == point.id).firstOrNull;
       final imageUrl = raw?.imageUrl ?? raw?.artworkImages.firstOrNull;
-      final icon = await _buildDiamondMarker(imageUrl);
+      final isSelected = point.id == _selectedArtworkId;
+      final icon = await _buildDiamondMarker(imageUrl, isSelected: isSelected);
       newMarkers.add(Marker(
         markerId: MarkerId(point.id),
         position: LatLng(point.lat, point.lng),
-        infoWindow: InfoWindow(title: point.title),
         icon: icon,
+        onTap: () => _onMarkerTapped(point),
       ));
     }
     if (mounted) setState(() => _markers = newMarkers);
+  }
+
+  void _onMarkerTapped(ArtworkPoint point) {
+    final raw = _rawArtworks.where((a) => a.id == point.id).firstOrNull;
+    setState(() {
+      _selectedArtworkId = point.id;
+      _selectedArtworkData = {
+        'id': point.id,
+        'name': point.title,
+        'artist': raw?.displayArtist ?? '',
+        'imageUrl': raw?.imageUrl ?? '',
+        'locationName': raw?.locationName ?? '',
+        'lat': point.lat,
+        'lng': point.lng,
+      };
+    });
+    _updateMarkers();
   }
 
   Future<void> _openArViewNow() async {
@@ -400,7 +430,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         _gateOpen = false;
         _activeArtwork = null;
         _enteredRadiusAt = null;
-        _nearbyArtwork = null;
+
       });
     }
   }
@@ -468,6 +498,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                         _controller.complete(controller);
                       },
                       markers: _markers,
+
                       myLocationEnabled: true,
                       myLocationButtonEnabled: false,
                       zoomControlsEnabled: false,
@@ -512,25 +543,26 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       }),
                     ),
 
-                    if (_nearbyArtwork != null)
+                    if (_selectedArtworkData != null)
                       Positioned(
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        child: ArtworkProximityCard(
-                          artworkData: _nearbyArtwork!,
+                        child: _ArtworkTapCard(
+                          data: _selectedArtworkData!,
+                          isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
                           onClose: () {
-                            // Reseta completamente o estado do gate para que ele possa ser reativado
                             setState(() {
                               _gateOpen = false;
                               _activeArtwork = null;
                               _enteredRadiusAt = null;
-                              _nearbyArtwork = null;
+                      
+                              _selectedArtworkId = null;
+                              _selectedArtworkData = null;
                             });
+                            _updateMarkers();
                           },
-                          onOpenAr: () {
-                            _openArViewNow();
-                          },
+                          onOpenAr: _openArViewNow,
                         ),
                       ),
                   ],
@@ -545,6 +577,173 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     {"featureType": "all", "stylers": [{"saturation": -100}, {"lightness": 40}, {"gamma": 0.5}]},
     {"featureType": "poi", "stylers": [{"visibility": "off"}]},
   ]);
+}
+
+class _ArtworkTapCard extends StatelessWidget {
+  final Map<String, dynamic> data;
+  final VoidCallback onClose;
+  final bool isNearby;
+  final VoidCallback onOpenAr;
+
+  const _ArtworkTapCard({
+    required this.data,
+    required this.onClose,
+    required this.isNearby,
+    required this.onOpenAr,
+  });
+
+  Future<void> _navigate() async {
+    final lat = data['lat'];
+    final lng = data['lng'];
+    final uri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=walking');
+    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final name = data['name'] as String? ?? '';
+    final artist = data['artist'] as String? ?? '';
+    final imageUrl = data['imageUrl'] as String? ?? '';
+    final locationName = data['locationName'] as String? ?? '';
+
+    return Material(
+      color: Colors.white,
+      elevation: 16,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle bar
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+          ),
+
+          // Imagem hero com botão X sobreposto
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                height: 190,
+                width: double.infinity,
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            Container(color: Colors.grey[200]),
+                      )
+                    : Container(color: Colors.grey[200]),
+              ),
+              ),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: GestureDetector(
+                  onTap: onClose,
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.close, size: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          ),
+
+          // Info + botão
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (locationName.isNotEmpty)
+                  Text(
+                    locationName,
+                    style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                  ),
+                const SizedBox(height: 4),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (artist.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.person_outline, size: 14, color: Colors.grey[600]),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          artist,
+                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: isNearby ? onOpenAr : _navigate,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    icon: Icon(
+                      isNearby ? Icons.view_in_ar : Icons.turn_right,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    label: Text(
+                      isNearby ? context.t.map.openArButton : 'Navegar',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class UserLocationDot extends StatelessWidget {

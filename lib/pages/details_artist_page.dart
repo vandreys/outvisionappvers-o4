@@ -22,7 +22,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
   @override
   Widget build(BuildContext context) {
     final artist = widget.artist;
-    final bio = artist.bio;
+    final bio = artist.getBio(LocaleSettings.currentLocale.languageTag);
     final bioIsTruncated = bio.length > _bioPreviewLength;
     final bioText = (!_bioExpanded && bioIsTruncated)
         ? bio.substring(0, _bioPreviewLength)

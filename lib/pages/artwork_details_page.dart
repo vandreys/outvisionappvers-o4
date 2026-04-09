@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:outvisionxr/models/artwork_model.dart';
-import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/models/artist_model.dart';
+import 'package:outvisionxr/models/artwork_model.dart';
+import 'package:outvisionxr/pages/details_artist_page.dart';
+import 'package:outvisionxr/services/artist_service.dart';
+import 'package:outvisionxr/services/artwork_service.dart';
 
 class ArtworkDetailsPage extends StatefulWidget {
   final String artworkId;
@@ -14,7 +17,11 @@ class ArtworkDetailsPage extends StatefulWidget {
 
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   final ArtworkService _artworkService = ArtworkService();
+  final ArtistService _artistService = ArtistService();
   late Future<Artwork?> _artworkFuture;
+  bool _descExpanded = false;
+
+  static const int _descPreviewLength = 220;
 
   @override
   void initState() {
@@ -25,8 +32,15 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF2F2F2),
       appBar: AppBar(
-        title: Text(t.gallery.tabArtwork),
+        backgroundColor: const Color(0xFFF2F2F2),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, size: 30, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: FutureBuilder<Artwork?>(
         future: _artworkFuture,
@@ -40,38 +54,229 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           }
 
           final artwork = snapshot.data!;
+          final description = artwork.description ?? '';
+          final descIsTruncated = description.length > _descPreviewLength;
+          final descText = (!_descExpanded && descIsTruncated)
+              ? description.substring(0, _descPreviewLength)
+              : description;
 
           return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (artwork.imageUrl != null)
-                  Image.network(
-                    artwork.imageUrl!,
+                const SizedBox(height: 8),
+
+                // Imagem da obra
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 260,
                     width: double.infinity,
-                    fit: BoxFit.cover,
-                    height: 300,
-                  )
-                else
-                  Container(
-                    height: 300,
-                    width: double.infinity,
-                    color: Colors.grey[300],
-                    child: const Center(child: Icon(Icons.image_not_supported, size: 50)),
-                  ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(artwork.localizedTitle, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
-                      Text(artwork.artist ?? 'Artista Desconhecido', style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 8),
-                      Text(artwork.year ?? '', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600])),
-                    ],
+                    child: artwork.imageUrl != null
+                        ? Image.network(
+                            artwork.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                Container(color: Colors.grey[300]),
+                          )
+                        : Container(color: Colors.grey[300]),
                   ),
                 ),
+
+                const SizedBox(height: 24),
+
+                // Subtítulo (locationName ou year)
+                if (artwork.locationName != null &&
+                    artwork.locationName!.isNotEmpty)
+                  Text(
+                    artwork.locationName!,
+                    style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+                  )
+                else if (artwork.year != null && artwork.year!.isNotEmpty)
+                  Text(
+                    artwork.year!,
+                    style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+                  ),
+
+                const SizedBox(height: 6),
+
+                // Título
+                Text(
+                  artwork.localizedTitle,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+                const Divider(height: 1, color: Color(0xFFD8D8D8)),
+                const SizedBox(height: 24),
+
+                // Descrição com "more"
+                if (description.isNotEmpty) ...[
+                  GestureDetector(
+                    onTap: descIsTruncated
+                        ? () => setState(() => _descExpanded = !_descExpanded)
+                        : null,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 15,
+                          height: 1.6,
+                          color: Colors.grey[800],
+                        ),
+                        children: [
+                          TextSpan(text: descText),
+                          if (!_descExpanded && descIsTruncated)
+                            TextSpan(
+                              text: t.gallery.bioMore,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(height: 1, color: Color(0xFFD8D8D8)),
+                  const SizedBox(height: 24),
+                ],
+
+                // Botão Ver no mapa
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.black, width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          t.gallery.showOnMap,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.location_on_outlined,
+                            color: Colors.black, size: 18),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+                const Divider(height: 1, color: Color(0xFFD8D8D8)),
+                const SizedBox(height: 32),
+
+                // Seção Artista
+                Text(
+                  t.gallery.artist,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                StreamBuilder<List<Artist>>(
+                  stream: _artistService.getArtistStream(),
+                  builder: (context, artistSnapshot) {
+                    if (!artistSnapshot.hasData) return const SizedBox.shrink();
+
+                    final artistName = artwork.displayArtist;
+                    final artist = artistSnapshot.data!
+                        .where((a) => a.name == artistName)
+                        .firstOrNull;
+
+                    return StreamBuilder<List<Artwork>>(
+                      stream: _artworkService.getArtworkStream(),
+                      builder: (context, awSnapshot) {
+                        final count = awSnapshot.data
+                                ?.where((a) => a.displayArtist == artistName)
+                                .length ??
+                            0;
+
+                        final photoUrl = artist?.artistPhoto ?? '';
+
+                        return Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.grey[300],
+                              backgroundImage: photoUrl.isNotEmpty
+                                  ? NetworkImage(photoUrl)
+                                  : null,
+                              child: photoUrl.isEmpty
+                                  ? const Icon(Icons.person,
+                                      size: 30, color: Colors.grey)
+                                  : null,
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    artistName,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  if (count > 0)
+                                    Text(
+                                      '$count ${t.gallery.works}',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey[600]),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            if (artist != null)
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        DetailsArtistPage(artist: artist),
+                                  ),
+                                ),
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(Icons.chevron_right,
+                                      color: Colors.white, size: 22),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 40),
               ],
             ),
           );

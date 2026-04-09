@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 234 (78 per locale)
+/// Strings: 243 (81 per locale)
 ///
-/// Built on 2026-04-06 at 04:48 UTC
+/// Built on 2026-04-09 at 06:54 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -180,6 +180,9 @@ class _StringsGalleryEn {
 	String get highlights => 'Highlights';
 	String get viewAll => 'View all';
 	String get bioMore => ' more';
+	String get showOnMap => 'Show on map';
+	String get makeAvailableOffline => 'Make available offline';
+	String get artist => 'Artist';
 }
 
 // Path: settings
@@ -354,6 +357,9 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get highlights => 'Destacados';
 	@override String get viewAll => 'Ver todo';
 	@override String get bioMore => ' más';
+	@override String get showOnMap => 'Ver en el mapa';
+	@override String get makeAvailableOffline => 'Hacer disponible sin conexión';
+	@override String get artist => 'Artista';
 }
 
 // Path: settings
@@ -528,6 +534,9 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override String get highlights => 'Destaques';
 	@override String get viewAll => 'Ver tudo';
 	@override String get bioMore => ' mais';
+	@override String get showOnMap => 'Ver no mapa';
+	@override String get makeAvailableOffline => 'Disponibilizar offline';
+	@override String get artist => 'Artista';
 }
 
 // Path: settings
@@ -668,6 +677,9 @@ extension on Translations {
 			case 'gallery.highlights': return 'Highlights';
 			case 'gallery.viewAll': return 'View all';
 			case 'gallery.bioMore': return ' more';
+			case 'gallery.showOnMap': return 'Show on map';
+			case 'gallery.makeAvailableOffline': return 'Make available offline';
+			case 'gallery.artist': return 'Artist';
 			case 'settings.title': return 'Settings';
 			case 'settings.getHelp': return 'How to use the App';
 			case 'settings.appSettings': return 'App Settings';
@@ -754,6 +766,9 @@ extension on _StringsEs {
 			case 'gallery.highlights': return 'Destacados';
 			case 'gallery.viewAll': return 'Ver todo';
 			case 'gallery.bioMore': return ' más';
+			case 'gallery.showOnMap': return 'Ver en el mapa';
+			case 'gallery.makeAvailableOffline': return 'Hacer disponible sin conexión';
+			case 'gallery.artist': return 'Artista';
 			case 'settings.title': return 'Configuración';
 			case 'settings.getHelp': return 'Cómo usar la App';
 			case 'settings.appSettings': return 'Configuración de la App';
@@ -840,6 +855,9 @@ extension on _StringsPt {
 			case 'gallery.highlights': return 'Destaques';
 			case 'gallery.viewAll': return 'Ver tudo';
 			case 'gallery.bioMore': return ' mais';
+			case 'gallery.showOnMap': return 'Ver no mapa';
+			case 'gallery.makeAvailableOffline': return 'Disponibilizar offline';
+			case 'gallery.artist': return 'Artista';
 			case 'settings.title': return 'Configurações';
 			case 'settings.getHelp': return 'Como usar o App';
 			case 'settings.appSettings': return 'Configurações do App';
