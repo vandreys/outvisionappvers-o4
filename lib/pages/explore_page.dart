@@ -124,7 +124,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     final recorder = ui.PictureRecorder();
     final canvas = ui.Canvas(recorder);
 
-    final center = Offset(radius, radius);
+    const center = Offset(radius, radius);
 
     // Sombra
     canvas.drawCircle(center, radius, Paint()
@@ -157,7 +157,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         canvas.save();
         canvas.clipPath(Path()..addOval(Rect.fromCircle(center: center, radius: radius - border)));
         final src = Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble());
-        final dst = Rect.fromLTWH(border, border, size - border * 2, size - border * 2);
+        const dst = Rect.fromLTWH(border, border, size - border * 2, size - border * 2);
         canvas.drawImageRect(image, src, dst, Paint());
         canvas.restore();
       } catch (_) {

@@ -43,6 +43,8 @@ dependencies {
     // Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
     implementation("com.google.firebase:firebase-analytics")
+    // Splash screen API (Android 12+)
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 flutter {
