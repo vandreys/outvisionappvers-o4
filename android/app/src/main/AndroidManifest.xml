@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:label="outvisionxr"
+        android:label="Bienal de Curitiba"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 

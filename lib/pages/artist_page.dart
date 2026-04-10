@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
-import 'package:outvisionxr/pages/details_artist_page.dart';
+import 'package:outvisionxr/routes/app_router.dart';
+import 'package:provider/provider.dart';
 
 class ArtistsPage extends StatefulWidget {
   const ArtistsPage({super.key});
@@ -13,9 +16,28 @@ class ArtistsPage extends StatefulWidget {
 }
 
 class _ArtistsPageState extends State<ArtistsPage> {
-  final ArtistService _artistService = ArtistService();
+  Stream<List<Artist>>? _artistStream;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
+  Timer? _loadingTimer;
+  bool _timedOut = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_artistStream == null) {
+      _artistStream = Provider.of<ArtistService>(context, listen: false).getArtistStream();
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _loadingTimer?.cancel();
+    _timedOut = false;
+    _loadingTimer = Timer(const Duration(seconds: 10), () {
+      if (mounted) setState(() => _timedOut = true);
+    });
+  }
 
   @override
   void initState() {
@@ -29,8 +51,28 @@ class _ArtistsPageState extends State<ArtistsPage> {
 
   @override
   void dispose() {
+    _loadingTimer?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  Widget _buildTimeout(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.wifi_off, size: 64, color: Colors.grey),
+          const SizedBox(height: 16),
+          Text(t.ar.errorTitle, style: const TextStyle(color: Colors.grey)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => setState(_startTimer),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+            child: Text(t.ar.tryAgain, style: const TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -85,7 +127,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
           const SizedBox(height: 30),
           Expanded(
             child: StreamBuilder<List<Artist>>(
-              stream: _artistService.getArtistStream(),
+              stream: _artistStream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(
@@ -100,7 +142,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
                   );
                 }
 
+                if (snapshot.hasData) _loadingTimer?.cancel();
+
                 if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (_timedOut) return _buildTimeout(context);
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -176,14 +221,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
 
   Widget _buildArtistGridItem(Artist artist, double circleRadius) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailsArtistPage(artist: artist),
-          ),
-        );
-      },
+      onTap: () => Navigator.pushNamed(context, AppRouter.artistDetails, arguments: artist),
       child: Column(
         children: [
           Container(

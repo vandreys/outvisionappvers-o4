@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutAppPage extends StatelessWidget {
   const AboutAppPage({super.key});
@@ -20,7 +21,7 @@ class AboutAppPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
-            const FlutterLogo(size: 80), // Placeholder for App Logo
+            const FlutterLogo(size: 80),
             const SizedBox(height: 20),
             const Text(
               'Outvision XR',
@@ -30,9 +31,15 @@ class AboutAppPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              "v1.0.0",
-              style: TextStyle(color: Colors.grey, fontSize: 16),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                final version = snapshot.data?.version ?? '...';
+                return Text(
+                  'v$version',
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
+                );
+              },
             ),
             const Spacer(),
             Text(

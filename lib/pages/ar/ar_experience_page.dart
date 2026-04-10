@@ -56,7 +56,10 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
         await _launchQuickLook(modelUrl);
       }
     } catch (e) {
-      debugPrint('Erro ao abrir AR: $e');
+      assert(() {
+        debugPrint('Erro ao abrir AR: $e');
+        return true;
+      }());
     } finally {
       if (mounted) setState(() => _launching = false);
     }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
-import 'package:outvisionxr/pages/details_artist_page.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
+import 'package:outvisionxr/routes/app_router.dart';
+import 'package:provider/provider.dart';
 
 class ArtworkDetailsPage extends StatefulWidget {
   final String artworkId;
@@ -16,17 +17,21 @@ class ArtworkDetailsPage extends StatefulWidget {
 }
 
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
-  final ArtworkService _artworkService = ArtworkService();
-  final ArtistService _artistService = ArtistService();
   late Future<Artwork?> _artworkFuture;
+  Stream<List<Artist>>? _artistStream;
+  Stream<List<Artwork>>? _artworkStream;
   bool _descExpanded = false;
 
   static const int _descPreviewLength = 220;
 
   @override
-  void initState() {
-    super.initState();
-    _artworkFuture = _artworkService.getArtworkById(widget.artworkId);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_artistStream == null) {
+      _artworkFuture = Provider.of<ArtworkService>(context, listen: false).getArtworkById(widget.artworkId);
+      _artistStream = Provider.of<ArtistService>(context, listen: false).getArtistStream();
+      _artworkStream = Provider.of<ArtworkService>(context, listen: false).getArtworkStream();
+    }
   }
 
   @override
@@ -194,7 +199,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                 const SizedBox(height: 16),
 
                 StreamBuilder<List<Artist>>(
-                  stream: _artistService.getArtistStream(),
+                  stream: _artistStream,
                   builder: (context, artistSnapshot) {
                     if (!artistSnapshot.hasData) return const SizedBox.shrink();
 
@@ -204,7 +209,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                         .firstOrNull;
 
                     return StreamBuilder<List<Artwork>>(
-                      stream: _artworkService.getArtworkStream(),
+                      stream: _artworkStream,
                       builder: (context, awSnapshot) {
                         final count = awSnapshot.data
                                 ?.where((a) => a.displayArtist == artistName)
@@ -251,12 +256,10 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                             ),
                             if (artist != null)
                               GestureDetector(
-                                onTap: () => Navigator.push(
+                                onTap: () => Navigator.pushNamed(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        DetailsArtistPage(artist: artist),
-                                  ),
+                                  AppRouter.artistDetails,
+                                  arguments: artist,
                                 ),
                                 child: Container(
                                   width: 40,

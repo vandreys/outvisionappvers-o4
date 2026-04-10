@@ -10,9 +10,8 @@ import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
-import 'package:outvisionxr/pages/ar/ar_experience_page.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
-import 'package:outvisionxr/pages/settings_page.dart';
+import 'package:outvisionxr/routes/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -88,7 +87,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       });
       _processAndSetArtworks();
     }, onError: (error) {
-      debugPrint("Erro ao buscar obras de arte: $error");
+      assert(() {
+        debugPrint("Erro ao buscar obras de arte: $error");
+        return true;
+      }());
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -277,7 +279,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         _updateArrivalGate(position);
       },
       onError: (error) {
-        debugPrint('❌ Erro no stream de localização: $error');
+        assert(() {
+          debugPrint('❌ Erro no stream de localização: $error');
+          return true;
+        }());
       },
     );
   }
@@ -417,10 +422,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     if (!mounted) return;
 
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ARExperiencePage(artwork: artworkModel!)),
-    );
+    await Navigator.pushNamed(context, AppRouter.ar, arguments: artworkModel);
 
     // 2. Ao voltar da experiência AR, reexibe o mapa e reseta o estado do gate.
     if (mounted) {
@@ -512,24 +514,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       top: 60,
                       left: 20,
                       child: roundedSquareButton(Icons.menu, Colors.black, () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => const SettingsPage(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              const begin = Offset(-1.0, 0.0);
-                              const end = Offset.zero;        // Termina no centro
-                              const curve = Curves.ease;
-
-                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-                              return SlideTransition(
-                                position: animation.drive(tween),
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
+                        Navigator.pushNamed(context, AppRouter.settings);
                       }),
                     ),
 

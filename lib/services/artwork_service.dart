@@ -5,17 +5,20 @@ import 'package:outvisionxr/models/artwork_model.dart';
 class ArtworkService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Stream<List<Artwork>>? _cachedStream;
+
   Stream<List<Artwork>> getArtworkStream() {
-    return _firestore
+    return _cachedStream ??= _firestore
         .collection('artworks')
         .where('availability', isEqualTo: 'active')
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Artwork.fromFirestore(doc))
-          .whereType<Artwork>()
-          .toList();
-    });
+          return snapshot.docs
+              .map((doc) => Artwork.fromFirestore(doc))
+              .whereType<Artwork>()
+              .toList();
+        })
+        .asBroadcastStream();
   }
 
   Future<Artwork?> getArtworkById(String id) async {

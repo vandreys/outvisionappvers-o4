@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
-import 'package:outvisionxr/pages/settings/settings_language.dart';
-import 'package:outvisionxr/pages/settings/settings_about.dart';
-import 'package:outvisionxr/pages/settings/settings_about_app.dart';
+import 'package:outvisionxr/routes/app_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -67,12 +66,7 @@ class SettingsPage extends StatelessWidget {
                           icon: Icons.language,
                           iconBackgroundColor: Colors.green,
                           title: context.t.settings.language,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const LanguagePage()),
-                            );
-                          },
+                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsLang),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -83,12 +77,7 @@ class SettingsPage extends StatelessWidget {
                           icon: Icons.info_outline,
                           iconBackgroundColor: Colors.orange,
                           title: context.t.settings.about,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const AboutPage()),
-                            );
-                          },
+                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsAbout),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -99,12 +88,7 @@ class SettingsPage extends StatelessWidget {
                           icon: Icons.app_settings_alt,
                           iconBackgroundColor: Colors.red,
                           title: context.t.settings.aboutApp,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const AboutAppPage()),
-                            );
-                          },
+                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsApp),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -159,13 +143,19 @@ class SettingsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Center(
-                  child: Text(
-                    "v1.0.0",
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: isTablet ? 13 : 10,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  child: FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      final version = snapshot.data?.version ?? '...';
+                      return Text(
+                        'v$version',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: isTablet ? 13 : 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

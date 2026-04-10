@@ -5,12 +5,15 @@ import 'package:outvisionxr/models/artist_model.dart';
 class ArtistService extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Stream<List<Artist>>? _cachedStream;
+
   Stream<List<Artist>> getArtistStream() {
-    return _firestore
+    return _cachedStream ??= _firestore
         .collection('artists')
         .orderBy('name')
         .snapshots()
         .map((snapshot) =>
-            snapshot.docs.map((doc) => Artist.fromFirestore(doc)).toList());
+            snapshot.docs.map((doc) => Artist.fromFirestore(doc)).toList())
+        .asBroadcastStream();
   }
 }

@@ -92,14 +92,20 @@ class Artwork {
       }
 
       if (location == null) {
-        debugPrint('⚠️ Obra ignorada (${doc.id}): localização inválida.');
+        assert(() {
+          debugPrint('⚠️ Obra ignorada (${doc.id}): localização inválida.');
+          return true;
+        }());
         return null;
       }
 
       // --- Título: string simples ou Map i18n ---
       final dynamic titleData = data['title'];
       if (titleData == null) {
-        debugPrint('⚠️ Obra ignorada (${doc.id}): campo "title" ausente.');
+        assert(() {
+          debugPrint('⚠️ Obra ignorada (${doc.id}): campo "title" ausente.');
+          return true;
+        }());
         return null;
       }
       final Map<String, dynamic> titleMap = titleData is Map
@@ -148,7 +154,10 @@ class Artwork {
         faceUser: faceUser,
       );
     } catch (e) {
-      debugPrint('❌ Erro ao processar obra (${doc.id}): $e');
+      assert(() {
+        debugPrint('❌ Erro ao processar obra (${doc.id}): $e');
+        return true;
+      }());
       return null;
     }
   }

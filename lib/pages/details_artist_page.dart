@@ -3,6 +3,7 @@ import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
+import 'package:provider/provider.dart';
 
 class DetailsArtistPage extends StatefulWidget {
   final Artist artist;
@@ -15,7 +16,13 @@ class DetailsArtistPage extends StatefulWidget {
 
 class _DetailsArtistPageState extends State<DetailsArtistPage> {
   bool _bioExpanded = false;
-  final ArtworkService _artworkService = ArtworkService();
+  Stream<List<Artwork>>? _artworkStream;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _artworkStream ??= Provider.of<ArtworkService>(context, listen: false).getArtworkStream();
+  }
 
   static const int _bioPreviewLength = 220;
 
@@ -125,7 +132,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
             const SizedBox(height: 16),
 
             StreamBuilder<List<Artwork>>(
-              stream: _artworkService.getArtworkStream(),
+              stream: _artworkStream,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const SizedBox.shrink();
 

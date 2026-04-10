@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
+import 'package:provider/provider.dart';
 
 
 class LanguagePage extends StatelessWidget {
@@ -55,7 +57,8 @@ class LanguagePage extends StatelessWidget {
                 children: orderedLocales.asMap().entries.map((entry) {
                   final index = entry.key;
                   final locale = entry.value;
-                  final isSelected = LocaleSettings.currentLocale == locale;
+                  final languageProvider = Provider.of<LanguageProvider>(context);
+                  final isSelected = languageProvider.currentLocale == locale;
                   final isLast = index == orderedLocales.length - 1;
 
                   return Column(
@@ -67,16 +70,13 @@ class LanguagePage extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black, // Texto Preto
+                            color: Colors.black,
                           ),
                         ),
                         trailing: isSelected
                             ? const Icon(Icons.check, color: Colors.black)
                             : null,
-                        onTap: () {
-                          // Atualiza o idioma do app
-                          LocaleSettings.setLocale(locale);
-                        },
+                        onTap: () => languageProvider.setLocale(locale),
                       ),
                       // Adiciona o divisor apenas se não for o último item
                       if (!isLast)

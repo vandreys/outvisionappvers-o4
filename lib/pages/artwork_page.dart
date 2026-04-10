@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
-import 'package:outvisionxr/pages/artwork_details_page.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
+import 'package:outvisionxr/routes/app_router.dart';
+import 'package:provider/provider.dart';
 
 class ArtworkPage extends StatefulWidget {
   const ArtworkPage({super.key});
@@ -15,9 +16,28 @@ class ArtworkPage extends StatefulWidget {
 }
 
 class _ArtworkPageState extends State<ArtworkPage> {
-  final ArtworkService _artworkService = ArtworkService();
+  Stream<List<Artwork>>? _artworkStream;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
+  Timer? _loadingTimer;
+  bool _timedOut = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_artworkStream == null) {
+      _artworkStream = Provider.of<ArtworkService>(context, listen: false).getArtworkStream();
+      _startTimer();
+    }
+  }
+
+  void _startTimer() {
+    _loadingTimer?.cancel();
+    _timedOut = false;
+    _loadingTimer = Timer(const Duration(seconds: 10), () {
+      if (mounted) setState(() => _timedOut = true);
+    });
+  }
 
   @override
   void initState() {
@@ -31,8 +51,28 @@ class _ArtworkPageState extends State<ArtworkPage> {
 
   @override
   void dispose() {
+    _loadingTimer?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  Widget _buildTimeout(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.wifi_off, size: 64, color: Colors.grey),
+          const SizedBox(height: 16),
+          Text(t.ar.errorTitle, style: const TextStyle(color: Colors.grey)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => setState(_startTimer),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+            child: Text(t.ar.tryAgain, style: const TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -86,10 +126,13 @@ class _ArtworkPageState extends State<ArtworkPage> {
           ),
           Expanded(
             child: StreamBuilder<List<Artwork>>(
-              stream: _artworkService.getArtworkStream(),
+              stream: _artworkStream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  debugPrint("Erro Firebase (Obras): ${snapshot.error}");
+                  assert(() {
+                    debugPrint("Erro Firebase (Obras): ${snapshot.error}");
+                    return true;
+                  }());
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +148,12 @@ class _ArtworkPageState extends State<ArtworkPage> {
                   );
                 }
 
+                if (snapshot.hasData) _loadingTimer?.cancel();
+
                 if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (_timedOut) {
+                    return _buildTimeout(context);
+                  }
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -239,13 +287,10 @@ class _ArtworkPageState extends State<ArtworkPage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ArtworkDetailsPage(
-                                artworkId: artwork.id,
-                              ),
-                            ),
+                            AppRouter.artworkDetails,
+                            arguments: artwork.id,
                           );
                         },
                         child: Text(
