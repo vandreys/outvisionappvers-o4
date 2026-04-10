@@ -83,7 +83,7 @@ class BienalDeCuritibaApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute: AppRouter.explore,
+      initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
