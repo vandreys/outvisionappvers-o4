@@ -1,16 +1,26 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-// ATUALIZAÇÃO DO MÉTODO _NAVITEM PARA RECEBER O ONTAP
 Widget navItem(IconData icon, String label, bool active, Color color, VoidCallback onTap) {
   return GestureDetector(
     onTap: onTap,
     behavior: HitTestBehavior.opaque,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    child: SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(color: color, fontSize: 11),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     ),
   );
 }

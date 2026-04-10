@@ -11,10 +11,8 @@ import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/pages/settings/settings_about.dart';
 import 'package:outvisionxr/pages/settings/settings_about_app.dart';
-import 'package:outvisionxr/pages/splash_screen.dart';
 
 class AppRouter {
-  static const String splash         = '/splash';
   static const String explore        = '/';
   static const String artwork        = '/artwork';
   static const String artists        = '/artists';
@@ -28,9 +26,6 @@ class AppRouter {
 
   static Route<dynamic> onGenerateRoute(RouteSettings route) {
     switch (route.name) {
-      case splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
-
       case explore:
         return MaterialPageRoute(builder: (_) => const ExplorePage());
 

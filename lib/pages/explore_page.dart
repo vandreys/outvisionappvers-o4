@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
+import 'package:outvisionxr/widgets/splash_loading.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -441,21 +442,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(color: Colors.black),
-                  const SizedBox(height: 20),
-                  Text(
-                    t.map.loadingGps,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            )
+          ? const SplashLoading()
           : (_locationError != null)
               ? Center(
                   child: Padding(

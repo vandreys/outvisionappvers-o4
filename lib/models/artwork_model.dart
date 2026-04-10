@@ -147,7 +147,7 @@ class Artwork {
         location: location,
         arrivalRadiusMeters:
             (data['arrival_radius_meters'] as num?)?.toDouble() ?? 20.0,
-        availability: data['availability'] as String? ?? 'active',
+        availability: (data['availability'] is String) ? data['availability'] as String : 'active',
         androidGlbUrl: androidGlbUrl?.isNotEmpty == true ? androidGlbUrl : null,
         iosUsdzUrl: iosUsdzUrl?.isNotEmpty == true ? iosUsdzUrl : null,
         eyeLevelOffsetMeters: eyeLevel,

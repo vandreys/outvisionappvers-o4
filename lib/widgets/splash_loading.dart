@@ -1,43 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:outvisionxr/routes/app_router.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class SplashLoading extends StatefulWidget {
+  const SplashLoading({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashLoading> createState() => _SplashLoadingState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashLoadingState extends State<SplashLoading>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _progressAnimation;
+  late Animation<double> _progress;
 
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2400),
-    );
-
-    _progressAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    _controller.forward();
-
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRouter.explore,
-          (_) => false,
-        );
-      }
-    });
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(); // fica animando enquanto o GPS carrega
+    _progress = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
   @override
@@ -59,7 +41,6 @@ class _SplashScreenState extends State<SplashScreen>
             children: [
               const Spacer(flex: 3),
 
-              // Título
               const Text(
                 'Bienal de\nCuritiba',
                 style: TextStyle(
@@ -85,9 +66,8 @@ class _SplashScreenState extends State<SplashScreen>
 
               const Spacer(flex: 3),
 
-              // Barra de progresso
               AnimatedBuilder(
-                animation: _progressAnimation,
+                animation: _progress,
                 builder: (context, _) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,12 +79,9 @@ class _SplashScreenState extends State<SplashScreen>
                           width: double.infinity,
                           child: Stack(
                             children: [
-                              Container(
-                                color: Colors.white12,
-                                width: double.infinity,
-                              ),
+                              Container(color: Colors.white12, width: double.infinity),
                               FractionallySizedBox(
-                                widthFactor: _progressAnimation.value,
+                                widthFactor: _progress.value,
                                 child: Container(color: Colors.white),
                               ),
                             ],
@@ -112,9 +89,9 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        '${(_progressAnimation.value * 100).toInt()}%',
-                        style: const TextStyle(
+                      const Text(
+                        'Carregando...',
+                        style: TextStyle(
                           color: Colors.white38,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
