@@ -58,9 +58,12 @@ class BienalDeCuritibaApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
 
-        fontFamily: GoogleFonts.inter().fontFamily,
+        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
 
-        textTheme: GoogleFonts.interTextTheme(),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+          size: 24,
+        ),
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,

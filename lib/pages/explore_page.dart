@@ -25,6 +25,10 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin {
+  // Cache estático: persiste entre recriações do widget ao navegar
+  static bool _hasInitialized = false;
+  static LatLng? _cachedPosition;
+
   Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
@@ -58,6 +62,12 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+
+    // Se já inicializou antes e tem posição em cache, pula o loading
+    if (_hasInitialized && _cachedPosition != null) {
+      _isLoading = false;
+      _currentPosition = _cachedPosition;
+    }
 
     _initLocationService();
     _listenToArtworks();
@@ -245,6 +255,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         _locationError = null;
       });
 
+      // Salva no cache estático para não mostrar loading ao voltar à página
+      _hasInitialized = true;
+      _cachedPosition = _currentPosition;
+
       // Move a câmera UMA vez na inicialização
       await _moveCameraToPosition(_currentPosition!);
 
@@ -272,8 +286,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       (Position position) {
         if (!mounted) return;
 
+        _cachedPosition = LatLng(position.latitude, position.longitude);
         setState(() {
-          _currentPosition = LatLng(position.latitude, position.longitude);
+          _currentPosition = _cachedPosition;
         });
 
         // ✅ Atualiza gate
