@@ -31,11 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed && mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRouter.explore,
-          (_) => false,
-        );
+        Navigator.pushReplacementNamed(context, AppRouter.welcome);
       }
     });
   }

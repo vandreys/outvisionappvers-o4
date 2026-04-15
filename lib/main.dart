@@ -58,7 +58,7 @@ class BienalDeCuritibaApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
 
-        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+        textTheme: GoogleFonts.interTextTheme(),
 
         iconTheme: const IconThemeData(
           color: Colors.black,
@@ -86,7 +86,7 @@ class BienalDeCuritibaApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute: AppRouter.explore,
+      initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
