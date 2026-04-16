@@ -37,7 +37,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const WelcomePage());
 
       case explore:
-        return MaterialPageRoute(builder: (_) => const ExplorePage());
+        final artworkId = route.arguments as String?;
+        return MaterialPageRoute(builder: (_) => ExplorePage(initialArtworkId: artworkId));
 
       case artwork:
         return MaterialPageRoute(builder: (_) => const ArtworkPage());

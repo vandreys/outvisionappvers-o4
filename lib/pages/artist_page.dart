@@ -6,6 +6,7 @@ import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/routes/app_router.dart';
+import 'package:outvisionxr/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
 class ArtistsPage extends StatefulWidget {
@@ -114,11 +115,11 @@ class _ArtistsPageState extends State<ArtistsPage> {
         children: [
           const SizedBox(height: 2),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: R.hp(context), vertical: 8),
             child: Text(
               t.gallery.tabArtists,
-              style: const TextStyle(
-                fontSize: 24,
+              style: TextStyle(
+                fontSize: R.titleFontSize(context, 24),
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -189,7 +190,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                             childAspectRatio: aspectRatio,
                           ),
                           itemCount: artists.length,
-                          itemBuilder: (context, index) => _buildArtistGridItem(artists[index], circleRadius),
+                          itemBuilder: (context, index) => _buildArtistGridItem(context, artists[index], circleRadius),
                         ),
                       );
                     }
@@ -205,7 +206,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                           childAspectRatio: 0.7,
                         ),
                         itemCount: artists.length,
-                        itemBuilder: (context, index) => _buildArtistGridItem(artists[index], 42),
+                        itemBuilder: (context, index) => _buildArtistGridItem(context, artists[index], 42),
                       ),
                     );
                   },
@@ -219,7 +220,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
     );
   }
 
-  Widget _buildArtistGridItem(Artist artist, double circleRadius) {
+  Widget _buildArtistGridItem(BuildContext context, Artist artist, double circleRadius) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, AppRouter.artistDetails, arguments: artist),
       child: Column(
@@ -243,7 +244,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
           const SizedBox(height: 8),
           Text(
             artist.name,
-            style: const TextStyle(fontSize: 13, color: Colors.black),
+            style: TextStyle(
+              fontSize: R.bodyFontSize(context, 13),
+              color: Colors.black,
+            ),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

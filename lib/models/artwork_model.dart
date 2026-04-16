@@ -11,7 +11,6 @@ class Artwork {
   final String? description;
   final String? locationName;
   final String? imageUrl;
-  final List<String> artworkImages;
   final GeoPoint location;
   final double arrivalRadiusMeters;
   final String availability;
@@ -31,7 +30,6 @@ class Artwork {
     this.description,
     this.locationName,
     this.imageUrl,
-    this.artworkImages = const [],
     required this.location,
     this.arrivalRadiusMeters = 20.0,
     this.availability = 'active',
@@ -143,7 +141,6 @@ class Artwork {
         description: data['description'] as String?,
         locationName: data['location_name'] as String?,
         imageUrl: imageUrl?.isNotEmpty == true ? imageUrl : null,
-        artworkImages: List<String>.from(data['artwork_images'] ?? []),
         location: location,
         arrivalRadiusMeters:
             (data['arrival_radius_meters'] as num?)?.toDouble() ?? 20.0,

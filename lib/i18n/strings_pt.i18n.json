@@ -64,13 +64,20 @@
     "locationNotFound": "Não foi possível obter sua localização. Tente novamente.",
     "locationError": "Erro ao iniciar localização.",
     "helpTitle": "Ajuda do Mapa",
-    "helpContent": "Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual."
+    "helpContent": "Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.",
+    "noNearbyArtwork": "Nenhuma obra de arte perto da sua localização",
+    "noNearbyArtworkDesc": "Não há obras de arte visíveis ao redor da sua localização. Amplie a visualização ou use o botão abaixo para ver as obras mais próximas.",
+    "takeToNearest": "Leve-me para a obra mais próxima"
   },
   "bottomNav": {
     "explore": "Explorar",
     "gallery": "Obras",
     "captured": "Capturados",
     "settings": "Configurações"
+  },
+  "welcome": {
+    "headline": "Arte e design\nno seu melhor",
+    "startButton": "Começar"
   },
   "ar": {
     "scanInstruction": "Escaneie o chão movendo o celular",

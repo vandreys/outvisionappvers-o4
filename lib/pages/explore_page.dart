@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
+import 'package:outvisionxr/utils/responsive.dart';
 import 'package:outvisionxr/widgets/splash_loading.dart';
 
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class ExplorePage extends StatefulWidget {
-  const ExplorePage({super.key});
+  final String? initialArtworkId;
+  const ExplorePage({super.key, this.initialArtworkId});
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -53,6 +55,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   // Marcador selecionado por toque
   String? _selectedArtworkId;
   Map<String, dynamic>? _selectedArtworkData;
+
+  bool _initialSelectionDone = false;
 
   // Config do gate
   static const int _minDwellSeconds = 3;
@@ -130,6 +134,20 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     setState(() => _artworkPoints = artworkPoints);
     _updateMarkers();
+
+    // Seleciona a obra inicial vinda do botão "ver no mapa"
+    if (!_initialSelectionDone && widget.initialArtworkId != null) {
+      final point = artworkPoints.where((p) => p.id == widget.initialArtworkId).firstOrNull;
+      if (point != null) {
+        _initialSelectionDone = true;
+        _onMarkerTapped(point);
+        _controller.future.then((controller) {
+          controller.animateCamera(CameraUpdate.newLatLngZoom(
+            LatLng(point.lat, point.lng), 18.0,
+          ));
+        });
+      }
+    }
   }
 
   Future<BitmapDescriptor> _buildDiamondMarker(String? imageUrl, {bool isSelected = false}) async {
@@ -386,7 +404,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
     final newMarkers = <Marker>{};
     for (final point in _artworkPoints) {
       final raw = _rawArtworks.where((a) => a.id == point.id).firstOrNull;
-      final imageUrl = raw?.imageUrl ?? raw?.artworkImages.firstOrNull;
+      final imageUrl = raw?.imageUrl;
       final isSelected = point.id == _selectedArtworkId;
       final icon = await _buildDiamondMarker(imageUrl, isSelected: isSelected);
       newMarkers.add(Marker(
@@ -414,6 +432,19 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       };
     });
     _updateMarkers();
+  }
+
+  ArtworkPoint? _getNearestArtworkPoint() {
+    if (_artworkPoints.isEmpty || _currentPosition == null) return null;
+    ArtworkPoint nearest = _artworkPoints.first;
+    double minDist = double.infinity;
+    for (final p in _artworkPoints) {
+      final d = Geolocator.distanceBetween(
+        _currentPosition!.latitude, _currentPosition!.longitude, p.lat, p.lng,
+      );
+      if (d < minDist) { minDist = d; nearest = p; }
+    }
+    return nearest;
   }
 
   Future<void> _openArViewNow() async {
@@ -530,26 +561,39 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       }),
                     ),
 
+                    if (_selectedArtworkData == null && _artworkPoints.isNotEmpty && !_isArActive)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: R.bottomCard(
+                          context,
+                          _NoNearbyArtworkCard(nearest: _getNearestArtworkPoint()),
+                        ),
+                      ),
+
                     if (_selectedArtworkData != null)
                       Positioned(
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        child: _ArtworkTapCard(
-                          data: _selectedArtworkData!,
-                          isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
-                          onClose: () {
-                            setState(() {
-                              _gateOpen = false;
-                              _activeArtwork = null;
-                              _enteredRadiusAt = null;
-                      
-                              _selectedArtworkId = null;
-                              _selectedArtworkData = null;
-                            });
-                            _updateMarkers();
-                          },
-                          onOpenAr: _openArViewNow,
+                        child: R.bottomCard(
+                          context,
+                          _ArtworkTapCard(
+                            data: _selectedArtworkData!,
+                            isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
+                            onClose: () {
+                              setState(() {
+                                _gateOpen = false;
+                                _activeArtwork = null;
+                                _enteredRadiusAt = null;
+                                _selectedArtworkId = null;
+                                _selectedArtworkData = null;
+                              });
+                              _updateMarkers();
+                            },
+                            onOpenAr: _openArViewNow,
+                          ),
                         ),
                       ),
                   ],
@@ -728,6 +772,86 @@ class _ArtworkTapCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NoNearbyArtworkCard extends StatelessWidget {
+  final ArtworkPoint? nearest;
+
+  const _NoNearbyArtworkCard({this.nearest});
+
+  Future<void> _navigateToNearest() async {
+    if (nearest == null) return;
+    final uri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=${nearest!.lat},${nearest!.lng}&travelmode=walking',
+    );
+    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      elevation: 16,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text(
+              context.t.map.noNearbyArtwork,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.t.map.noNearbyArtworkDesc,
+              style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: nearest != null ? _navigateToNearest : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  context.t.map.takeToNearest,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

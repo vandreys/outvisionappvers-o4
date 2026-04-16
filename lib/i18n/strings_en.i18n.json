@@ -64,13 +64,20 @@
     "locationNotFound": "Could not get your location. Please try again.",
     "locationError": "Error initializing location.",
     "helpTitle": "Map Help",
-    "helpContent": "Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position."
+    "helpContent": "Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.",
+    "noNearbyArtwork": "No artwork near your location",
+    "noNearbyArtworkDesc": "There are no artworks visible around your location. Zoom out or use the button below to navigate to the nearest artwork.",
+    "takeToNearest": "Take me to the nearest artwork"
   },
   "bottomNav": {
     "explore": "Explore",
     "gallery": "Artworks",
     "captured": "Captured",
     "settings": "Settings"
+  },
+  "welcome": {
+    "headline": "Art and design\nat its best",
+    "startButton": "Start"
   },
   "ar": {
     "scanInstruction": "Scan the floor by moving your phone",

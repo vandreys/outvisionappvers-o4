@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 243 (81 per locale)
+/// Strings: 258 (86 per locale)
 ///
-/// Built on 2026-04-09 at 06:54 UTC
+/// Built on 2026-04-16 at 10:52 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -155,6 +155,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsLanguagePageEn languagePage = _StringsLanguagePageEn._(_root);
 	late final _StringsMapEn map = _StringsMapEn._(_root);
 	late final _StringsBottomNavEn bottomNav = _StringsBottomNavEn._(_root);
+	late final _StringsWelcomeEn welcome = _StringsWelcomeEn._(_root);
 	late final _StringsArEn ar = _StringsArEn._(_root);
 }
 
@@ -258,6 +259,9 @@ class _StringsMapEn {
 	String get locationError => 'Error initializing location.';
 	String get helpTitle => 'Map Help';
 	String get helpContent => 'Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.';
+	String get noNearbyArtwork => 'No artwork near your location';
+	String get noNearbyArtworkDesc => 'There are no artworks visible around your location. Zoom out or use the button below to navigate to the nearest artwork.';
+	String get takeToNearest => 'Take me to the nearest artwork';
 }
 
 // Path: bottomNav
@@ -271,6 +275,17 @@ class _StringsBottomNavEn {
 	String get gallery => 'Artworks';
 	String get captured => 'Captured';
 	String get settings => 'Settings';
+}
+
+// Path: welcome
+class _StringsWelcomeEn {
+	_StringsWelcomeEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get headline => 'Art and design\nat its best';
+	String get startButton => 'Start';
 }
 
 // Path: ar
@@ -332,6 +347,7 @@ class _StringsEs implements Translations {
 	@override late final _StringsLanguagePageEs languagePage = _StringsLanguagePageEs._(_root);
 	@override late final _StringsMapEs map = _StringsMapEs._(_root);
 	@override late final _StringsBottomNavEs bottomNav = _StringsBottomNavEs._(_root);
+	@override late final _StringsWelcomeEs welcome = _StringsWelcomeEs._(_root);
 	@override late final _StringsArEs ar = _StringsArEs._(_root);
 }
 
@@ -435,6 +451,9 @@ class _StringsMapEs implements _StringsMapEn {
 	@override String get locationError => 'Error al iniciar la ubicación.';
 	@override String get helpTitle => 'Ayuda del Mapa';
 	@override String get helpContent => 'Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual.';
+	@override String get noNearbyArtwork => 'Ninguna obra de arte cerca de tu ubicación';
+	@override String get noNearbyArtworkDesc => 'No hay obras de arte visibles alrededor de tu ubicación. Aleja el zoom o usa el botón de abajo para navegar hacia la obra más cercana.';
+	@override String get takeToNearest => 'Llévame a la obra más cercana';
 }
 
 // Path: bottomNav
@@ -448,6 +467,17 @@ class _StringsBottomNavEs implements _StringsBottomNavEn {
 	@override String get gallery => 'Obras';
 	@override String get captured => 'Capturados';
 	@override String get settings => 'Configuración';
+}
+
+// Path: welcome
+class _StringsWelcomeEs implements _StringsWelcomeEn {
+	_StringsWelcomeEs._(this._root);
+
+	@override final _StringsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get headline => 'Arte y diseño\nen su máximo esplendor';
+	@override String get startButton => 'Comenzar';
 }
 
 // Path: ar
@@ -509,6 +539,7 @@ class _StringsPt implements Translations {
 	@override late final _StringsLanguagePagePt languagePage = _StringsLanguagePagePt._(_root);
 	@override late final _StringsMapPt map = _StringsMapPt._(_root);
 	@override late final _StringsBottomNavPt bottomNav = _StringsBottomNavPt._(_root);
+	@override late final _StringsWelcomePt welcome = _StringsWelcomePt._(_root);
 	@override late final _StringsArPt ar = _StringsArPt._(_root);
 }
 
@@ -612,6 +643,9 @@ class _StringsMapPt implements _StringsMapEn {
 	@override String get locationError => 'Erro ao iniciar localização.';
 	@override String get helpTitle => 'Ajuda do Mapa';
 	@override String get helpContent => 'Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.';
+	@override String get noNearbyArtwork => 'Nenhuma obra de arte perto da sua localização';
+	@override String get noNearbyArtworkDesc => 'Não há obras de arte visíveis ao redor da sua localização. Amplie a visualização ou use o botão abaixo para ver as obras mais próximas.';
+	@override String get takeToNearest => 'Leve-me para a obra mais próxima';
 }
 
 // Path: bottomNav
@@ -625,6 +659,17 @@ class _StringsBottomNavPt implements _StringsBottomNavEn {
 	@override String get gallery => 'Obras';
 	@override String get captured => 'Capturados';
 	@override String get settings => 'Configurações';
+}
+
+// Path: welcome
+class _StringsWelcomePt implements _StringsWelcomeEn {
+	_StringsWelcomePt._(this._root);
+
+	@override final _StringsPt _root; // ignore: unused_field
+
+	// Translations
+	@override String get headline => 'Arte e design\nno seu melhor';
+	@override String get startButton => 'Começar';
 }
 
 // Path: ar
@@ -719,10 +764,15 @@ extension on Translations {
 			case 'map.locationError': return 'Error initializing location.';
 			case 'map.helpTitle': return 'Map Help';
 			case 'map.helpContent': return 'Explore the map to find the artworks. When you get close to a point, you can open the Augmented Reality experience. Use the zoom buttons (+/-) and the navigation button to center the map on your current position.';
+			case 'map.noNearbyArtwork': return 'No artwork near your location';
+			case 'map.noNearbyArtworkDesc': return 'There are no artworks visible around your location. Zoom out or use the button below to navigate to the nearest artwork.';
+			case 'map.takeToNearest': return 'Take me to the nearest artwork';
 			case 'bottomNav.explore': return 'Explore';
 			case 'bottomNav.gallery': return 'Artworks';
 			case 'bottomNav.captured': return 'Captured';
 			case 'bottomNav.settings': return 'Settings';
+			case 'welcome.headline': return 'Art and design\nat its best';
+			case 'welcome.startButton': return 'Start';
 			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
 			case 'ar.tapToPlace': return 'Tap the screen to place the artwork';
 			case 'ar.helpTitle': return 'Help';
@@ -808,10 +858,15 @@ extension on _StringsEs {
 			case 'map.locationError': return 'Error al iniciar la ubicación.';
 			case 'map.helpTitle': return 'Ayuda del Mapa';
 			case 'map.helpContent': return 'Explora el mapa para encontrar las obras de arte. Cuando te acerques a un punto, podrás abrir la experiencia de Realidad Aumentada. Utiliza los botones de zoom (+/-) y el botón de navegación para centrar el mapa en tu posición actual.';
+			case 'map.noNearbyArtwork': return 'Ninguna obra de arte cerca de tu ubicación';
+			case 'map.noNearbyArtworkDesc': return 'No hay obras de arte visibles alrededor de tu ubicación. Aleja el zoom o usa el botón de abajo para navegar hacia la obra más cercana.';
+			case 'map.takeToNearest': return 'Llévame a la obra más cercana';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';
 			case 'bottomNav.settings': return 'Configuración';
+			case 'welcome.headline': return 'Arte y diseño\nen su máximo esplendor';
+			case 'welcome.startButton': return 'Comenzar';
 			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
 			case 'ar.tapToPlace': return 'Toca la pantalla para posicionar la obra';
 			case 'ar.helpTitle': return 'Ayuda';
@@ -897,10 +952,15 @@ extension on _StringsPt {
 			case 'map.locationError': return 'Erro ao iniciar localização.';
 			case 'map.helpTitle': return 'Ajuda do Mapa';
 			case 'map.helpContent': return 'Explore o mapa para encontrar as obras de arte. Ao se aproximar de um ponto, você poderá abrir a experiência em Realidade Aumentada. Use os botões de zoom (+/-) e o botão de navegação para centralizar o mapa em sua posição atual.';
+			case 'map.noNearbyArtwork': return 'Nenhuma obra de arte perto da sua localização';
+			case 'map.noNearbyArtworkDesc': return 'Não há obras de arte visíveis ao redor da sua localização. Amplie a visualização ou use o botão abaixo para ver as obras mais próximas.';
+			case 'map.takeToNearest': return 'Leve-me para a obra mais próxima';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';
 			case 'bottomNav.settings': return 'Configurações';
+			case 'welcome.headline': return 'Arte e design\nno seu melhor';
+			case 'welcome.startButton': return 'Começar';
 			case 'ar.scanInstruction': return 'Escaneie o chão movendo o celular';
 			case 'ar.tapToPlace': return 'Toque na tela para posicionar a obra';
 			case 'ar.helpTitle': return 'Ajuda';

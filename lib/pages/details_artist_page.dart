@@ -3,6 +3,7 @@ import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
+import 'package:outvisionxr/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
 class DetailsArtistPage extends StatefulWidget {
@@ -35,6 +36,10 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
         ? bio.substring(0, _bioPreviewLength)
         : bio;
 
+    final tablet = R.isTablet(context);
+    final hPad = R.hp(context);
+    final avatarRadius = tablet ? 100.0 : 82.0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
       appBar: AppBar(
@@ -46,152 +51,120 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: hPad),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
 
-            // Foto circular
-            CircleAvatar(
-              radius: 82,
-              backgroundColor: Colors.grey[300],
-              backgroundImage: artist.artistPhoto.isNotEmpty
-                  ? NetworkImage(artist.artistPhoto)
-                  : null,
-              child: artist.artistPhoto.isEmpty
-                  ? const Icon(Icons.person, size: 80, color: Colors.grey)
-                  : null,
-            ),
+                // Foto circular
+                CircleAvatar(
+                  radius: avatarRadius,
+                  backgroundColor: Colors.grey[300],
+                  backgroundImage: artist.artistPhoto.isNotEmpty
+                      ? NetworkImage(artist.artistPhoto)
+                      : null,
+                  child: artist.artistPhoto.isEmpty
+                      ? Icon(Icons.person, size: avatarRadius * 0.9, color: Colors.grey)
+                      : null,
+                ),
 
-            const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-            // Nome
-            Text(
-              artist.name,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-
-            // Localização / subtítulo
-            if (artist.location.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(
-                artist.location,
-                style: TextStyle(fontSize: 15, color: Colors.grey[600]),
-              ),
-            ],
-
-            const SizedBox(height: 24),
-
-            // Bio com "more"
-            if (bio.isNotEmpty) ...[
-              GestureDetector(
-                onTap: bioIsTruncated
-                    ? () => setState(() => _bioExpanded = !_bioExpanded)
-                    : null,
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 15,
-                      height: 1.6,
-                      color: Colors.grey[800],
-                    ),
-                    children: [
-                      TextSpan(text: bioText),
-                      if (!_bioExpanded && bioIsTruncated)
-                        TextSpan(
-                          text: t.gallery.bioMore,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                    ],
+                // Nome
+                Text(
+                  artist.name,
+                  style: TextStyle(
+                    fontSize: R.titleFontSize(context, 28),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              const Divider(height: 1, color: Color(0xFFD8D8D8)),
-              const SizedBox(height: 32),
-            ],
 
-            // Highlights
-            Text(
-              t.gallery.highlights,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
-            StreamBuilder<List<Artwork>>(
-              stream: _artworkStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
+                // Bio com "more"
+                if (bio.isNotEmpty) ...[
+                  GestureDetector(
+                    onTap: bioIsTruncated
+                        ? () => setState(() => _bioExpanded = !_bioExpanded)
+                        : null,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: R.bodyFontSize(context, 15),
+                          height: 1.6,
+                          color: Colors.grey[800],
+                        ),
+                        children: [
+                          TextSpan(text: bioText),
+                          if (!_bioExpanded && bioIsTruncated)
+                            TextSpan(
+                              text: t.gallery.bioMore,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(height: 1, color: Color(0xFFD8D8D8)),
+                  const SizedBox(height: 32),
+                ],
 
-                final artworks = snapshot.data!
-                    .where((a) => a.displayArtist == artist.name)
-                    .toList();
+                // Highlights
+                Text(
+                  t.gallery.highlights,
+                  style: TextStyle(
+                    fontSize: R.titleFontSize(context, 20),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                if (artworks.isEmpty) return const SizedBox.shrink();
+                StreamBuilder<List<Artwork>>(
+                  stream: _artworkStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const SizedBox.shrink();
 
-                final highlights = artworks.take(4).toList();
+                    final artworks = snapshot.data!
+                        .where((a) => a.displayArtist == artist.name)
+                        .toList();
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GridView.builder(
+                    if (artworks.isEmpty) return const SizedBox.shrink();
+
+                    final crossAxisCount = tablet ? 3 : 2;
+                    final highlights = artworks.take(tablet ? 6 : 4).toList();
+
+                    return GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 28,
                         childAspectRatio: 0.78,
                       ),
                       itemCount: highlights.length,
                       itemBuilder: (context, index) {
-                        final artwork = highlights[index];
-                        return _HighlightCard(artwork: artwork);
+                        return _HighlightCard(artwork: highlights[index]);
                       },
-                    ),
-                    const SizedBox(height: 32),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.black, width: 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          t.gallery.viewAll,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                    );
+                  },
+                ),
 
-            const SizedBox(height: 40),
-          ],
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -226,8 +199,8 @@ class _HighlightCard extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           artwork.localizedTitle,
-          style: const TextStyle(
-            fontSize: 13,
+          style: TextStyle(
+            fontSize: R.bodyFontSize(context, 13),
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),

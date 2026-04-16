@@ -14,7 +14,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             Icons.location_on,
             context.t.bottomNav.explore,
             currentIndex == 0,
-            currentIndex == 0 ? Colors.pinkAccent : Colors.grey,
+            currentIndex == 0 ? Colors.black : Colors.grey,
             () {
               if (currentIndex != 0) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -31,7 +31,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             Icons.grid_view,
             context.t.bottomNav.gallery,
             currentIndex == 1,
-            currentIndex == 1 ? Colors.pinkAccent : Colors.grey,
+            currentIndex == 1 ? Colors.black : Colors.grey,
             () {
               if (currentIndex != 1) {
                 Navigator.pushNamedAndRemoveUntil(
@@ -48,7 +48,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
             Icons.person,
             context.t.gallery.tabArtists,
             currentIndex == 2,
-            currentIndex == 2 ? Colors.pinkAccent : Colors.grey,
+            currentIndex == 2 ? Colors.black : Colors.grey,
             () {
               if (currentIndex != 2) {
                 Navigator.pushNamedAndRemoveUntil(

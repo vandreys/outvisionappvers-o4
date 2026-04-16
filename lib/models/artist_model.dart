@@ -5,7 +5,6 @@ class Artist {
   final String name;
   final Map<String, String> bioMap;
   final String artistPhoto;
-  final String location;
   final String website;
 
   Artist({
@@ -13,7 +12,6 @@ class Artist {
     required this.name,
     this.bioMap = const {'en': '', 'pt': '', 'es': ''},
     this.artistPhoto = '',
-    this.location = '',
     this.website = '',
   });
 
@@ -39,7 +37,6 @@ class Artist {
       name: data['name'] as String? ?? '',
       bioMap: bioMap,
       artistPhoto: (data['artist_photo'] ?? '') as String,
-      location: (data['location'] ?? data['location_artist'] ?? '') as String,
       website: (data['website'] ?? '') as String,
     );
   }
@@ -61,8 +58,6 @@ class Artist {
         'bio': bioMap,
         'text_about_artist': bio,
         'artist_photo': artistPhoto,
-        'location': location,
-        'location_artist': location,
         'website': website,
       };
 }
