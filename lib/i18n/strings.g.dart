@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 258 (86 per locale)
+/// Strings: 291 (97 per locale)
 ///
-/// Built on 2026-04-16 at 10:52 UTC
+/// Built on 2026-04-19 at 17:11 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -151,6 +151,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final _StringsGalleryEn gallery = _StringsGalleryEn._(_root);
 	late final _StringsSettingsEn settings = _StringsSettingsEn._(_root);
+	late final _StringsLimiaresEn limiares = _StringsLimiaresEn._(_root);
 	late final _StringsAboutEn about = _StringsAboutEn._(_root);
 	late final _StringsLanguagePageEn languagePage = _StringsLanguagePageEn._(_root);
 	late final _StringsMapEn map = _StringsMapEn._(_root);
@@ -178,6 +179,7 @@ class _StringsGalleryEn {
 	String get works => 'Works';
 	String get noArtworkFound => 'No artwork found';
 	String get noArtistFound => 'No artist found';
+	String get unknownArtist => 'Unknown artist';
 	String get highlights => 'Highlights';
 	String get viewAll => 'View all';
 	String get bioMore => ' more';
@@ -198,10 +200,27 @@ class _StringsSettingsEn {
 	String get appSettings => 'App Settings';
 	String get language => 'Language';
 	String get about => '16th International Biennial of Curitiba';
+	String get limiares => 'Limiares';
 	String get website => 'Website';
+	String get instagram => 'Instagram';
 	String get aboutApp => 'About the App';
 	String get privacyPolicy => 'Privacy Policy';
 	String get termsOfUse => 'Terms of Use';
+}
+
+// Path: limiares
+class _StringsLimiaresEn {
+	_StringsLimiaresEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'LIMIARES';
+	String get conceptText => 'The 16th International Biennial of Curitiba draws on the concept of LIMIAR (THRESHOLD), understood as the space between what is not yet and what is already beginning to be. In a world marked by the dissolution of boundaries between the human and the technological, the natural and the artificial, the Biennial presents itself as a territory of transition — a laboratory of listening, risk, and transformation.\n\nHere, art acts as a mediating force between worlds, opening passages to new modes of existence and perception.\n\nOn the threshold between crisis and creation, art reveals its power of invention and its capacity to imagine possible futures.';
+	String get statementTitle => 'CURATORIAL STATEMENT';
+	String get statementText => 'In a world traversed by accelerating technological, social, and environmental transformations, the 16th International Biennial of Curitiba — taking place between March and August 2026 — presents itself as a transdisciplinary laboratory of experimentation, where art, science, technology, and critical thinking converge to explore the challenges of contemporaneity.\n\nThis edition tests the limits between artistic production, audiences, critical thought, and civic action, investigating hybrid modes of existence and the dissolved boundaries between the biological and the synthetic, the human and the non-human. These zones of friction — between the natural and the artificial, the sensory and the programmable — inform the practices of the future and offer fertile ground for the aesthetic and emergent existence of art.\n\nWe live in an era marked by the omnipresence of algorithms, the rise of artificial intelligence, and the supremacy of digital capitalism. In this context, artistic practice is no longer exclusively individual expression but becomes an expanded field of collaboration between humans, machines, and intelligent systems. The traditional concept of authorship is called into question, making space for the artist as programmer, mediator, or facilitator of algorithmic processes.\n\nHow does aesthetic experience transform in times of augmented realities, big data, and digital ecologies? Art, more than representing the world, becomes a living, responsive, and critical interface that questions the regimes of visuality and the systems of power that structure our daily lives. Hybrid languages — fusing the physical and the virtual, the organic and the computational — expand the horizons of sensibility and open pathways to new forms of activism, memory, and subjectivity.\n\nAnother fundamental axis of this edition lies in the critique of the neutrality of technology. Artificial intelligence and algorithmic systems are shaped by political, economic, and ideological interests. Art, in this context, emerges as a device of resistance against data extractivism, mass surveillance, and the mechanisms of control and inequality operating behind the scenes of the digital age.\n\nThe 16th International Biennial of Curitiba summons artists, researchers, scientists, technologists, and activists to imagine possible futures and reflect on the impacts of technological innovation on forms of life, identities, and the materialities of the contemporary world. Through immersive installations, generative art, interactive environments, virtual reality simulations, and post-humanist practices, the Biennial proposes to map the speculative terrain of emerging practices, placing the local and the global, the body and the code, the sensory and the synthetic in dialogue.\n\nThe public will be invited to participate in transformative experiences, interacting with works that reconfigure the ways of perceiving, acting, and imagining. In this encounter between art and technopolitics, the Biennial seeks to be a platform of listening, invention, and risk, opening breaches in the present to rehearse more just, conscious, and sensitive forms of coexistence.';
+	String get curatorsLabel => 'Curators';
+	String get curatorsNames => 'Adriana Almada and Tereza de Arruda';
 }
 
 // Path: about
@@ -211,13 +230,13 @@ class _StringsAboutEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get pageTitle => 'About Outvision';
-	String get mainTitle => 'Outvision XR: Art and Augmented Reality';
-	String get description => 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and visitors to exhibitions like the Curitiba Biennial, our app transforms how you interact with artworks and artists.';
-	String get missionTitle => 'Our Mission';
-	String get missionText => 'To connect people to art in new ways, using technology to enrich understanding and engagement with contemporary cultural expressions. We believe AR can break down barriers and make art more accessible and interactive for everyone.';
-	String get visionTitle => 'Our Vision';
-	String get visionText => 'To be the leading platform for curating art with Augmented Reality, recognized for its innovation, accessibility, and ability to create memorable experiences that transcend the traditional boundaries of galleries and museums.';
+	String get pageTitle => 'About the App';
+	String get mainTitle => '16th International Biennial of Curitiba';
+	String get description => 'This app is an official experience of the 16th International Biennial of Curitiba, developed with a focus on visualizing artworks through Augmented Reality (AR). In dialogue with the curatorial theme Limiares (Thresholds), the app invites visitors to cross boundaries between the physical and digital worlds, exploring art in an immersive and interactive way across the Biennial\'s venues.';
+	String get missionTitle => 'About Outvision XR';
+	String get missionText => 'Outvision XR is a platform specialized in art experiences with Augmented Reality. Combining technology and culture, we enhance the connection between artworks, artists, and audiences, making contemporary art more accessible, sensory, and memorable.';
+	String get visionTitle => 'Limiares (Thresholds)';
+	String get visionText => 'The curatorial theme Limiares (Thresholds) invites reflection on the boundaries — physical, cultural, symbolic — that separate and unite us. Through Augmented Reality, the app transforms these thresholds into portals, allowing each artwork to be experienced beyond the visible.';
 	String get connectTitle => 'Connect With Us';
 	String get website => 'Website';
 	String get email => 'Email';
@@ -262,6 +281,8 @@ class _StringsMapEn {
 	String get noNearbyArtwork => 'No artwork near your location';
 	String get noNearbyArtworkDesc => 'There are no artworks visible around your location. Zoom out or use the button below to navigate to the nearest artwork.';
 	String get takeToNearest => 'Take me to the nearest artwork';
+	String get navigate => 'Navigate';
+	String get connectionError => 'Connection error. Check your internet.';
 }
 
 // Path: bottomNav
@@ -343,6 +364,7 @@ class _StringsEs implements Translations {
 	// Translations
 	@override late final _StringsGalleryEs gallery = _StringsGalleryEs._(_root);
 	@override late final _StringsSettingsEs settings = _StringsSettingsEs._(_root);
+	@override late final _StringsLimiaresEs limiares = _StringsLimiaresEs._(_root);
 	@override late final _StringsAboutEs about = _StringsAboutEs._(_root);
 	@override late final _StringsLanguagePageEs languagePage = _StringsLanguagePageEs._(_root);
 	@override late final _StringsMapEs map = _StringsMapEs._(_root);
@@ -370,6 +392,7 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get works => 'Obras';
 	@override String get noArtworkFound => 'Ninguna obra encontrada';
 	@override String get noArtistFound => 'Ningún artista encontrado';
+	@override String get unknownArtist => 'Artista desconocido';
 	@override String get highlights => 'Destacados';
 	@override String get viewAll => 'Ver todo';
 	@override String get bioMore => ' más';
@@ -390,10 +413,27 @@ class _StringsSettingsEs implements _StringsSettingsEn {
 	@override String get appSettings => 'Configuración de la App';
 	@override String get language => 'Idioma';
 	@override String get about => '16ª Bienal Internacional de Curitiba';
+	@override String get limiares => 'Limiares';
 	@override String get website => 'Sitio Web';
+	@override String get instagram => 'Instagram';
 	@override String get aboutApp => 'Sobre la App';
 	@override String get privacyPolicy => 'Política de Privacidad';
 	@override String get termsOfUse => 'Términos de Uso';
+}
+
+// Path: limiares
+class _StringsLimiaresEs implements _StringsLimiaresEn {
+	_StringsLimiaresEs._(this._root);
+
+	@override final _StringsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'LIMIARES';
+	@override String get conceptText => 'La 16ª Bienal Internacional de Curitiba parte del concepto LIMIAR (UMBRAL), entendido como el espacio entre lo que aún no es y lo que ya comienza a ser. En un mundo marcado por la disolución de las fronteras entre lo humano y lo tecnológico, lo natural y lo artificial, la Bienal se propone como un territorio de transición — un laboratorio de escucha, riesgo y transformación.\n\nAquí, el arte actúa como fuerza mediadora entre mundos, abriendo pasajes hacia nuevos modos de existencia y percepción.\n\nEn el umbral entre crisis y creación, el arte revela su potencia de invención y su capacidad de imaginar futuros posibles.';
+	@override String get statementTitle => 'STATEMENT CURATORIAL';
+	@override String get statementText => 'En un mundo atravesado por aceleradas transformaciones tecnológicas, sociales y ambientales, la 16ª Bienal Internacional de Curitiba — que tiene lugar entre marzo y agosto de 2026 — se propone como un laboratorio transdisciplinar de experimentación, donde arte, ciencia, tecnología y pensamiento crítico convergen para explorar los desafíos de la contemporaneidad.\n\nEsta edición tensiona los límites entre producción artística, públicos, pensamiento crítico y acción ciudadana, investigando los modos de existencia híbridos y las fronteras disueltas entre lo biológico y lo sintético, lo humano y lo no-humano. Son estas zonas de fricción — entre lo natural y lo artificial, lo sensible y lo programable — las que informan las prácticas del porvenir y ofrecen terreno fértil para la existencia estética y emergencial del arte.\n\nVivemos una era marcada por la omnipresencia de los algoritmos, el auge de la inteligencia artificial y la supremacía del capitalismo digital. En este contexto, la práctica artística deja de ser exclusivamente expresión individual para convertirse en un campo expandido de colaboración entre humanos, máquinas y sistemas inteligentes. El concepto tradicional de autoría es puesto en cuestión, abriendo espacio para el artista como programador, mediador o facilitador de procesos algorítmicos.\n\n¿Cómo se transforma la experiencia estética en tiempos de realidades aumentadas, big data y ecologías digitales? El arte, más que representar el mundo, se convierte en una interfaz viva, responsiva y crítica, que cuestiona los regímenes de visualidad y los sistemas de poder que estructuran nuestro cotidiano. Los lenguajes híbridos — que fusionan lo físico y lo virtual, lo orgánico y lo computacional — amplían los horizontes de la sensibilidad y abren caminos hacia nuevas formas de activismo, memoria y subjetividad.\n\nOtro eje fundamental de esta edición reside en la crítica a la neutralidad de la tecnología. La inteligencia artificial y los sistemas algorítmicos son moldeados por intereses políticos, económicos e ideológicos. El arte, en este contexto, emerge como un dispositivo de resistencia contra el extractivismo de datos, la vigilancia masiva y los mecanismos de control y desigualdad que operan entre bastidores de la era digital.\n\nLa 16ª Bienal Internacional de Curitiba convoca a artistas, investigadores, científicos, tecnólogos y activistas a imaginar futuros posibles y reflexionar sobre los impactos de la innovación tecnológica en las formas de vida, las identidades y las materialidades del mundo contemporáneo. A través de instalaciones inmersivas, arte generativo, ambientes interactivos, simulaciones en realidad virtual y prácticas posthumanistas, la Bienal se propone trazar un mapa especulativo de las prácticas emergentes, poniendo en diálogo lo local y lo global, el cuerpo y el código, lo sensible y lo sintético.\n\nEl público será invitado a participar de experiencias transformadoras, interactuando con obras que reconfiguran los modos de percibir, actuar e imaginar. En este encuentro entre arte y tecnopolítica, la Bienal quiere ser plataforma de escucha, de invención y de riesgo, abriendo brechas en el presente para ensayar formas de coexistencia más justas, conscientes y sensibles.';
+	@override String get curatorsLabel => 'Curadoras';
+	@override String get curatorsNames => 'Adriana Almada y Tereza de Arruda';
 }
 
 // Path: about
@@ -403,13 +443,13 @@ class _StringsAboutEs implements _StringsAboutEn {
 	@override final _StringsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get pageTitle => 'Sobre Outvision';
-	@override String get mainTitle => 'Outvision XR: Arte y Realidad Aumentada';
-	@override String get description => 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras y artistas.';
-	@override String get missionTitle => 'Nuestra Misión';
-	@override String get missionText => 'Conectar a las personas con el arte de formas inéditas, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer que el arte sea más accesible e interactivo para todos.';
-	@override String get visionTitle => 'Nuestra Visión';
-	@override String get visionText => 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y por la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y museos.';
+	@override String get pageTitle => 'Sobre la App';
+	@override String get mainTitle => '16ª Bienal Internacional de Curitiba';
+	@override String get description => 'Esta aplicación es una experiencia oficial de la 16ª Bienal Internacional de Curitiba, desarrollada con foco en la visualización de obras en Realidad Aumentada (RA). En diálogo con el tema curatorial Limiares (Umbrales), la app invita al visitante a cruzar fronteras entre el mundo físico y el digital, explorando el arte de forma inmersiva e interactiva en los espacios de la Bienal.';
+	@override String get missionTitle => 'Sobre Outvision XR';
+	@override String get missionText => 'Outvision XR es una plataforma especializada en experiencias de arte con Realidad Aumentada. Uniendo tecnología y cultura, potenciamos la conexión entre obras, artistas y públicos, haciendo que el arte contemporáneo sea más accesible, sensorial y memorable.';
+	@override String get visionTitle => 'Limiares (Umbrales)';
+	@override String get visionText => 'El tema curatorial Limiares (Umbrales) propone una reflexión sobre las fronteras — físicas, culturales, simbólicas — que nos separan y nos unen. A través de la Realidad Aumentada, la app transforma esos umbrales en portales, permitiendo que cada obra sea vivida más allá de lo visible.';
 	@override String get connectTitle => 'Conéctate con Nosotros';
 	@override String get website => 'Sitio Web';
 	@override String get email => 'Correo Electrónico';
@@ -454,6 +494,8 @@ class _StringsMapEs implements _StringsMapEn {
 	@override String get noNearbyArtwork => 'Ninguna obra de arte cerca de tu ubicación';
 	@override String get noNearbyArtworkDesc => 'No hay obras de arte visibles alrededor de tu ubicación. Aleja el zoom o usa el botón de abajo para navegar hacia la obra más cercana.';
 	@override String get takeToNearest => 'Llévame a la obra más cercana';
+	@override String get navigate => 'Navegar';
+	@override String get connectionError => 'Error de conexión. Verifica tu internet.';
 }
 
 // Path: bottomNav
@@ -535,6 +577,7 @@ class _StringsPt implements Translations {
 	// Translations
 	@override late final _StringsGalleryPt gallery = _StringsGalleryPt._(_root);
 	@override late final _StringsSettingsPt settings = _StringsSettingsPt._(_root);
+	@override late final _StringsLimiaresPt limiares = _StringsLimiaresPt._(_root);
 	@override late final _StringsAboutPt about = _StringsAboutPt._(_root);
 	@override late final _StringsLanguagePagePt languagePage = _StringsLanguagePagePt._(_root);
 	@override late final _StringsMapPt map = _StringsMapPt._(_root);
@@ -562,6 +605,7 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override String get works => 'Obras';
 	@override String get noArtworkFound => 'Nenhuma obra encontrada';
 	@override String get noArtistFound => 'Nenhum artista encontrado';
+	@override String get unknownArtist => 'Artista desconhecido';
 	@override String get highlights => 'Destaques';
 	@override String get viewAll => 'Ver tudo';
 	@override String get bioMore => ' mais';
@@ -582,10 +626,27 @@ class _StringsSettingsPt implements _StringsSettingsEn {
 	@override String get appSettings => 'Configurações do App';
 	@override String get language => 'Idioma';
 	@override String get about => '16ª Bienal Internacional de Curitiba';
+	@override String get limiares => 'Limiares';
 	@override String get website => 'Website';
+	@override String get instagram => 'Instagram';
 	@override String get aboutApp => 'Sobre o App';
 	@override String get privacyPolicy => 'Política de Privacidade';
 	@override String get termsOfUse => 'Termos de Uso';
+}
+
+// Path: limiares
+class _StringsLimiaresPt implements _StringsLimiaresEn {
+	_StringsLimiaresPt._(this._root);
+
+	@override final _StringsPt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'LIMIARES';
+	@override String get conceptText => 'A 16ª Bienal Internacional de Curitiba parte do conceito LIMIAR, entendido como o espaço entre o que ainda não é e o que já começa a ser. Num mundo marcado pela dissolução das fronteiras entre o humano e o tecnológico, o natural e o artificial, a Bienal propõe-se como um território de transição — um laboratório de escuta, risco e transformação.\n\nAqui, a arte atua como força mediadora entre mundos, abrindo passagens para novos modos de existência e percepção.\n\nNo limiar entre crise e criação, a arte revela sua potência de invenção e sua capacidade de imaginar futuros possíveis.';
+	@override String get statementTitle => 'STATEMENT CURATORIAL';
+	@override String get statementText => 'Em um mundo atravessado por aceleradas transformações tecnológicas, sociais e ambientais, a 16ª Bienal Internacional de Curitiba — que acontece entre março e agosto de 2026 — propõe-se como um laboratório transdisciplinar de experimentação, onde arte, ciência, tecnologia e pensamento crítico convergem para explorar os desafios da contemporaneidade.\n\nEsta edição tensiona os limites entre produção artística, públicos, pensamento crítico e ação cidadã, investigando os modos de existência híbridos e as fronteiras dissolvidas entre o biológico e o sintético, o humano e o não-humano. São essas zonas de atrito — entre o natural e o artificial, o sensível e o programável — que informam as práticas do porvir e oferecem terreno fértil para a existência estética e emergencial da arte.\n\nVivemos uma era marcada pela onipresença dos algoritmos, pela ascensão da inteligência artificial e pela supremacia do capitalismo digital. Nesse contexto, a prática artística deixa de ser exclusivamente expressão individual para tornar-se um campo expandido de colaboração entre humanos, máquinas e sistemas inteligentes. O conceito tradicional de autoria é colocado em xeque, abrindo espaço para o artista como programador, mediador ou facilitador de processos algorítmicos.\n\nComo se transforma a experiência estética em tempos de realidades aumentadas, big data e ecologias digitais? A arte, mais do que representar o mundo, torna-se uma interface viva, responsiva e crítica, que questiona os regimes de visualidade e os sistemas de poder que estruturam nosso cotidiano. As linguagens híbridas — que fundem o físico e o virtual, o orgânico e o computacional — expandem os horizontes da sensibilidade e abrem caminhos para novas formas de ativismo, memória e subjetividade.\n\nOutro eixo fundamental desta edição reside na crítica à neutralidade da tecnologia. A inteligência artificial e os sistemas algorítmicos são moldados por interesses políticos, econômicos e ideológicos. A arte, nesse contexto, emerge como um dispositivo de resistência contra o extrativismo de dados, a vigilância em massa e os mecanismos de controle e desigualdade que operam nos bastidores da era digital.\n\nA 16ª Bienal Internacional de Curitiba convoca artistas, pesquisadores, cientistas, tecnólogos e ativistas a imaginar futuros possíveis e refletir sobre os impactos da inovação tecnológica nas formas de vida, nas identidades e nas materialidades do mundo contemporâneo. Por meio de instalações imersivas, arte generativa, ambientes interativos, simulações em realidade virtual e práticas pós-humanistas, a Bienal propõe-se a traçar um mapa especulativo das práticas emergentes, colocando em diálogo o local e o global, o corpo e o código, o sensível e o sintético.\n\nO público será convidado a participar de experiências transformadoras, interagindo com obras que reconfiguram os modos de perceber, agir e imaginar. Neste encontro entre arte e tecnopolítica, a Bienal quer ser plataforma de escuta, de invenção e de risco, abrindo brechas no presente para ensaiar formas de coexistência mais justas, conscientes e sensíveis.';
+	@override String get curatorsLabel => 'Curadoras';
+	@override String get curatorsNames => 'Adriana Almada e Tereza de Arruda';
 }
 
 // Path: about
@@ -595,13 +656,13 @@ class _StringsAboutPt implements _StringsAboutEn {
 	@override final _StringsPt _root; // ignore: unused_field
 
 	// Translations
-	@override String get pageTitle => 'Sobre Outvision';
-	@override String get mainTitle => 'Outvision XR: Arte e Realidade Aumentada';
-	@override String get description => 'Outvision XR é uma plataforma inovadora que redefine a experiência da arte, combinando o mundo físico com a imersão da Realidade Aumentada (RA). Desenvolvido para entusiastas da arte e visitantes de exposições como a Bienal de Curitiba, nosso aplicativo transforma a maneira como você interage com obras e artistas.';
-	@override String get missionTitle => 'Nossa Missão';
-	@override String get missionText => 'Conectar pessoas à arte de maneiras inéditas, utilizando a tecnologia para enriquecer a compreensão e o engajamento com expressões culturais contemporâneas. Acreditamos que a RA pode quebrar barreiras e tornar a arte mais acessível e interativa para todos.';
-	@override String get visionTitle => 'Nossa Visão';
-	@override String get visionText => 'Ser a plataforma líder em curadoria de arte com Realidade Aumentada, reconhecida por sua inovação, acessibilidade e pela capacidade de criar experiências memoráveis que transcendem os limites tradicionais das galerias e museus.';
+	@override String get pageTitle => 'Sobre o App';
+	@override String get mainTitle => '16ª Bienal Internacional de Curitiba';
+	@override String get description => 'Este aplicativo é uma experiência oficial da 16ª Bienal Internacional de Curitiba, desenvolvido com foco na visualização de obras em Realidade Aumentada (RA). Em diálogo com o tema curatorial Limiares, o app convida o visitante a cruzar fronteiras entre o mundo físico e o digital, explorando a arte de forma imersiva e interativa nos espaços da Bienal.';
+	@override String get missionTitle => 'Sobre a Outvision XR';
+	@override String get missionText => 'A Outvision XR é uma plataforma especializada em experiências de arte com Realidade Aumentada. Unindo tecnologia e cultura, potencializamos a conexão entre obras, artistas e públicos, tornando a arte contemporânea mais acessível, sensorial e memorável.';
+	@override String get visionTitle => 'Limiares';
+	@override String get visionText => 'O tema curatorial Limiares propõe uma reflexão sobre as fronteiras — físicas, culturais, simbólicas — que nos separam e nos unem. Por meio da Realidade Aumentada, o app transforma esses limiares em portais, permitindo que cada obra seja vivida além do visível.';
 	@override String get connectTitle => 'Conecte-se Conosco';
 	@override String get website => 'Website';
 	@override String get email => 'Email';
@@ -646,6 +707,8 @@ class _StringsMapPt implements _StringsMapEn {
 	@override String get noNearbyArtwork => 'Nenhuma obra de arte perto da sua localização';
 	@override String get noNearbyArtworkDesc => 'Não há obras de arte visíveis ao redor da sua localização. Amplie a visualização ou use o botão abaixo para ver as obras mais próximas.';
 	@override String get takeToNearest => 'Leve-me para a obra mais próxima';
+	@override String get navigate => 'Navegar';
+	@override String get connectionError => 'Erro de conexão. Verifique sua internet.';
 }
 
 // Path: bottomNav
@@ -719,6 +782,7 @@ extension on Translations {
 			case 'gallery.works': return 'Works';
 			case 'gallery.noArtworkFound': return 'No artwork found';
 			case 'gallery.noArtistFound': return 'No artist found';
+			case 'gallery.unknownArtist': return 'Unknown artist';
 			case 'gallery.highlights': return 'Highlights';
 			case 'gallery.viewAll': return 'View all';
 			case 'gallery.bioMore': return ' more';
@@ -730,17 +794,25 @@ extension on Translations {
 			case 'settings.appSettings': return 'App Settings';
 			case 'settings.language': return 'Language';
 			case 'settings.about': return '16th International Biennial of Curitiba';
+			case 'settings.limiares': return 'Limiares';
 			case 'settings.website': return 'Website';
+			case 'settings.instagram': return 'Instagram';
 			case 'settings.aboutApp': return 'About the App';
 			case 'settings.privacyPolicy': return 'Privacy Policy';
 			case 'settings.termsOfUse': return 'Terms of Use';
-			case 'about.pageTitle': return 'About Outvision';
-			case 'about.mainTitle': return 'Outvision XR: Art and Augmented Reality';
-			case 'about.description': return 'Outvision XR is an innovative platform that redefines the art experience, combining the physical world with the immersion of Augmented Reality (AR). Developed for art enthusiasts and visitors to exhibitions like the Curitiba Biennial, our app transforms how you interact with artworks and artists.';
-			case 'about.missionTitle': return 'Our Mission';
-			case 'about.missionText': return 'To connect people to art in new ways, using technology to enrich understanding and engagement with contemporary cultural expressions. We believe AR can break down barriers and make art more accessible and interactive for everyone.';
-			case 'about.visionTitle': return 'Our Vision';
-			case 'about.visionText': return 'To be the leading platform for curating art with Augmented Reality, recognized for its innovation, accessibility, and ability to create memorable experiences that transcend the traditional boundaries of galleries and museums.';
+			case 'limiares.title': return 'LIMIARES';
+			case 'limiares.conceptText': return 'The 16th International Biennial of Curitiba draws on the concept of LIMIAR (THRESHOLD), understood as the space between what is not yet and what is already beginning to be. In a world marked by the dissolution of boundaries between the human and the technological, the natural and the artificial, the Biennial presents itself as a territory of transition — a laboratory of listening, risk, and transformation.\n\nHere, art acts as a mediating force between worlds, opening passages to new modes of existence and perception.\n\nOn the threshold between crisis and creation, art reveals its power of invention and its capacity to imagine possible futures.';
+			case 'limiares.statementTitle': return 'CURATORIAL STATEMENT';
+			case 'limiares.statementText': return 'In a world traversed by accelerating technological, social, and environmental transformations, the 16th International Biennial of Curitiba — taking place between March and August 2026 — presents itself as a transdisciplinary laboratory of experimentation, where art, science, technology, and critical thinking converge to explore the challenges of contemporaneity.\n\nThis edition tests the limits between artistic production, audiences, critical thought, and civic action, investigating hybrid modes of existence and the dissolved boundaries between the biological and the synthetic, the human and the non-human. These zones of friction — between the natural and the artificial, the sensory and the programmable — inform the practices of the future and offer fertile ground for the aesthetic and emergent existence of art.\n\nWe live in an era marked by the omnipresence of algorithms, the rise of artificial intelligence, and the supremacy of digital capitalism. In this context, artistic practice is no longer exclusively individual expression but becomes an expanded field of collaboration between humans, machines, and intelligent systems. The traditional concept of authorship is called into question, making space for the artist as programmer, mediator, or facilitator of algorithmic processes.\n\nHow does aesthetic experience transform in times of augmented realities, big data, and digital ecologies? Art, more than representing the world, becomes a living, responsive, and critical interface that questions the regimes of visuality and the systems of power that structure our daily lives. Hybrid languages — fusing the physical and the virtual, the organic and the computational — expand the horizons of sensibility and open pathways to new forms of activism, memory, and subjectivity.\n\nAnother fundamental axis of this edition lies in the critique of the neutrality of technology. Artificial intelligence and algorithmic systems are shaped by political, economic, and ideological interests. Art, in this context, emerges as a device of resistance against data extractivism, mass surveillance, and the mechanisms of control and inequality operating behind the scenes of the digital age.\n\nThe 16th International Biennial of Curitiba summons artists, researchers, scientists, technologists, and activists to imagine possible futures and reflect on the impacts of technological innovation on forms of life, identities, and the materialities of the contemporary world. Through immersive installations, generative art, interactive environments, virtual reality simulations, and post-humanist practices, the Biennial proposes to map the speculative terrain of emerging practices, placing the local and the global, the body and the code, the sensory and the synthetic in dialogue.\n\nThe public will be invited to participate in transformative experiences, interacting with works that reconfigure the ways of perceiving, acting, and imagining. In this encounter between art and technopolitics, the Biennial seeks to be a platform of listening, invention, and risk, opening breaches in the present to rehearse more just, conscious, and sensitive forms of coexistence.';
+			case 'limiares.curatorsLabel': return 'Curators';
+			case 'limiares.curatorsNames': return 'Adriana Almada and Tereza de Arruda';
+			case 'about.pageTitle': return 'About the App';
+			case 'about.mainTitle': return '16th International Biennial of Curitiba';
+			case 'about.description': return 'This app is an official experience of the 16th International Biennial of Curitiba, developed with a focus on visualizing artworks through Augmented Reality (AR). In dialogue with the curatorial theme Limiares (Thresholds), the app invites visitors to cross boundaries between the physical and digital worlds, exploring art in an immersive and interactive way across the Biennial\'s venues.';
+			case 'about.missionTitle': return 'About Outvision XR';
+			case 'about.missionText': return 'Outvision XR is a platform specialized in art experiences with Augmented Reality. Combining technology and culture, we enhance the connection between artworks, artists, and audiences, making contemporary art more accessible, sensory, and memorable.';
+			case 'about.visionTitle': return 'Limiares (Thresholds)';
+			case 'about.visionText': return 'The curatorial theme Limiares (Thresholds) invites reflection on the boundaries — physical, cultural, symbolic — that separate and unite us. Through Augmented Reality, the app transforms these thresholds into portals, allowing each artwork to be experienced beyond the visible.';
 			case 'about.connectTitle': return 'Connect With Us';
 			case 'about.website': return 'Website';
 			case 'about.email': return 'Email';
@@ -767,6 +839,8 @@ extension on Translations {
 			case 'map.noNearbyArtwork': return 'No artwork near your location';
 			case 'map.noNearbyArtworkDesc': return 'There are no artworks visible around your location. Zoom out or use the button below to navigate to the nearest artwork.';
 			case 'map.takeToNearest': return 'Take me to the nearest artwork';
+			case 'map.navigate': return 'Navigate';
+			case 'map.connectionError': return 'Connection error. Check your internet.';
 			case 'bottomNav.explore': return 'Explore';
 			case 'bottomNav.gallery': return 'Artworks';
 			case 'bottomNav.captured': return 'Captured';
@@ -813,6 +887,7 @@ extension on _StringsEs {
 			case 'gallery.works': return 'Obras';
 			case 'gallery.noArtworkFound': return 'Ninguna obra encontrada';
 			case 'gallery.noArtistFound': return 'Ningún artista encontrado';
+			case 'gallery.unknownArtist': return 'Artista desconocido';
 			case 'gallery.highlights': return 'Destacados';
 			case 'gallery.viewAll': return 'Ver todo';
 			case 'gallery.bioMore': return ' más';
@@ -824,17 +899,25 @@ extension on _StringsEs {
 			case 'settings.appSettings': return 'Configuración de la App';
 			case 'settings.language': return 'Idioma';
 			case 'settings.about': return '16ª Bienal Internacional de Curitiba';
+			case 'settings.limiares': return 'Limiares';
 			case 'settings.website': return 'Sitio Web';
+			case 'settings.instagram': return 'Instagram';
 			case 'settings.aboutApp': return 'Sobre la App';
 			case 'settings.privacyPolicy': return 'Política de Privacidad';
 			case 'settings.termsOfUse': return 'Términos de Uso';
-			case 'about.pageTitle': return 'Sobre Outvision';
-			case 'about.mainTitle': return 'Outvision XR: Arte y Realidad Aumentada';
-			case 'about.description': return 'Outvision XR es una plataforma innovadora que redefine la experiencia del arte, combinando el mundo físico con la inmersión de la Realidad Aumentada (RA). Desarrollada para entusiastas del arte y visitantes de exposiciones como la Bienal de Curitiba, nuestra aplicación transforma la forma en que interactúas con obras y artistas.';
-			case 'about.missionTitle': return 'Nuestra Misión';
-			case 'about.missionText': return 'Conectar a las personas con el arte de formas inéditas, utilizando la tecnología para enriquecer la comprensión y el compromiso con las expresiones culturales contemporáneas. Creemos que la RA puede derribar barreras y hacer que el arte sea más accesible e interactivo para todos.';
-			case 'about.visionTitle': return 'Nuestra Visión';
-			case 'about.visionText': return 'Ser la plataforma líder en curaduría de arte con Realidad Aumentada, reconocida por su innovación, accesibilidad y por la capacidad de crear experiencias memorables que trascienden los límites tradicionales de las galerías y museos.';
+			case 'limiares.title': return 'LIMIARES';
+			case 'limiares.conceptText': return 'La 16ª Bienal Internacional de Curitiba parte del concepto LIMIAR (UMBRAL), entendido como el espacio entre lo que aún no es y lo que ya comienza a ser. En un mundo marcado por la disolución de las fronteras entre lo humano y lo tecnológico, lo natural y lo artificial, la Bienal se propone como un territorio de transición — un laboratorio de escucha, riesgo y transformación.\n\nAquí, el arte actúa como fuerza mediadora entre mundos, abriendo pasajes hacia nuevos modos de existencia y percepción.\n\nEn el umbral entre crisis y creación, el arte revela su potencia de invención y su capacidad de imaginar futuros posibles.';
+			case 'limiares.statementTitle': return 'STATEMENT CURATORIAL';
+			case 'limiares.statementText': return 'En un mundo atravesado por aceleradas transformaciones tecnológicas, sociales y ambientales, la 16ª Bienal Internacional de Curitiba — que tiene lugar entre marzo y agosto de 2026 — se propone como un laboratorio transdisciplinar de experimentación, donde arte, ciencia, tecnología y pensamiento crítico convergen para explorar los desafíos de la contemporaneidad.\n\nEsta edición tensiona los límites entre producción artística, públicos, pensamiento crítico y acción ciudadana, investigando los modos de existencia híbridos y las fronteras disueltas entre lo biológico y lo sintético, lo humano y lo no-humano. Son estas zonas de fricción — entre lo natural y lo artificial, lo sensible y lo programable — las que informan las prácticas del porvenir y ofrecen terreno fértil para la existencia estética y emergencial del arte.\n\nVivemos una era marcada por la omnipresencia de los algoritmos, el auge de la inteligencia artificial y la supremacía del capitalismo digital. En este contexto, la práctica artística deja de ser exclusivamente expresión individual para convertirse en un campo expandido de colaboración entre humanos, máquinas y sistemas inteligentes. El concepto tradicional de autoría es puesto en cuestión, abriendo espacio para el artista como programador, mediador o facilitador de procesos algorítmicos.\n\n¿Cómo se transforma la experiencia estética en tiempos de realidades aumentadas, big data y ecologías digitales? El arte, más que representar el mundo, se convierte en una interfaz viva, responsiva y crítica, que cuestiona los regímenes de visualidad y los sistemas de poder que estructuran nuestro cotidiano. Los lenguajes híbridos — que fusionan lo físico y lo virtual, lo orgánico y lo computacional — amplían los horizontes de la sensibilidad y abren caminos hacia nuevas formas de activismo, memoria y subjetividad.\n\nOtro eje fundamental de esta edición reside en la crítica a la neutralidad de la tecnología. La inteligencia artificial y los sistemas algorítmicos son moldeados por intereses políticos, económicos e ideológicos. El arte, en este contexto, emerge como un dispositivo de resistencia contra el extractivismo de datos, la vigilancia masiva y los mecanismos de control y desigualdad que operan entre bastidores de la era digital.\n\nLa 16ª Bienal Internacional de Curitiba convoca a artistas, investigadores, científicos, tecnólogos y activistas a imaginar futuros posibles y reflexionar sobre los impactos de la innovación tecnológica en las formas de vida, las identidades y las materialidades del mundo contemporáneo. A través de instalaciones inmersivas, arte generativo, ambientes interactivos, simulaciones en realidad virtual y prácticas posthumanistas, la Bienal se propone trazar un mapa especulativo de las prácticas emergentes, poniendo en diálogo lo local y lo global, el cuerpo y el código, lo sensible y lo sintético.\n\nEl público será invitado a participar de experiencias transformadoras, interactuando con obras que reconfiguran los modos de percibir, actuar e imaginar. En este encuentro entre arte y tecnopolítica, la Bienal quiere ser plataforma de escucha, de invención y de riesgo, abriendo brechas en el presente para ensayar formas de coexistencia más justas, conscientes y sensibles.';
+			case 'limiares.curatorsLabel': return 'Curadoras';
+			case 'limiares.curatorsNames': return 'Adriana Almada y Tereza de Arruda';
+			case 'about.pageTitle': return 'Sobre la App';
+			case 'about.mainTitle': return '16ª Bienal Internacional de Curitiba';
+			case 'about.description': return 'Esta aplicación es una experiencia oficial de la 16ª Bienal Internacional de Curitiba, desarrollada con foco en la visualización de obras en Realidad Aumentada (RA). En diálogo con el tema curatorial Limiares (Umbrales), la app invita al visitante a cruzar fronteras entre el mundo físico y el digital, explorando el arte de forma inmersiva e interactiva en los espacios de la Bienal.';
+			case 'about.missionTitle': return 'Sobre Outvision XR';
+			case 'about.missionText': return 'Outvision XR es una plataforma especializada en experiencias de arte con Realidad Aumentada. Uniendo tecnología y cultura, potenciamos la conexión entre obras, artistas y públicos, haciendo que el arte contemporáneo sea más accesible, sensorial y memorable.';
+			case 'about.visionTitle': return 'Limiares (Umbrales)';
+			case 'about.visionText': return 'El tema curatorial Limiares (Umbrales) propone una reflexión sobre las fronteras — físicas, culturales, simbólicas — que nos separan y nos unen. A través de la Realidad Aumentada, la app transforma esos umbrales en portales, permitiendo que cada obra sea vivida más allá de lo visible.';
 			case 'about.connectTitle': return 'Conéctate con Nosotros';
 			case 'about.website': return 'Sitio Web';
 			case 'about.email': return 'Correo Electrónico';
@@ -861,6 +944,8 @@ extension on _StringsEs {
 			case 'map.noNearbyArtwork': return 'Ninguna obra de arte cerca de tu ubicación';
 			case 'map.noNearbyArtworkDesc': return 'No hay obras de arte visibles alrededor de tu ubicación. Aleja el zoom o usa el botón de abajo para navegar hacia la obra más cercana.';
 			case 'map.takeToNearest': return 'Llévame a la obra más cercana';
+			case 'map.navigate': return 'Navegar';
+			case 'map.connectionError': return 'Error de conexión. Verifica tu internet.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';
@@ -907,6 +992,7 @@ extension on _StringsPt {
 			case 'gallery.works': return 'Obras';
 			case 'gallery.noArtworkFound': return 'Nenhuma obra encontrada';
 			case 'gallery.noArtistFound': return 'Nenhum artista encontrado';
+			case 'gallery.unknownArtist': return 'Artista desconhecido';
 			case 'gallery.highlights': return 'Destaques';
 			case 'gallery.viewAll': return 'Ver tudo';
 			case 'gallery.bioMore': return ' mais';
@@ -918,17 +1004,25 @@ extension on _StringsPt {
 			case 'settings.appSettings': return 'Configurações do App';
 			case 'settings.language': return 'Idioma';
 			case 'settings.about': return '16ª Bienal Internacional de Curitiba';
+			case 'settings.limiares': return 'Limiares';
 			case 'settings.website': return 'Website';
+			case 'settings.instagram': return 'Instagram';
 			case 'settings.aboutApp': return 'Sobre o App';
 			case 'settings.privacyPolicy': return 'Política de Privacidade';
 			case 'settings.termsOfUse': return 'Termos de Uso';
-			case 'about.pageTitle': return 'Sobre Outvision';
-			case 'about.mainTitle': return 'Outvision XR: Arte e Realidade Aumentada';
-			case 'about.description': return 'Outvision XR é uma plataforma inovadora que redefine a experiência da arte, combinando o mundo físico com a imersão da Realidade Aumentada (RA). Desenvolvido para entusiastas da arte e visitantes de exposições como a Bienal de Curitiba, nosso aplicativo transforma a maneira como você interage com obras e artistas.';
-			case 'about.missionTitle': return 'Nossa Missão';
-			case 'about.missionText': return 'Conectar pessoas à arte de maneiras inéditas, utilizando a tecnologia para enriquecer a compreensão e o engajamento com expressões culturais contemporâneas. Acreditamos que a RA pode quebrar barreiras e tornar a arte mais acessível e interativa para todos.';
-			case 'about.visionTitle': return 'Nossa Visão';
-			case 'about.visionText': return 'Ser a plataforma líder em curadoria de arte com Realidade Aumentada, reconhecida por sua inovação, acessibilidade e pela capacidade de criar experiências memoráveis que transcendem os limites tradicionais das galerias e museus.';
+			case 'limiares.title': return 'LIMIARES';
+			case 'limiares.conceptText': return 'A 16ª Bienal Internacional de Curitiba parte do conceito LIMIAR, entendido como o espaço entre o que ainda não é e o que já começa a ser. Num mundo marcado pela dissolução das fronteiras entre o humano e o tecnológico, o natural e o artificial, a Bienal propõe-se como um território de transição — um laboratório de escuta, risco e transformação.\n\nAqui, a arte atua como força mediadora entre mundos, abrindo passagens para novos modos de existência e percepção.\n\nNo limiar entre crise e criação, a arte revela sua potência de invenção e sua capacidade de imaginar futuros possíveis.';
+			case 'limiares.statementTitle': return 'STATEMENT CURATORIAL';
+			case 'limiares.statementText': return 'Em um mundo atravessado por aceleradas transformações tecnológicas, sociais e ambientais, a 16ª Bienal Internacional de Curitiba — que acontece entre março e agosto de 2026 — propõe-se como um laboratório transdisciplinar de experimentação, onde arte, ciência, tecnologia e pensamento crítico convergem para explorar os desafios da contemporaneidade.\n\nEsta edição tensiona os limites entre produção artística, públicos, pensamento crítico e ação cidadã, investigando os modos de existência híbridos e as fronteiras dissolvidas entre o biológico e o sintético, o humano e o não-humano. São essas zonas de atrito — entre o natural e o artificial, o sensível e o programável — que informam as práticas do porvir e oferecem terreno fértil para a existência estética e emergencial da arte.\n\nVivemos uma era marcada pela onipresença dos algoritmos, pela ascensão da inteligência artificial e pela supremacia do capitalismo digital. Nesse contexto, a prática artística deixa de ser exclusivamente expressão individual para tornar-se um campo expandido de colaboração entre humanos, máquinas e sistemas inteligentes. O conceito tradicional de autoria é colocado em xeque, abrindo espaço para o artista como programador, mediador ou facilitador de processos algorítmicos.\n\nComo se transforma a experiência estética em tempos de realidades aumentadas, big data e ecologias digitais? A arte, mais do que representar o mundo, torna-se uma interface viva, responsiva e crítica, que questiona os regimes de visualidade e os sistemas de poder que estruturam nosso cotidiano. As linguagens híbridas — que fundem o físico e o virtual, o orgânico e o computacional — expandem os horizontes da sensibilidade e abrem caminhos para novas formas de ativismo, memória e subjetividade.\n\nOutro eixo fundamental desta edição reside na crítica à neutralidade da tecnologia. A inteligência artificial e os sistemas algorítmicos são moldados por interesses políticos, econômicos e ideológicos. A arte, nesse contexto, emerge como um dispositivo de resistência contra o extrativismo de dados, a vigilância em massa e os mecanismos de controle e desigualdade que operam nos bastidores da era digital.\n\nA 16ª Bienal Internacional de Curitiba convoca artistas, pesquisadores, cientistas, tecnólogos e ativistas a imaginar futuros possíveis e refletir sobre os impactos da inovação tecnológica nas formas de vida, nas identidades e nas materialidades do mundo contemporâneo. Por meio de instalações imersivas, arte generativa, ambientes interativos, simulações em realidade virtual e práticas pós-humanistas, a Bienal propõe-se a traçar um mapa especulativo das práticas emergentes, colocando em diálogo o local e o global, o corpo e o código, o sensível e o sintético.\n\nO público será convidado a participar de experiências transformadoras, interagindo com obras que reconfiguram os modos de perceber, agir e imaginar. Neste encontro entre arte e tecnopolítica, a Bienal quer ser plataforma de escuta, de invenção e de risco, abrindo brechas no presente para ensaiar formas de coexistência mais justas, conscientes e sensíveis.';
+			case 'limiares.curatorsLabel': return 'Curadoras';
+			case 'limiares.curatorsNames': return 'Adriana Almada e Tereza de Arruda';
+			case 'about.pageTitle': return 'Sobre o App';
+			case 'about.mainTitle': return '16ª Bienal Internacional de Curitiba';
+			case 'about.description': return 'Este aplicativo é uma experiência oficial da 16ª Bienal Internacional de Curitiba, desenvolvido com foco na visualização de obras em Realidade Aumentada (RA). Em diálogo com o tema curatorial Limiares, o app convida o visitante a cruzar fronteiras entre o mundo físico e o digital, explorando a arte de forma imersiva e interativa nos espaços da Bienal.';
+			case 'about.missionTitle': return 'Sobre a Outvision XR';
+			case 'about.missionText': return 'A Outvision XR é uma plataforma especializada em experiências de arte com Realidade Aumentada. Unindo tecnologia e cultura, potencializamos a conexão entre obras, artistas e públicos, tornando a arte contemporânea mais acessível, sensorial e memorável.';
+			case 'about.visionTitle': return 'Limiares';
+			case 'about.visionText': return 'O tema curatorial Limiares propõe uma reflexão sobre as fronteiras — físicas, culturais, simbólicas — que nos separam e nos unem. Por meio da Realidade Aumentada, o app transforma esses limiares em portais, permitindo que cada obra seja vivida além do visível.';
 			case 'about.connectTitle': return 'Conecte-se Conosco';
 			case 'about.website': return 'Website';
 			case 'about.email': return 'Email';
@@ -955,6 +1049,8 @@ extension on _StringsPt {
 			case 'map.noNearbyArtwork': return 'Nenhuma obra de arte perto da sua localização';
 			case 'map.noNearbyArtworkDesc': return 'Não há obras de arte visíveis ao redor da sua localização. Amplie a visualização ou use o botão abaixo para ver as obras mais próximas.';
 			case 'map.takeToNearest': return 'Leve-me para a obra mais próxima';
+			case 'map.navigate': return 'Navegar';
+			case 'map.connectionError': return 'Erro de conexão. Verifique sua internet.';
 			case 'bottomNav.explore': return 'Explorar';
 			case 'bottomNav.gallery': return 'Obras';
 			case 'bottomNav.captured': return 'Capturados';

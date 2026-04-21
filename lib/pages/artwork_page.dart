@@ -6,7 +6,6 @@ import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/routes/app_router.dart';
-import 'package:outvisionxr/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
 class ArtworkPage extends StatefulWidget {
@@ -182,22 +181,6 @@ class _ArtworkPageState extends State<ArtworkPage> {
                   );
                 }
 
-                final tablet = R.isTablet(context);
-                if (tablet) {
-                  return GridView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 0,
-                      childAspectRatio: 0.80,
-                    ),
-                    itemCount: artworks.length,
-                    itemBuilder: (context, index) =>
-                        _buildArtworkCard(artworks[index], context),
-                  );
-                }
-
                 return ListView.builder(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -281,7 +264,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                           child: Text(
                             artwork.displayArtist.isNotEmpty
                                 ? artwork.displayArtist
-                                : 'Artista desconhecido',
+                                : t.gallery.unknownArtist,
                             style: TextStyle(
                                 fontSize: 14, color: Colors.grey[700]),
                             overflow: TextOverflow.ellipsis,

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
-import 'package:outvisionxr/utils/responsive.dart';
 import 'package:outvisionxr/widgets/splash_loading.dart';
 
 import 'package:flutter/material.dart';
@@ -60,8 +59,8 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
   // Config do gate
   static const int _minDwellSeconds = 3;
-  static const double _entryRadiusMeters = 20;
-  static const double _exitRadiusMeters = 25;
+  static const double _entryRadiusMeters = 150;
+  static const double _exitRadiusMeters = 155;
 
   @override
   void initState() {
@@ -110,7 +109,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Erro de conexão: $error"),
+            content: Text(t.map.connectionError),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
           ),
@@ -566,10 +565,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        child: R.bottomCard(
-                          context,
-                          _NoNearbyArtworkCard(nearest: _getNearestArtworkPoint()),
-                        ),
+                        child: _NoNearbyArtworkCard(nearest: _getNearestArtworkPoint()),
                       ),
 
                     if (_selectedArtworkData != null)
@@ -577,23 +573,20 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        child: R.bottomCard(
-                          context,
-                          _ArtworkTapCard(
-                            data: _selectedArtworkData!,
-                            isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
-                            onClose: () {
-                              setState(() {
-                                _gateOpen = false;
-                                _activeArtwork = null;
-                                _enteredRadiusAt = null;
-                                _selectedArtworkId = null;
-                                _selectedArtworkData = null;
-                              });
-                              _updateMarkers();
-                            },
-                            onOpenAr: _openArViewNow,
-                          ),
+                        child: _ArtworkTapCard(
+                          data: _selectedArtworkData!,
+                          isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
+                          onClose: () {
+                            setState(() {
+                              _gateOpen = false;
+                              _activeArtwork = null;
+                              _enteredRadiusAt = null;
+                              _selectedArtworkId = null;
+                              _selectedArtworkData = null;
+                            });
+                            _updateMarkers();
+                          },
+                          onOpenAr: _openArViewNow,
                         ),
                       ),
                   ],
@@ -759,7 +752,7 @@ class _ArtworkTapCard extends StatelessWidget {
                       size: 20,
                     ),
                     label: Text(
-                      isNearby ? context.t.map.openArButton : 'Navegar',
+                      isNearby ? context.t.map.openArButton : context.t.map.navigate,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15,

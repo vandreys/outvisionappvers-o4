@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -74,10 +76,10 @@ class SettingsPage extends StatelessWidget {
                         ),
                         Divider(height: 1, color: Colors.grey[300]),
                         _tile(
-                          icon: Icons.info_outline,
-                          iconBackgroundColor: Colors.orange,
-                          title: context.t.settings.about,
-                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsAbout),
+                          icon: Icons.app_settings_alt,
+                          iconBackgroundColor: Colors.red,
+                          title: context.t.settings.aboutApp,
+                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsApp),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -85,10 +87,10 @@ class SettingsPage extends StatelessWidget {
                         ),
                         Divider(height: 1, color: Colors.grey[300]),
                         _tile(
-                          icon: Icons.app_settings_alt,
-                          iconBackgroundColor: Colors.red,
-                          title: context.t.settings.aboutApp,
-                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsApp),
+                          icon: Icons.auto_awesome,
+                          iconBackgroundColor: Colors.black,
+                          title: context.t.settings.limiares,
+                          onTap: () => Navigator.pushNamed(context, AppRouter.settingsLimiares),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -105,7 +107,29 @@ class SettingsPage extends StatelessWidget {
                           iconBackgroundColor: Colors.grey,
                           title: context.t.settings.website,
                           isExternal: true,
-                          onTap: () {},
+                          onTap: () => launchUrl(
+                            Uri.parse('https://www.bienaldecuritiba.org/'),
+                            mode: LaunchMode.externalApplication,
+                          ),
+                          verticalPadding: tileVerticalPadding,
+                          iconSize: iconSize,
+                          iconPadding: iconPadding,
+                          fontSize: fontSize,
+                        ),
+                        Divider(height: 1, color: Colors.grey[300]),
+                        _tile(
+                          iconWidget: FaIcon(
+                            FontAwesomeIcons.instagram,
+                            color: Colors.white,
+                            size: iconSize,
+                          ),
+                          iconBackgroundColor: const Color(0xFFE1306C),
+                          title: context.t.settings.instagram,
+                          isExternal: true,
+                          onTap: () => launchUrl(
+                            Uri.parse('https://www.instagram.com/bienaldecuritiba/'),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -117,7 +141,10 @@ class SettingsPage extends StatelessWidget {
                           iconBackgroundColor: Colors.indigo,
                           title: context.t.settings.privacyPolicy,
                           isExternal: true,
-                          onTap: () {},
+                          onTap: () => launchUrl(
+                            Uri.parse('https://outvisionxr.com/privacy-bienal'),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -129,7 +156,10 @@ class SettingsPage extends StatelessWidget {
                           iconBackgroundColor: Colors.brown,
                           title: context.t.settings.termsOfUse,
                           isExternal: true,
-                          onTap: () {},
+                          onTap: () => launchUrl(
+                            Uri.parse('https://outvisionxr.com/terms-of-use-bienal'),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           verticalPadding: tileVerticalPadding,
                           iconSize: iconSize,
                           iconPadding: iconPadding,
@@ -180,7 +210,8 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget _tile({
-    required IconData icon,
+    IconData? icon,
+    Widget? iconWidget,
     required Color iconBackgroundColor,
     required String title,
     required VoidCallback onTap,
@@ -202,7 +233,7 @@ class SettingsPage extends StatelessWidget {
                 color: iconBackgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.white, size: iconSize),
+              child: iconWidget ?? Icon(icon, color: Colors.white, size: iconSize),
             ),
             const SizedBox(width: 15),
             Expanded(

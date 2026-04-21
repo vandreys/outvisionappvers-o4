@@ -11,6 +11,7 @@ import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/pages/settings/settings_about.dart';
 import 'package:outvisionxr/pages/settings/settings_about_app.dart';
+import 'package:outvisionxr/pages/settings/settings_limiares.dart';
 import 'package:outvisionxr/pages/splash_screen.dart';
 import 'package:outvisionxr/pages/welcome_page.dart';
 
@@ -21,9 +22,10 @@ class AppRouter {
   static const String artwork        = '/artwork';
   static const String artists        = '/artists';
   static const String settings       = '/settings';
-  static const String settingsLang   = '/settings/language';
-  static const String settingsAbout  = '/settings/about';
-  static const String settingsApp    = '/settings/about-app';
+  static const String settingsLang      = '/settings/language';
+  static const String settingsAbout     = '/settings/about';
+  static const String settingsApp       = '/settings/about-app';
+  static const String settingsLimiares  = '/settings/limiares';
   static const String artworkDetails = '/artwork/details';
   static const String artistDetails  = '/artist/details';
   static const String ar             = '/ar';
@@ -65,6 +67,9 @@ class AppRouter {
 
       case settingsApp:
         return MaterialPageRoute(builder: (_) => const AboutAppPage());
+
+      case settingsLimiares:
+        return MaterialPageRoute(builder: (_) => const LimiaresPage());
 
       case artworkDetails:
         final id = route.arguments as String;
