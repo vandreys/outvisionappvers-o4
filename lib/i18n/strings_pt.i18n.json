@@ -92,6 +92,9 @@
     "headline": "Arte e design\nno seu melhor",
     "startButton": "Começar"
   },
+  "errorScreen": {
+    "message": "Algo deu errado.\nReinicie o aplicativo."
+  },
   "ar": {
     "scanInstruction": "Escaneie o chão movendo o celular",
     "tapToPlace": "Toque na tela para posicionar a obra",

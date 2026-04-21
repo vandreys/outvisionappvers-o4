@@ -10,28 +10,31 @@ class ArtworkService extends ChangeNotifier {
         .collection('artworks')
         .snapshots()
         .map((snapshot) {
-          final allDocs = snapshot.docs;
-          final parsed = allDocs.map((doc) => Artwork.fromFirestore(doc)).toList();
-          final valid = parsed.whereType<Artwork>().toList();
-          final active = valid.where((a) => a.availability == 'active').toList();
-
-          debugPrint('🔍 ArtworkService: ${allDocs.length} docs | ${valid.length} parseados | ${active.length} ativos');
-          for (final a in valid) {
-            debugPrint('   📍 ${a.id}: availability="${a.availability}"');
+          final parsed = <Artwork>[];
+          for (final doc in snapshot.docs) {
+            try {
+              final artwork = Artwork.fromFirestore(doc);
+              if (artwork != null) parsed.add(artwork);
+            } catch (e) {
+              debugPrint('ArtworkService: erro ao parsear doc ${doc.id}: $e');
+            }
           }
-          if (parsed.length != valid.length) {
-            debugPrint('   ⚠️ ${parsed.length - valid.length} docs ignorados por erro de parse (localização/título ausente)');
+          final active = parsed.where((a) => a.availability == 'active').toList();
+          if (kDebugMode) {
+            debugPrint('ArtworkService: ${snapshot.docs.length} docs | ${parsed.length} parseados | ${active.length} ativos');
           }
-
           return active;
         });
   }
 
   Future<Artwork?> getArtworkById(String id) async {
-    final doc = await _firestore.collection("artworks").doc(id).get();
-    if (doc.exists) {
-      return Artwork.fromFirestore(doc);
+    try {
+      final doc = await _firestore.collection('artworks').doc(id).get();
+      if (doc.exists) return Artwork.fromFirestore(doc);
+      return null;
+    } catch (e) {
+      debugPrint('ArtworkService.getArtworkById error: $e');
+      return null;
     }
-    return null;
   }
 }

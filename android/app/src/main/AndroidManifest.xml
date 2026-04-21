@@ -8,7 +8,9 @@
     <application
         android:label="Bienal de Curitiba"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/launcher_icon"
+        android:allowBackup="false"
+        android:fullBackupContent="false">
 
         <!-- 🔴 DESATIVA O IMPELLER (CORREÇÃO DO mali_gralloc / tela preta) -->
         <meta-data
@@ -18,7 +20,7 @@
         <!-- Google Maps / Geospatial -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD-6SfQ7dWgYzPwgI7LR31oV7AJINjPKUw" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".MainActivity"

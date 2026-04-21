@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:604467548182:android:e4a87a76023e033c45a537",
+        "mobilesdk_app_id": "1:604467548182:android:b4bd959c9c678f9645a537",
         "android_client_info": {
-          "package_name": "com.example.outvisionxr"
+          "package_name": "works.outvision.bienaldecuritiba"
         }
       },
       "oauth_client": [],

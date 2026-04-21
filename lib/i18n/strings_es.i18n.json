@@ -92,6 +92,9 @@
     "headline": "Arte y diseño\nen su máximo esplendor",
     "startButton": "Comenzar"
   },
+  "errorScreen": {
+    "message": "Algo salió mal.\nReinicia la aplicación."
+  },
   "ar": {
     "scanInstruction": "Escanea el suelo moviendo el móvil",
     "tapToPlace": "Toca la pantalla para posicionar la obra",

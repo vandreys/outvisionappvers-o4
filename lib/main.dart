@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -13,6 +16,18 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    return true;
+  };
+
+  if (kReleaseMode) {
+    ErrorWidget.builder = (details) => _ErrorScreen(details.exception.toString());
+  }
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
@@ -21,9 +36,13 @@ void main() async {
 
   LocaleSettings.setLocale(AppLocale.pt);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint('Firebase init error: $e');
+  }
 
   runApp(
     MultiProvider(
@@ -88,6 +107,38 @@ class BienalDeCuritibaApp extends StatelessWidget {
 
       initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
+    );
+  }
+}
+
+class _ErrorScreen extends StatelessWidget {
+  final String message;
+  const _ErrorScreen(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Colors.black54),
+                const SizedBox(height: 16),
+                Text(
+                  t.errorScreen.message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16, color: Colors.black87),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

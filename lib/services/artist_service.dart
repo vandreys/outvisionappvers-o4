@@ -12,7 +12,7 @@ class ArtistService extends ChangeNotifier {
         .collection('artists')
         .orderBy('name')
         .snapshots()
-        .map((snapshot) =>
+        .map<List<Artist>>((snapshot) =>
             snapshot.docs.map((doc) => Artist.fromFirestore(doc)).toList())
         .asBroadcastStream();
   }

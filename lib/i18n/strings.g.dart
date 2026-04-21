@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 291 (97 per locale)
+/// Strings: 294 (98 per locale)
 ///
-/// Built on 2026-04-19 at 17:11 UTC
+/// Built on 2026-04-21 at 08:18 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -157,6 +157,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsMapEn map = _StringsMapEn._(_root);
 	late final _StringsBottomNavEn bottomNav = _StringsBottomNavEn._(_root);
 	late final _StringsWelcomeEn welcome = _StringsWelcomeEn._(_root);
+	late final _StringsErrorScreenEn errorScreen = _StringsErrorScreenEn._(_root);
 	late final _StringsArEn ar = _StringsArEn._(_root);
 }
 
@@ -309,6 +310,16 @@ class _StringsWelcomeEn {
 	String get startButton => 'Start';
 }
 
+// Path: errorScreen
+class _StringsErrorScreenEn {
+	_StringsErrorScreenEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get message => 'Something went wrong.\nRestart the application.';
+}
+
 // Path: ar
 class _StringsArEn {
 	_StringsArEn._(this._root);
@@ -370,6 +381,7 @@ class _StringsEs implements Translations {
 	@override late final _StringsMapEs map = _StringsMapEs._(_root);
 	@override late final _StringsBottomNavEs bottomNav = _StringsBottomNavEs._(_root);
 	@override late final _StringsWelcomeEs welcome = _StringsWelcomeEs._(_root);
+	@override late final _StringsErrorScreenEs errorScreen = _StringsErrorScreenEs._(_root);
 	@override late final _StringsArEs ar = _StringsArEs._(_root);
 }
 
@@ -522,6 +534,16 @@ class _StringsWelcomeEs implements _StringsWelcomeEn {
 	@override String get startButton => 'Comenzar';
 }
 
+// Path: errorScreen
+class _StringsErrorScreenEs implements _StringsErrorScreenEn {
+	_StringsErrorScreenEs._(this._root);
+
+	@override final _StringsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get message => 'Algo salió mal.\nReinicia la aplicación.';
+}
+
 // Path: ar
 class _StringsArEs implements _StringsArEn {
 	_StringsArEs._(this._root);
@@ -583,6 +605,7 @@ class _StringsPt implements Translations {
 	@override late final _StringsMapPt map = _StringsMapPt._(_root);
 	@override late final _StringsBottomNavPt bottomNav = _StringsBottomNavPt._(_root);
 	@override late final _StringsWelcomePt welcome = _StringsWelcomePt._(_root);
+	@override late final _StringsErrorScreenPt errorScreen = _StringsErrorScreenPt._(_root);
 	@override late final _StringsArPt ar = _StringsArPt._(_root);
 }
 
@@ -735,6 +758,16 @@ class _StringsWelcomePt implements _StringsWelcomeEn {
 	@override String get startButton => 'Começar';
 }
 
+// Path: errorScreen
+class _StringsErrorScreenPt implements _StringsErrorScreenEn {
+	_StringsErrorScreenPt._(this._root);
+
+	@override final _StringsPt _root; // ignore: unused_field
+
+	// Translations
+	@override String get message => 'Algo deu errado.\nReinicie o aplicativo.';
+}
+
 // Path: ar
 class _StringsArPt implements _StringsArEn {
 	_StringsArPt._(this._root);
@@ -847,6 +880,7 @@ extension on Translations {
 			case 'bottomNav.settings': return 'Settings';
 			case 'welcome.headline': return 'Art and design\nat its best';
 			case 'welcome.startButton': return 'Start';
+			case 'errorScreen.message': return 'Something went wrong.\nRestart the application.';
 			case 'ar.scanInstruction': return 'Scan the floor by moving your phone';
 			case 'ar.tapToPlace': return 'Tap the screen to place the artwork';
 			case 'ar.helpTitle': return 'Help';
@@ -952,6 +986,7 @@ extension on _StringsEs {
 			case 'bottomNav.settings': return 'Configuración';
 			case 'welcome.headline': return 'Arte y diseño\nen su máximo esplendor';
 			case 'welcome.startButton': return 'Comenzar';
+			case 'errorScreen.message': return 'Algo salió mal.\nReinicia la aplicación.';
 			case 'ar.scanInstruction': return 'Escanea el suelo moviendo el móvil';
 			case 'ar.tapToPlace': return 'Toca la pantalla para posicionar la obra';
 			case 'ar.helpTitle': return 'Ayuda';
@@ -1057,6 +1092,7 @@ extension on _StringsPt {
 			case 'bottomNav.settings': return 'Configurações';
 			case 'welcome.headline': return 'Arte e design\nno seu melhor';
 			case 'welcome.startButton': return 'Começar';
+			case 'errorScreen.message': return 'Algo deu errado.\nReinicie o aplicativo.';
 			case 'ar.scanInstruction': return 'Escaneie o chão movendo o celular';
 			case 'ar.tapToPlace': return 'Toque na tela para posicionar a obra';
 			case 'ar.helpTitle': return 'Ajuda';

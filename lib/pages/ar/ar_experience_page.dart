@@ -34,6 +34,18 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
     super.dispose();
   }
 
+  bool _isSafeModelUrl(String url) {
+    try {
+      final uri = Uri.parse(url);
+      return uri.scheme == 'https' &&
+          (uri.host.endsWith('firebasestorage.googleapis.com') ||
+           uri.host.endsWith('firebasestorage.app') ||
+           uri.host.endsWith('storage.googleapis.com'));
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<void> _openAR() async {
     final artwork = widget.artwork;
 
@@ -46,6 +58,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
             : artwork.androidGlbUrl);
 
     if (modelUrl == null || modelUrl.isEmpty) return;
+    if (!_isSafeModelUrl(modelUrl)) return;
 
     setState(() => _launching = true);
 

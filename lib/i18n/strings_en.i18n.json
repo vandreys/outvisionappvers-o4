@@ -92,6 +92,9 @@
     "headline": "Art and design\nat its best",
     "startButton": "Start"
   },
+  "errorScreen": {
+    "message": "Something went wrong.\nRestart the application."
+  },
   "ar": {
     "scanInstruction": "Scan the floor by moving your phone",
     "tapToPlace": "Tap the screen to place the artwork",

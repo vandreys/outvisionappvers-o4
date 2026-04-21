@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDc-QfIfOa_9rvEnfag-6D7bSHotFtwIV0',
-    appId: '1:604467548182:android:e4a87a76023e033c45a537',
+    appId: '1:604467548182:android:b4bd959c9c678f9645a537',
     messagingSenderId: '604467548182',
     projectId: 'outvision-app-24329',
     databaseURL: 'https://outvision-app-24329-default-rtdb.firebaseio.com',
@@ -60,11 +60,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBwhsBt8uKqncD0hv6fzL3JOXI3VgeVJE8',
-    appId: '1:604467548182:ios:3d4b09b92fc688c445a537',
+    appId: '1:604467548182:ios:f76caec46d248cac45a537',
     messagingSenderId: '604467548182',
     projectId: 'outvision-app-24329',
     databaseURL: 'https://outvision-app-24329-default-rtdb.firebaseio.com',
     storageBucket: 'outvision-app-24329.firebasestorage.app',
-    iosBundleId: 'com.example.outvisionxr',
+    iosBundleId: 'works.outvision.bienaldecuritiba',
   );
 }
