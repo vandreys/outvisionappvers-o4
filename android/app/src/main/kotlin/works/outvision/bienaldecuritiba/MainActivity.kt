@@ -1,4 +1,4 @@
-package com.example.outvisionxr
+package works.outvision.bienaldecuritiba
 
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen

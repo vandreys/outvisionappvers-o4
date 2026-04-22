@@ -64,7 +64,7 @@ class AboutAppPage extends StatelessWidget {
                 children: [
                   // Subtitle + título
                   const Text(
-                    '16ª Edição · 2025',
+                    '16ª Edição · 2026',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black45,
@@ -208,7 +208,7 @@ class AboutAppPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             const Text(
-                              '© 2025 OutVisionXR. Todos os direitos reservados.',
+                              '© 2026 OutVisionXR. Todos os direitos reservados.',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 11, color: Colors.black38),
                             ),

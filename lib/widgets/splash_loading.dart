@@ -55,7 +55,7 @@ class _SplashLoadingState extends State<SplashLoading>
               const SizedBox(height: 10),
 
               const Text(
-                '2025',
+                '2026',
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: 16,

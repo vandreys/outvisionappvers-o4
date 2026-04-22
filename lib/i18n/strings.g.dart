@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 294 (98 per locale)
 ///
-/// Built on 2026-04-21 at 08:18 UTC
+/// Built on 2026-04-22 at 07:32 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -174,7 +174,7 @@ class _StringsGalleryEn {
 	String get search => 'Search...';
 	String get artworkTitle => 'The Garden of Earthly Delights';
 	String get artworkArtist => 'Hieronymus Bosch';
-	String get artistSubtitle => 'Curitiba Biennial 2025';
+	String get artistSubtitle => 'Curitiba Biennial 2026';
 	String get viewExhibition => 'View artwork';
 	String get artistDetails => 'Artist Details';
 	String get works => 'Works';
@@ -243,7 +243,7 @@ class _StringsAboutEn {
 	String get email => 'Email';
 	String get instagram => 'Instagram';
 	String get share => 'Share';
-	String get copyright => 'Outvision XR © 2025. All rights reserved.';
+	String get copyright => 'Outvision XR © 2026. All rights reserved.';
 }
 
 // Path: languagePage
@@ -398,7 +398,7 @@ class _StringsGalleryEs implements _StringsGalleryEn {
 	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'El Jardín de las Delicias';
 	@override String get artworkArtist => 'Hieronymus Bosch';
-	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
+	@override String get artistSubtitle => 'Bienal de Curitiba 2026';
 	@override String get viewExhibition => 'Ver obra';
 	@override String get artistDetails => 'Detalles del Artista';
 	@override String get works => 'Obras';
@@ -467,7 +467,7 @@ class _StringsAboutEs implements _StringsAboutEn {
 	@override String get email => 'Correo Electrónico';
 	@override String get instagram => 'Instagram';
 	@override String get share => 'Compartir';
-	@override String get copyright => 'Outvision XR © 2025. Todos los derechos reservados.';
+	@override String get copyright => 'Outvision XR © 2026. Todos los derechos reservados.';
 }
 
 // Path: languagePage
@@ -622,7 +622,7 @@ class _StringsGalleryPt implements _StringsGalleryEn {
 	@override String get search => 'Buscar...';
 	@override String get artworkTitle => 'O Jardim das Delícias Terrenas';
 	@override String get artworkArtist => 'Hieronymus Bosch';
-	@override String get artistSubtitle => 'Bienal de Curitiba 2025';
+	@override String get artistSubtitle => 'Bienal de Curitiba 2026';
 	@override String get viewExhibition => 'Ver obra';
 	@override String get artistDetails => 'Detalhes do Artista';
 	@override String get works => 'Obras';
@@ -691,7 +691,7 @@ class _StringsAboutPt implements _StringsAboutEn {
 	@override String get email => 'Email';
 	@override String get instagram => 'Instagram';
 	@override String get share => 'Compartilhar';
-	@override String get copyright => 'Outvision XR © 2025. Todos os direitos reservados.';
+	@override String get copyright => 'Outvision XR © 2026. Todos os direitos reservados.';
 }
 
 // Path: languagePage
@@ -809,7 +809,7 @@ extension on Translations {
 			case 'gallery.search': return 'Search...';
 			case 'gallery.artworkTitle': return 'The Garden of Earthly Delights';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
-			case 'gallery.artistSubtitle': return 'Curitiba Biennial 2025';
+			case 'gallery.artistSubtitle': return 'Curitiba Biennial 2026';
 			case 'gallery.viewExhibition': return 'View artwork';
 			case 'gallery.artistDetails': return 'Artist Details';
 			case 'gallery.works': return 'Works';
@@ -851,7 +851,7 @@ extension on Translations {
 			case 'about.email': return 'Email';
 			case 'about.instagram': return 'Instagram';
 			case 'about.share': return 'Share';
-			case 'about.copyright': return 'Outvision XR © 2025. All rights reserved.';
+			case 'about.copyright': return 'Outvision XR © 2026. All rights reserved.';
 			case 'languagePage.title': return 'Language';
 			case 'languagePage.portuguese': return 'Portuguese';
 			case 'languagePage.english': return 'English';
@@ -915,7 +915,7 @@ extension on _StringsEs {
 			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'El Jardín de las Delicias';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
-			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
+			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2026';
 			case 'gallery.viewExhibition': return 'Ver obra';
 			case 'gallery.artistDetails': return 'Detalles del Artista';
 			case 'gallery.works': return 'Obras';
@@ -957,7 +957,7 @@ extension on _StringsEs {
 			case 'about.email': return 'Correo Electrónico';
 			case 'about.instagram': return 'Instagram';
 			case 'about.share': return 'Compartir';
-			case 'about.copyright': return 'Outvision XR © 2025. Todos los derechos reservados.';
+			case 'about.copyright': return 'Outvision XR © 2026. Todos los derechos reservados.';
 			case 'languagePage.title': return 'Idioma';
 			case 'languagePage.portuguese': return 'Portugués';
 			case 'languagePage.english': return 'Inglés';
@@ -1021,7 +1021,7 @@ extension on _StringsPt {
 			case 'gallery.search': return 'Buscar...';
 			case 'gallery.artworkTitle': return 'O Jardim das Delícias Terrenas';
 			case 'gallery.artworkArtist': return 'Hieronymus Bosch';
-			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2025';
+			case 'gallery.artistSubtitle': return 'Bienal de Curitiba 2026';
 			case 'gallery.viewExhibition': return 'Ver obra';
 			case 'gallery.artistDetails': return 'Detalhes do Artista';
 			case 'gallery.works': return 'Obras';
@@ -1063,7 +1063,7 @@ extension on _StringsPt {
 			case 'about.email': return 'Email';
 			case 'about.instagram': return 'Instagram';
 			case 'about.share': return 'Compartilhar';
-			case 'about.copyright': return 'Outvision XR © 2025. Todos os direitos reservados.';
+			case 'about.copyright': return 'Outvision XR © 2026. Todos os direitos reservados.';
 			case 'languagePage.title': return 'Idioma';
 			case 'languagePage.portuguese': return 'Português';
 			case 'languagePage.english': return 'Inglês';

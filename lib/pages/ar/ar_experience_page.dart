@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -7,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
+
+enum _ArStatus { localizing, ready, error }
 
 class ARExperiencePage extends StatefulWidget {
   final Artwork artwork;
@@ -18,20 +21,47 @@ class ARExperiencePage extends StatefulWidget {
 }
 
 class _ARExperiencePageState extends State<ARExperiencePage> {
-  bool _launching = false;
+  _ArStatus _status = _ArStatus.localizing;
+  String? _errorMessage;
+  StreamSubscription<dynamic>? _eventSub;
+  bool _androidLaunching = false;
+
+  // Computed once — avoids URL parsing and platform checks on every build()
+  late final String? _modelUrl;
+  late final bool _hasModel;
+
+  Artwork get _artwork => widget.artwork;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    // Dispara o AR assim que a página abre
-    WidgetsBinding.instance.addPostFrameCallback((_) => _openAR());
+
+    final url = _resolveModelUrl();
+    _modelUrl = url;
+    _hasModel = url != null && url.isNotEmpty && _isSafeModelUrl(url);
+
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _launchAndroid());
+    }
   }
 
   @override
   void dispose() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    _eventSub?.cancel();
     super.dispose();
+  }
+
+  String? _resolveModelUrl() {
+    if (Platform.isAndroid) {
+      return _artwork.androidGlbUrl?.isNotEmpty == true
+          ? _artwork.androidGlbUrl
+          : _artwork.iosUsdzUrl;
+    }
+    return _artwork.iosUsdzUrl?.isNotEmpty == true
+        ? _artwork.iosUsdzUrl
+        : _artwork.androidGlbUrl;
   }
 
   bool _isSafeModelUrl(String url) {
@@ -39,167 +69,106 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       final uri = Uri.parse(url);
       return uri.scheme == 'https' &&
           (uri.host.endsWith('firebasestorage.googleapis.com') ||
-           uri.host.endsWith('firebasestorage.app') ||
-           uri.host.endsWith('storage.googleapis.com'));
+              uri.host.endsWith('firebasestorage.app') ||
+              uri.host.endsWith('storage.googleapis.com'));
     } catch (_) {
       return false;
     }
   }
 
-  Future<void> _openAR() async {
-    final artwork = widget.artwork;
+  // Called by UiKitView once the native view is ready; subscribe to event channel.
+  void _onPlatformViewCreated(int viewId) {
+    _eventSub = EventChannel('outvisionxr/ar_view_events_$viewId')
+        .receiveBroadcastStream()
+        .listen(
+          _onArEvent,
+          onError: (_) {
+            if (mounted) setState(() => _status = _ArStatus.error);
+          },
+        );
+  }
 
-    final String? modelUrl = Platform.isAndroid
-        ? (artwork.androidGlbUrl?.isNotEmpty == true
-            ? artwork.androidGlbUrl
-            : artwork.iosUsdzUrl)
-        : (artwork.iosUsdzUrl?.isNotEmpty == true
-            ? artwork.iosUsdzUrl
-            : artwork.androidGlbUrl);
-
-    if (modelUrl == null || modelUrl.isEmpty) return;
-    if (!_isSafeModelUrl(modelUrl)) return;
-
-    setState(() => _launching = true);
-
-    try {
-      if (Platform.isAndroid) {
-        await _launchSceneViewer(modelUrl, artwork.localizedTitle);
-      } else {
-        await _launchQuickLook(modelUrl);
-      }
-    } catch (e) {
-      assert(() {
-        debugPrint('Erro ao abrir AR: $e');
-        return true;
-      }());
-    } finally {
-      if (mounted) setState(() => _launching = false);
+  void _onArEvent(dynamic event) {
+    if (!mounted) return;
+    if (event is String) {
+      setState(() {
+        _status = event == 'ready' ? _ArStatus.ready : _ArStatus.localizing;
+      });
+    } else if (event is Map) {
+      setState(() {
+        _status = _ArStatus.error;
+        _errorMessage = event['message'] as String?;
+      });
     }
   }
 
-  /// Lança o Google Scene Viewer diretamente (Android).
-  /// Mesmo mecanismo que o model_viewer_plus usa internamente.
+  // Android: launch Google Scene Viewer
+  Future<void> _launchAndroid() async {
+    if (!_hasModel) return;
+    setState(() => _androidLaunching = true);
+    try {
+      await _launchSceneViewer(_modelUrl!, _artwork.localizedTitle);
+    } catch (_) {
+    } finally {
+      if (mounted) setState(() => _androidLaunching = false);
+    }
+  }
+
   Future<void> _launchSceneViewer(String glbUrl, String title) async {
     final encodedUrl = Uri.encodeComponent(glbUrl);
     final encodedTitle = Uri.encodeComponent(title);
+    final fallbackStore = Uri.encodeComponent(
+      'https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox',
+    );
 
-    final intentUrl =
-        'intent://arvr.google.com/scene-viewer/1.0'
+    final intentUrl = 'intent://arvr.google.com/scene-viewer/1.0'
         '?file=$encodedUrl'
         '&mode=ar_preferred'
         '&title=$encodedTitle'
         '#Intent;scheme=https;'
         'package=com.google.android.googlequicksearchbox;'
         'action=android.intent.action.VIEW;'
-        'S.browser_fallback_url=https://developers.google.com/ar;'
+        'S.browser_fallback_url=$fallbackStore;'
         'end;';
 
-    final uri = Uri.parse(intentUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    final intentUri = Uri.parse(intentUrl);
+    if (await canLaunchUrl(intentUri)) {
+      await launchUrl(intentUri);
     } else {
-      // Fallback: tenta pelo Google AR Core viewer
-      final fallbackUrl =
-          'https://arvr.google.com/scene-viewer/1.0'
-          '?file=$encodedUrl'
-          '&mode=ar_preferred';
-      await launchUrl(Uri.parse(fallbackUrl),
-          mode: LaunchMode.externalApplication);
-    }
-  }
-
-  /// Lança o Quick Look do iOS para AR.
-  Future<void> _launchQuickLook(String usdzUrl) async {
-    final uri = Uri.parse(usdzUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      await launchUrl(
+        Uri.parse(
+            'https://arvr.google.com/scene-viewer/1.0?file=$encodedUrl&mode=ar_preferred'),
+        mode: LaunchMode.externalApplication,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final artwork = widget.artwork;
     final topPadding = MediaQuery.of(context).padding.top;
-
-    final String? modelUrl = Platform.isAndroid
-        ? (artwork.androidGlbUrl?.isNotEmpty == true
-            ? artwork.androidGlbUrl
-            : artwork.iosUsdzUrl)
-        : (artwork.iosUsdzUrl?.isNotEmpty == true
-            ? artwork.iosUsdzUrl
-            : artwork.androidGlbUrl);
-
-    final bool hasModel = modelUrl != null && modelUrl.isNotEmpty;
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Fundo — tela de espera enquanto o Scene Viewer abre
-          Center(
-            child: hasModel
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.view_in_ar,
-                          color: Colors.white54, size: 80),
-                      const SizedBox(height: 24),
-                      Text(
-                        artwork.localizedTitle,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      if (artwork.displayArtist.isNotEmpty)
-                        Text(
-                          artwork.displayArtist,
-                          style: const TextStyle(
-                              color: Colors.white54, fontSize: 14),
-                        ),
-                      const SizedBox(height: 48),
-                      if (_launching)
-                        const CircularProgressIndicator(color: Colors.white)
-                      else
-                        ElevatedButton.icon(
-                          onPressed: _openAR,
-                          icon: const Icon(Icons.view_in_ar),
-                          label: Text(t.ar.openAr),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            minimumSize: const Size(220, 52),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            textStyle: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.view_in_ar,
-                          color: Colors.white54, size: 80),
-                      const SizedBox(height: 16),
-                      Text(
-                        t.ar.modelUnavailable,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white70, fontSize: 16),
-                      ),
-                    ],
-                  ),
-          ),
+          // iOS: native ARKit view full screen
+          if (Platform.isIOS && _hasModel)
+            UiKitView(
+              viewType: 'outvisionxr/ar_view',
+              creationParams: {
+                'lat': _artwork.location.latitude,
+                'lng': _artwork.location.longitude,
+                'eyeLevelOffsetMeters': _artwork.eyeLevelOffsetMeters ?? 1.5,
+                'faceUser': _artwork.faceUser ?? true,
+                'iosUsdzAsset': _modelUrl,
+              },
+              creationParamsCodec: const StandardMessageCodec(),
+              onPlatformViewCreated: _onPlatformViewCreated,
+            )
+          else
+            _buildFallback(),
 
-          // Botão fechar
+          // Close button — blur on 48×48 is negligible
           Positioned(
             top: topPadding + 12,
             left: 12,
@@ -208,12 +177,138 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
               onPressed: () => Navigator.pop(context),
             ),
           ),
+
+          // iOS status overlay — RepaintBoundary isolates repaints from AR camera
+          if (Platform.isIOS && _hasModel && _status != _ArStatus.ready)
+            RepaintBoundary(child: _buildIosStatusOverlay()),
         ],
+      ),
+    );
+  }
+
+  // Android waiting screen / model unavailable
+  Widget _buildFallback() {
+    if (Platform.isAndroid && _hasModel) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.view_in_ar, color: Colors.white54, size: 80),
+            const SizedBox(height: 24),
+            Text(
+              _artwork.localizedTitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            if (_artwork.displayArtist.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                _artwork.displayArtist,
+                style: const TextStyle(color: Colors.white54, fontSize: 14),
+              ),
+            ],
+            const SizedBox(height: 48),
+            if (_androidLaunching)
+              const CircularProgressIndicator(color: Colors.white)
+            else
+              ElevatedButton.icon(
+                onPressed: _launchAndroid,
+                icon: const Icon(Icons.view_in_ar),
+                label: Text(t.ar.openAr),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size(220, 52),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  textStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.view_in_ar, color: Colors.white54, size: 80),
+          const SizedBox(height: 16),
+          Text(
+            t.ar.modelUnavailable,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIosStatusOverlay() {
+    if (_status == _ArStatus.error) {
+      return Positioned(
+        bottom: 60,
+        left: 24,
+        right: 24,
+        child: _StatusPanel(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.warning_amber_rounded,
+                  color: Colors.orangeAccent, size: 36),
+              const SizedBox(height: 12),
+              Text(
+                t.ar.errorTitle,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _errorMessage ?? t.ar.genericError,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      bottom: 60,
+      left: 24,
+      right: 24,
+      child: _StatusPanel(
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                t.ar.onboardingContent,
+                style: const TextStyle(color: Colors.white, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+// Glassmorphic close button — blur on small area is cheap
 class _GlassmorphicButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
@@ -244,6 +339,29 @@ class _GlassmorphicButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// Solid semi-opaque panel — no BackdropFilter on top of live camera (expensive)
+class _StatusPanel extends StatelessWidget {
+  final Widget child;
+
+  const _StatusPanel({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.12),
+          width: 1,
+        ),
+      ),
+      child: child,
     );
   }
 }

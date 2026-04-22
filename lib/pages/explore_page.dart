@@ -522,7 +522,6 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                   children: [
                     if (!_isArActive)
                       GoogleMap(
-                      style: _grayMapStyle,
                       mapType: MapType.normal,
                       initialCameraPosition: CameraPosition(
                         target: _currentPosition!,
@@ -530,6 +529,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       ),
                       onMapCreated: (controller) {
                         _controller.complete(controller);
+                        controller.setMapStyle(_grayMapStyle);
                       },
                       markers: _markers,
 

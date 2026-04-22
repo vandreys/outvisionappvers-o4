@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/routes/app_router.dart';
+import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class ArtworkDetailsPage extends StatefulWidget {
@@ -19,42 +21,35 @@ class ArtworkDetailsPage extends StatefulWidget {
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   late Future<Artwork?> _artworkFuture;
   Stream<List<Artist>>? _artistStream;
-  Stream<List<Artwork>>? _artworkStream;
   bool _descExpanded = false;
 
-  static const int _descPreviewLength = 220;
+  static const int _descPreviewLength = 240;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_artistStream == null) {
-      _artworkFuture = Provider.of<ArtworkService>(context, listen: false).getArtworkById(widget.artworkId);
-      _artistStream = Provider.of<ArtistService>(context, listen: false).getArtistStream();
-      _artworkStream = Provider.of<ArtworkService>(context, listen: false).getArtworkStream();
+      _artworkFuture = Provider.of<ArtworkService>(context, listen: false)
+          .getArtworkById(widget.artworkId);
+      _artistStream =
+          Provider.of<ArtistService>(context, listen: false).getArtistStream();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F2),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF2F2F2),
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, size: 30, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      backgroundColor: AppColors.bg,
       body: FutureBuilder<Artwork?>(
         future: _artworkFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(strokeWidth: 1.5));
           }
-
-          if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data == null) {
             return Center(child: Text(t.ar.genericError));
           }
 
@@ -65,232 +60,272 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
               ? description.substring(0, _descPreviewLength)
               : description;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 8),
-
-                // Imagem da obra
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: SizedBox(
-                    height: 260,
-                    width: double.infinity,
-                    child: artwork.imageUrl != null
-                        ? Image.network(
-                            artwork.imageUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) =>
-                                Container(color: Colors.grey[300]),
-                          )
-                        : Container(color: Colors.grey[300]),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Subtítulo (locationName ou year)
-                if (artwork.locationName != null &&
-                    artwork.locationName!.isNotEmpty)
-                  Text(
-                    artwork.locationName!,
-                    style: TextStyle(fontSize: 15, color: Colors.grey[600]),
-                  )
-                else if (artwork.year != null && artwork.year!.isNotEmpty)
-                  Text(
-                    artwork.year!,
-                    style: TextStyle(fontSize: 15, color: Colors.grey[600]),
-                  ),
-
-                const SizedBox(height: 6),
-
-                // Título
-                Text(
-                  artwork.localizedTitle,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-                const Divider(height: 1, color: Color(0xFFD8D8D8)),
-                const SizedBox(height: 24),
-
-                // Descrição com "more"
-                if (description.isNotEmpty) ...[
-                  GestureDetector(
-                    onTap: descIsTruncated
-                        ? () => setState(() => _descExpanded = !_descExpanded)
-                        : null,
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 15,
-                          height: 1.6,
-                          color: Colors.grey[800],
-                        ),
-                        children: [
-                          TextSpan(text: descText),
-                          if (!_descExpanded && descIsTruncated)
-                            TextSpan(
-                              text: t.gallery.bioMore,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                        ],
-                      ),
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _buildHero(artwork)),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(22, 6, 22, 0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    // Location · year label in accent
+                    Text(
+                      [
+                        if (artwork.locationName != null &&
+                            artwork.locationName!.isNotEmpty)
+                          artwork.locationName!,
+                        if (artwork.year != null && artwork.year!.isNotEmpty)
+                          artwork.year!,
+                      ].join(' · ').toUpperCase(),
+                      style: AppText.label(color: AppColors.accent),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  const Divider(height: 1, color: Color(0xFFD8D8D8)),
-                  const SizedBox(height: 24),
-                ],
-
-                // Botão Ver no mapa
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRouter.explore,
-                        (route) => false,
-                        arguments: artwork.id,
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.black, width: 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          t.gallery.showOnMap,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.location_on_outlined,
-                            color: Colors.black, size: 18),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-                const Divider(height: 1, color: Color(0xFFD8D8D8)),
-                const SizedBox(height: 32),
-
-                // Seção Artista
-                Text(
-                  t.gallery.artist,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                StreamBuilder<List<Artist>>(
-                  stream: _artistStream,
-                  builder: (context, artistSnapshot) {
-                    if (!artistSnapshot.hasData) return const SizedBox.shrink();
-
-                    final artistName = artwork.displayArtist;
-                    final artist = artistSnapshot.data!
-                        .where((a) => a.name == artistName)
-                        .firstOrNull;
-
-                    return StreamBuilder<List<Artwork>>(
-                      stream: _artworkStream,
-                      builder: (context, awSnapshot) {
-                        final count = awSnapshot.data
-                                ?.where((a) => a.displayArtist == artistName)
-                                .length ??
-                            0;
-
-                        final photoUrl = artist?.artistPhoto ?? '';
-
-                        return Row(
+                    const SizedBox(height: 8),
+                    // Title
+                    Text(artwork.localizedTitle,
+                        style: AppText.display(fontSize: Rsp.fs(context, 34))),
+                    const SizedBox(height: 22),
+                    Divider(height: 1, color: AppColors.border),
+                    const SizedBox(height: 22),
+                    // Description
+                    if (description.isNotEmpty) ...[
+                      Text.rich(
+                        TextSpan(
+                          style: AppText.body(),
                           children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.grey[300],
-                              backgroundImage: photoUrl.isNotEmpty
-                                  ? NetworkImage(photoUrl)
-                                  : null,
-                              child: photoUrl.isEmpty
-                                  ? const Icon(Icons.person,
-                                      size: 30, color: Colors.grey)
-                                  : null,
-                            ),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    artistName,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
+                            TextSpan(text: descText),
+                            if (!_descExpanded && descIsTruncated)
+                              WidgetSpan(
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      setState(() => _descExpanded = true),
+                                  child: Text(
+                                    ' ${t.gallery.bioMore}',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.accent,
+                                      height: 1.75,
                                     ),
                                   ),
-                                  if (count > 0)
-                                    Text(
-                                      '$count ${t.gallery.works}',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey[600]),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            if (artist != null)
-                              GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                  context,
-                                  AppRouter.artistDetails,
-                                  arguments: artist,
-                                ),
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(Icons.chevron_right,
-                                      color: Colors.white, size: 22),
                                 ),
                               ),
                           ],
-                        );
+                        ),
+                      ),
+                      if (_descExpanded) ...[
+                        const SizedBox(height: 4),
+                        GestureDetector(
+                          onTap: () =>
+                              setState(() => _descExpanded = false),
+                          child: Text(
+                            'menos ↑',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.accent,
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 28),
+                      Divider(height: 1, color: AppColors.border),
+                      const SizedBox(height: 28),
+                    ],
+                    // Artist section
+                    StreamBuilder<List<Artist>>(
+                      stream: _artistStream,
+                      builder: (context, artistSnap) {
+                        if (!artistSnap.hasData) return const SizedBox.shrink();
+                        final artist = artistSnap.data!
+                            .where((a) => a.name == artwork.displayArtist)
+                            .firstOrNull;
+                        if (artist == null) return const SizedBox.shrink();
+                        return _buildArtistRow(artist, context);
                       },
-                    );
-                  },
+                    ),
+                    const SizedBox(height: 28),
+                    Divider(height: 1, color: AppColors.border),
+                    const SizedBox(height: 24),
+                    // Buttons
+                    _buildButtons(artwork, context),
+                    const SizedBox(height: 48),
+                  ]),
                 ),
-
-                const SizedBox(height: 40),
-              ],
-            ),
+              ),
+            ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildHero(Artwork artwork) {
+    return Stack(
+      children: [
+        SizedBox(
+          height: Rsp.isTablet(context) ? 300 : 230,
+          width: double.infinity,
+          child: artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty
+              ? Image.network(
+                  artwork.imageUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) =>
+                      Container(color: AppColors.bg2),
+                )
+              : Container(color: AppColors.bg2),
+        ),
+        // Gradient
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 156,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [AppColors.bg, AppColors.bg.withValues(alpha: 0)],
+              ),
+            ),
+          ),
+        ),
+        // Back + share
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _GlassCircleButton(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: const Icon(Icons.chevron_left,
+                      size: 22, color: Colors.white),
+                ),
+                _GlassCircleButton(
+                  onTap: () {},
+                  child: const Icon(Icons.ios_share,
+                      size: 16, color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildArtistRow(Artist artist, BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(
+        context,
+        AppRouter.artistDetails,
+        arguments: artist,
+      ),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: SizedBox(
+              width: 52,
+              height: 52,
+              child: artist.artistPhoto.isNotEmpty
+                  ? Image.network(
+                      artist.artistPhoto,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Container(color: AppColors.bg2),
+                    )
+                  : Container(
+                      color: AppColors.bg2,
+                      child: Icon(Icons.person_outline,
+                          size: 22, color: AppColors.fg3),
+                    ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  artist.name,
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.fg,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text('Artista participante', style: AppText.caption()),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtons(Artwork artwork, BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: OutlinedButton(
+            onPressed: () => Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRouter.explore,
+              (route) => false,
+              arguments: artwork.id,
+            ),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: AppColors.border, width: 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  t.gallery.showOnMap,
+                  style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.fg),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.location_on_outlined,
+                    size: 15, color: AppColors.fg),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GlassCircleButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final Widget child;
+
+  const _GlassCircleButton({required this.onTap, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.28),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: Center(child: child),
       ),
     );
   }
