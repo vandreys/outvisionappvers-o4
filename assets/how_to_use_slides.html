@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var A=["https://claude.ai","https://preview.claude.ai","https://eap-omelette.claude.ai"];var L=30000;var u=3000;document.addEventListener("DOMContentLoaded",()=>{const V=window.Babel;const $="om-src-id";if(V&&V.registerPlugin&&!(V.availablePlugins&&V.availablePlugins[$])){V.registerPlugin($,({types:Q})=>({visitor:{JSXOpeningElement(W,X){const K=W.node;if(K.name&&K.name.type==="JSXMemberExpression")return;for(let J=0;J<K.attributes.length;J++){const w=K.attributes[J];if(w.type==="JSXAttribute"&&w.name&&w.name.name==="data-om-id")return}const z=X.file&&X.file.opts&&X.file.opts.filename||"?";const k=K.loc&&K.loc.start;const C=`jsx:${z}:${K.start??0}:${k?k.line:0}:${k?k.column+1:0}`;K.attributes.push(Q.jsxAttribute(Q.jsxIdentifier("data-om-id"),Q.stringLiteral(C)))}}}))}const Z=["transform-react-jsx-source",$];document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((Q,W)=>{const X=Q.getAttribute("data-plugins")||"";const K=Z.filter((z)=>X.indexOf(z)<0);if(K.length){Q.setAttribute("data-plugins",X?`${X},${K.join(",")}`:K.join(","))}if(!Q.hasAttribute("data-filename")){Q.setAttribute("data-filename",Q.getAttribute("src")||`inline-${W}`)}})});var b=window.parent;if(b&&b!==window){const V=(z,k)=>{try{b.postMessage({__omelette_log:true,type:z,data:k},"*")}catch{}};["log","warn","error"].forEach((z)=>{const k=console[z];console[z]=(...C)=>{const J=C.map((w)=>{try{return typeof w==="object"?JSON.stringify(w):String(w)}catch{try{return String(w)}catch{return"[unstringifiable]"}}}).join(" ");V(z,J);k.apply(console,C)}});window.addEventListener("error",(z)=>{const k=z.target;if(k&&k!==window&&k.tagName){const C=k.src||k.href||"";V("resource_error",`${k.tagName} failed to load: ${C}`)}else{V("error",`${z.message||"Unknown error"} at ${z.filename||"?"}:${z.lineno||0}:${z.colno||0}`)}},true);window.addEventListener("unhandledrejection",(z)=>{const k=z.reason;const C=k instanceof Error?`${k.message} ${k.stack}`:String(k);V("error",`Unhandled rejection: ${C}`)});const $=()=>{try{b.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")$();else window.addEventListener("load",$);if(window.ResizeObserver)new ResizeObserver($).observe(document.documentElement);const Z={};let Q=0;window.claude={complete(z){return new Promise((k,C)=>{if(!A.length){C(new Error("claude.complete: no parent origin"));return}const J=`c${++Q}`;const w=()=>setTimeout(()=>{delete Z[J];C(new Error(`claude.complete: no data for ${L/1000}s`))},L);const Y=w();Z[J]={resolve:k,reject:C,text:"",t:Y,arm:w};try{for(const F of A){b.postMessage({__om_api:true,id:J,body:z},F)}}catch(F){clearTimeout(Y);delete Z[J];C(F)}})}};const W={};let X=0;window.omelette={writeFile:(z,k)=>new Promise((C,J)=>{if(!A.length){C();return}const w=`f${++X}`;const Y=setTimeout(()=>{delete W[w];C()},u);W[w]={resolve:C,reject:J,t:Y};try{for(const F of A){b.postMessage({__om_file:true,id:w,op:"write",path:z,content:k},F)}}catch{clearTimeout(Y);delete W[w];C()}})};const K=(z)=>{try{return JSON.stringify(z)}catch{return JSON.stringify(String(z))}};window.addEventListener("message",(z)=>{if(A.indexOf(z.origin)<0)return;if(z.source!==b)return;const k=z.data;if(!k)return;if(k.__om_file_r){const w=W[k.id];if(!w)return;clearTimeout(w.t);delete W[k.id];if(k.ok)w.resolve();else w.reject(new Error(k.error||"write failed"));return}if(k.__om_api_r){const w=Z[k.id];if(!w)return;if(k.error!=null){clearTimeout(w.t);delete Z[k.id];w.reject(new Error(k.error));return}if(k.chunk!=null){clearTimeout(w.t);w.t=w.arm();w.text+=k.chunk;return}if(k.done){clearTimeout(w.t);delete Z[k.id];w.resolve(k.text!=null?k.text:w.text);return}return}if(!k.__om_eval)return;const C=k;const J=(w)=>{z.source.postMessage({...w,__om_eval_r:1,id:C.id},z.origin)};try{const w=(0,eval)(C.code);if(w&&typeof w.then==="function"){w.then((Y)=>J({ok:1,v:K(Y)}),(Y)=>J({ok:0,e:String(Y)}))}else{J({ok:1,v:K(w)})}}catch(w){J({ok:0,e:String(w)})}})}})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Usar · OutVision XR</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:     #0D0D0D;
+    --white:  #FFFFFF;
+    --f6:     #F6F6F6;
+    --fg:     #0D0D0D;
+    --fg2:    rgba(13,13,13,0.68);
+    --fg3:    rgba(13,13,13,0.40);
+    --border: rgba(13,13,13,0.08);
+    --accent: #C1632F;
+    --accent2:#E07040;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── Stage ───────────────────────────────────────── */
+  .stage {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  /* ── Slides track ────────────────────────────────── */
+  .track-wrap {
+    width: 100%; flex: 1;
+    display: flex; align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .track {
+    display: flex;
+    transition: transform .55s cubic-bezier(.65,0,.35,1);
+    align-items: center;
+    will-change: transform;
+  }
+
+  /* ── Single slide ────────────────────────────────── */
+  .slide {
+    flex-shrink: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 36px;
+    padding: 20px 24px 0;
+  }
+
+  /* text block */
+  .slide-text {
+    text-align: center;
+    max-width: 300px;
+  }
+  .slide-step {
+    font-size: 10px; letter-spacing: 2px; font-weight: 500;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .slide-title {
+    font-size: 22px; font-weight: 700; letter-spacing: -.4px;
+    color: var(--white); line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .slide-desc {
+    font-size: 13px; color: rgba(255,255,255,.55);
+    line-height: 1.7; font-weight: 300;
+  }
+
+  /* ── Phone mockup ────────────────────────────────── */
+  .phone {
+    position: relative;
+    width: 220px; height: 440px;
+    flex-shrink: 0;
+  }
+  .phone-shell {
+    position: absolute; inset: 0;
+    border-radius: 38px;
+    border: 2px solid rgba(255,255,255,.14);
+    background: #1A1A1A;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.04),
+      0 40px 80px rgba(0,0,0,.7),
+      inset 0 1px 0 rgba(255,255,255,.08);
+    overflow: hidden;
+  }
+  /* notch */
+  .phone-shell::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 28px;
+    background: #1A1A1A;
+    border-radius: 0 0 16px 16px;
+    z-index: 20;
+  }
+  /* side button */
+  .phone::after {
+    content: '';
+    position: absolute; right: -3px; top: 110px;
+    width: 3px; height: 48px;
+    background: rgba(255,255,255,.12);
+    border-radius: 2px;
+  }
+  .phone-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 38px;
+    overflow: hidden;
+    background: var(--white);
+  }
+  /* status bar */
+  .status-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 44px; z-index: 10;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 22px 8px;
+  }
+  .sb-time { font-size: 9px; font-weight: 600; color: var(--fg); }
+  .sb-icons { display: flex; gap: 4px; align-items: center; }
+  .sb-icons svg { width: 10px; height: 10px; }
+
+  /* ── Bottom dots ─────────────────────────────────── */
+  .dots {
+    display: flex; gap: 7px; padding: 16px 0 20px;
+    flex-shrink: 0;
+  }
+  .dot {
+    width: 6px; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,.22);
+    transition: all .35s ease;
+    cursor: pointer;
+  }
+  .dot.active { width: 20px; background: var(--accent); }
+
+  /* ── Nav arrows ──────────────────────────────────── */
+  .nav-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 20; transition: all .2s;
+    backdrop-filter: blur(6px);
+  }
+  .nav-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.24); }
+  .nav-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-prev { left: 16px; }
+  .nav-next { right: 16px; }
+  .nav-btn.hidden { opacity: 0; pointer-events: none; }
+
+  /* ── Slide counter ───────────────────────────────── */
+  .counter {
+    position: absolute; top: 20px; right: 24px;
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 500;
+    color: rgba(255,255,255,.3);
+  }
+
+  /* ── Logo header ─────────────────────────────────── */
+  .logo-header {
+    position: absolute; top: 20px; left: 24px;
+    font-size: 10px; letter-spacing: 2px; font-weight: 600;
+    color: rgba(255,255,255,.25); text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     SCREEN ILLUSTRATIONS
+  ═══════════════════════════════════════════════════ */
+
+  /* shared map bg */
+  .map-bg {
+    position: absolute; inset: 0;
+    background: #EBEBEB;
+  }
+
+  /* map grid lines */
+  .map-grid line { stroke: #D8D8D8; stroke-width: .8; }
+
+  /* ── S1: Welcome ──────────────────────────────────── */
+  .s1-screen {
+    width: 100%; height: 100%;
+    background: #EEF5FB;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px;
+    position: relative;
+  }
+  .s1-glow {
+    position: absolute; width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,170,230,.3) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -60%);
+  }
+  .s1-logo-ring {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: white;
+    border: 1.5px solid rgba(100,170,230,.3);
+    box-shadow: 0 4px 16px rgba(100,170,230,.2);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .s1-app-name {
+    font-size: 15px; font-weight: 700; letter-spacing: -.3px;
+    color: #1A3A5C; position: relative; z-index: 1;
+  }
+  .s1-tagline {
+    font-size: 10px; color: rgba(60,100,150,.5);
+    letter-spacing: 1px; position: relative; z-index: 1;
+  }
+  .s1-badge {
+    margin-top: 8px;
+    padding: 6px 14px; border-radius: 20px;
+    background: #5BA3D9;
+    font-size: 9px; font-weight: 600; color: white; letter-spacing: .8px;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  /* ── S2: Map ──────────────────────────────────────── */
+  .s2-screen { width: 100%; height: 100%; position: relative; background: #E8E8E8; overflow: hidden; }
+  .s2-topbar {
+    position: absolute; top: 44px; left: 0; right: 0;
+    display: flex; justify-content: space-between; padding: 0 14px;
+    z-index: 5;
+  }
+  .map-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: white; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .map-btn svg { width: 14px; height: 14px; }
+  .s2-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: white; border-radius: 16px 16px 0 0;
+    padding: 10px 14px 16px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+    z-index: 5;
+  }
+  .s2-handle { width: 28px; height: 3px; background: #DDD; border-radius: 2px; margin: 0 auto 10px; }
+  .s2-btitle { font-size: 13px; font-weight: 700; color: var(--fg); margin-bottom: 3px; }
+  .s2-bdesc { font-size: 10px; color: var(--fg2); line-height: 1.5; margin-bottom: 10px; }
+  .s2-cta {
+    width: 100%; height: 36px; border-radius: 7px;
+    background: var(--fg);
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px;
+  }
+  .s2-cta span { font-size: 10px; font-weight: 600; color: white; }
+  .s2-cta svg { width: 12px; height: 12px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── S3: Proximity ────────────────────────────────── */
+  .s3-screen { width: 100%; height: 100%; position: relative; overflow: hidden; background: #E8E8E8; }
+
+  /* ── S4: Card ─────────────────────────────────────── */
+  .s4-screen { width: 100%; height: 100%; position: relative; overflow: hidden; background: #E8E8E8; }
+  .s4-card {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: white; border-radius: 14px 14px 0 0;
+    box-shadow: 0 -8px 30px rgba(0,0,0,.12);
+    padding: 8px 12px 16px;
+    z-index: 10;
+  }
+  .s4-handle { width: 28px; height: 3px; background: #DDD; border-radius: 2px; margin: 0 auto 8px; }
+  .s4-img {
+    width: 100%; height: 90px; border-radius: 8px;
+    background: linear-gradient(135deg, #2D2D2D 0%, #555 100%);
+    margin-bottom: 8px; position: relative; overflow: hidden;
+  }
+  .s4-img-close {
+    position: absolute; top: 6px; right: 6px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s4-img-close svg { width: 9px; height: 9px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; }
+  .s4-loc { font-size: 9px; color: var(--fg3); margin-bottom: 2px; }
+  .s4-name { font-size: 13px; font-weight: 700; color: var(--fg); margin-bottom: 2px; }
+  .s4-artist { font-size: 9px; color: var(--fg3); margin-bottom: 8px; display: flex; align-items: center; gap: 3px; }
+  .s4-ar-btn {
+    width: 100%; height: 34px; border-radius: 7px;
+    background: var(--fg);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .s4-ar-btn span { font-size: 10px; font-weight: 600; color: white; }
+  .s4-ar-btn svg { width: 12px; height: 12px; }
+
+  /* ── S5: AR View ──────────────────────────────────── */
+  .s5-screen {
+    width: 100%; height: 100%;
+    background: #D6E9F5;
+    position: relative; overflow: hidden;
+  }
+  .s5-camera-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #C8DFEF 0%, #D6E9F5 55%, #BFD5EA 100%);
+  }
+  /* faux camera noise */
+  .s5-camera-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: .6;
+  }
+  /* scanning reticle */
+  .s5-reticle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    width: 80px; height: 80px;
+  }
+  .s5-reticle-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: rgba(193,99,47,.8);
+    border-style: solid;
+  }
+  .s5-reticle-corner:nth-child(1) { top:0; left:0; border-width: 2px 0 0 2px; border-radius: 3px 0 0 0; }
+  .s5-reticle-corner:nth-child(2) { top:0; right:0; border-width: 2px 2px 0 0; border-radius: 0 3px 0 0; }
+  .s5-reticle-corner:nth-child(3) { bottom:0; left:0; border-width: 0 0 2px 2px; border-radius: 0 0 0 3px; }
+  .s5-reticle-corner:nth-child(4) { bottom:0; right:0; border-width: 0 2px 2px 0; border-radius: 0 0 3px 0; }
+  /* 3D object glow */
+  .s5-obj-glow {
+    position: absolute;
+    top: 30%; left: 50%; transform: translate(-50%, -50%);
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, rgba(193,99,47,.45) 0%, transparent 70%);
+  }
+  /* status bar on dark */
+  .s5-status-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 44px; z-index: 10;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 22px 8px;
+  }
+  .s5-status-bar span { font-size: 9px; font-weight: 600; color: rgba(26,58,92,.7); }
+  .s5-bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 64px; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(to top, rgba(180,215,240,.8), transparent);
+    gap: 24px;
+  }
+  .s5-ctrl-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px solid rgba(91,163,217,.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s5-ctrl-btn svg { width: 12px; height: 12px; stroke: rgba(26,58,92,.6); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .s5-shutter {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: white; border: 3px solid rgba(91,163,217,.4);
+    box-shadow: 0 2px 10px rgba(91,163,217,.3);
+  }
+  /* artwork name tag */
+  .s5-tag {
+    position: absolute; bottom: 72px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,.75); backdrop-filter: blur(8px);
+    border: 1px solid rgba(91,163,217,.25); border-radius: 20px;
+    padding: 4px 12px; white-space: nowrap;
+    z-index: 11;
+  }
+  .s5-tag span { font-size: 9px; color: #1A3A5C; font-weight: 500; }
+
+  /* ── S6: Done / Explore ───────────────────────────── */
+  .s6-screen {
+    width: 100%; height: 100%;
+    background: #EEF5FB;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+  }
+  .s6-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(100,170,230,.25) 0%, transparent 65%);
+  }
+  .s6-check {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(91,163,217,.15); border: 1.5px solid rgba(91,163,217,.5);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .s6-check svg { width: 22px; height: 22px; stroke: #5BA3D9; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .s6-title { font-size: 14px; font-weight: 700; color: #1A3A5C; position: relative; z-index: 1; text-align: center; padding: 0 20px; }
+  .s6-subtitle { font-size: 10px; color: rgba(30,70,120,.5); text-align: center; padding: 0 20px; line-height: 1.6; position: relative; z-index: 1; }
+  .s6-artworks {
+    display: flex; gap: 8px; margin-top: 4px; position: relative; z-index: 1;
+  }
+  .s6-thumb {
+    width: 44px; height: 44px; border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,.1);
+    overflow: hidden;
+  }
+  .s6-thumb-inner {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     MAP ELEMENTS
+  ═══════════════════════════════════════════════════ */
+  .marker {
+    position: absolute;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: white;
+    border: 2px solid #BBB;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  .marker.selected { border-color: #0D0D0D; }
+  .marker .inner {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: linear-gradient(135deg, #7B52FF 0%, #C1632F 100%);
+  }
+  .user-dot {
+    position: absolute;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #2979FF;
+    border: 2.5px solid white;
+    box-shadow: 0 0 0 4px rgba(41,121,255,.2);
+  }
+  /* proximity ring */
+  .prox-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(193,99,47,.5);
+    background: rgba(193,99,47,.06);
+  }
+
+  /* map road lines (SVG) */
+  .map-roads { position: absolute; inset: 0; }
+
+  /* swipe hint */
+  .swipe-hint {
+    position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: rgba(255,255,255,.25); letter-spacing: 1.5px;
+    text-transform: uppercase;
+    animation: fade-pulse 2.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .swipe-hint.gone { opacity: 0; }
+  @keyframes fade-pulse {
+    0%,100% { opacity: .25; } 50% { opacity: .6; }
+  }
+
+  /* touch ripple on nav */
+  @keyframes ripple {
+    from { transform: scale(1); opacity:.6; }
+    to   { transform: scale(1.8); opacity:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="logo-header">OutVision XR</div>
+  <div class="counter" id="counter">1 / 6</div>
+
+  <!-- Nav arrows -->
+  <button class="nav-btn nav-prev hidden" id="btnPrev" aria-label="Anterior">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="nav-btn nav-next" id="btnNext" aria-label="Próximo">
+    <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+  </button>
+
+  <!-- Track -->
+  <div class="track-wrap">
+    <div class="track" id="track">
+
+      <!-- ═══════════════ SLIDE 1 · Bem-vindo ═════════════════ -->
+      <div class="slide" id="slide-0">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="status-bar">
+              <span class="sb-time" style="color:rgba(26,58,92,.6)">9:41</span>
+              <div class="sb-icons">
+                <svg viewBox="0 0 24 24" fill="rgba(91,163,217,.7)"><rect x="1" y="7" width="3" height="10" rx="1"/><rect x="6" y="4" width="3" height="13" rx="1"/><rect x="11" y="1" width="3" height="16" rx="1"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="rgba(91,163,217,.7)" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2" ry="2" fill="none" stroke="rgba(91,163,217,.7)" stroke-width="1.8"/><path d="M22 11v3" stroke="rgba(91,163,217,.7)" stroke-width="2" stroke-linecap="round"/><rect x="4" y="9" width="10" height="7" rx="1" fill="rgba(91,163,217,.7)"/></svg>
+              </div>
+            </div>
+            <div class="s1-screen">
+              <div class="s1-glow"></div>
+              <div class="s1-logo-ring">
+                <!-- OutVision icon approximation -->
+                <svg width="32" height="32" viewBox="0 0 32 32">
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="rgba(91,163,217,.2)" stroke-width="1"/>
+                  <circle cx="16" cy="16" r="7" fill="none" stroke="rgba(91,163,217,.7)" stroke-width="1.5"/>
+                  <circle cx="16" cy="16" r="3" fill="#5BA3D9"/>
+                  <line x1="16" y1="4" x2="16" y2="9" stroke="rgba(91,163,217,.4)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="16" y1="23" x2="16" y2="28" stroke="rgba(91,163,217,.4)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="4" y1="16" x2="9" y2="16" stroke="rgba(91,163,217,.4)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="23" y1="16" x2="28" y2="16" stroke="rgba(91,163,217,.4)" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="s1-app-name">OutVision XR</div>
+              <div class="s1-tagline">BIENAL DE CURITIBA · AR</div>
+              <div class="s1-badge">Como usar</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 1 de 5</div>
+          <div class="slide-title">Arte que sai das paredes</div>
+          <div class="slide-desc">O OutVision XR usa realidade aumentada e geolocalização para trazer obras da Bienal de Curitiba ao seu entorno real.</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SLIDE 2 · Abra o Mapa ═══════════════ -->
+      <div class="slide" id="slide-1">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="status-bar" style="background:transparent;">
+              <span class="sb-time" style="color:#0D0D0D">9:41</span>
+              <div class="sb-icons">
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><rect x="1" y="7" width="3" height="10" rx="1"/><rect x="6" y="4" width="3" height="13" rx="1"/><rect x="11" y="1" width="3" height="16" rx="1"/></svg>
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="#0D0D0D" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2" ry="2" fill="none" stroke="#0D0D0D" stroke-width="1.8"/><path d="M22 11v3" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"/><rect x="4" y="9" width="12" height="7" rx="1" fill="#0D0D0D"/></svg>
+              </div>
+            </div>
+            <div class="s2-screen">
+              <!-- map background -->
+              <svg class="map-roads" viewBox="0 0 220 440" xmlns="http://www.w3.org/2000/svg">
+                <rect width="220" height="440" fill="#E8E8E8"/>
+                <!-- blocks -->
+                <rect x="0" y="60" width="90" height="80" fill="#DCDCDC"/>
+                <rect x="100" y="60" width="120" height="50" fill="#DCDCDC"/>
+                <rect x="0" y="160" width="70" height="100" fill="#DCDCDC"/>
+                <rect x="80" y="130" width="80" height="70" fill="#DCDCDC"/>
+                <rect x="170" y="130" width="50" height="90" fill="#DCDCDC"/>
+                <rect x="0" y="280" width="100" height="80" fill="#DCDCDC"/>
+                <rect x="110" y="240" width="110" height="100" fill="#DCDCDC"/>
+                <rect x="20" y="380" width="80" height="60" fill="#DCDCDC"/>
+                <rect x="120" y="360" width="100" height="80" fill="#DCDCDC"/>
+                <!-- roads -->
+                <rect x="90" y="0" width="10" height="440" fill="#F0F0F0"/>
+                <rect x="0" y="150" width="220" height="10" fill="#F0F0F0"/>
+                <rect x="0" y="270" width="220" height="10" fill="#F0F0F0"/>
+                <rect x="160" y="0" width="10" height="220" fill="#F0F0F0"/>
+                <!-- park-ish -->
+                <rect x="100" y="160" width="60" height="80" fill="#D8E8D0" rx="4"/>
+              </svg>
+              <div class="s2-topbar">
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </div>
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                </div>
+              </div>
+              <!-- markers -->
+              <div class="marker" style="top:115px;left:50px;"><div class="inner"></div></div>
+              <div class="marker" style="top:175px;left:130px;"><div class="inner"></div></div>
+              <div class="marker" style="top:295px;left:60px;"><div class="inner"></div></div>
+              <div class="marker" style="top:240px;left:160px;"><div class="inner"></div></div>
+              <!-- user dot -->
+              <div class="user-dot" style="top:200px;left:100px;transform:translate(-50%,-50%)"></div>
+              <!-- bottom card -->
+              <div class="s2-bottom">
+                <div class="s2-handle"></div>
+                <div class="s2-btitle">Nenhuma obra por perto</div>
+                <div class="s2-bdesc">Caminhe em direção aos marcadores para desbloquear obras em AR.</div>
+                <div class="s2-cta">
+                  <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                  <span>Ir à obra mais próxima</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 1 · Explore</div>
+          <div class="slide-title">Abra o mapa e explore</div>
+          <div class="slide-desc">Os marcadores circulares no mapa indicam onde estão as obras da Bienal. Toque em qualquer um para ver detalhes e obter direções.</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SLIDE 3 · Proximidade ═══════════════ -->
+      <div class="slide" id="slide-2">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="status-bar">
+              <span class="sb-time" style="color:#0D0D0D">9:41</span>
+              <div class="sb-icons">
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><rect x="1" y="7" width="3" height="10" rx="1"/><rect x="6" y="4" width="3" height="13" rx="1"/><rect x="11" y="1" width="3" height="16" rx="1"/></svg>
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="#0D0D0D" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2" ry="2" fill="none" stroke="#0D0D0D" stroke-width="1.8"/><path d="M22 11v3" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"/><rect x="4" y="9" width="12" height="7" rx="1" fill="#0D0D0D"/></svg>
+              </div>
+            </div>
+            <div class="s3-screen">
+              <svg class="map-roads" viewBox="0 0 220 440" xmlns="http://www.w3.org/2000/svg">
+                <rect width="220" height="440" fill="#E8E8E8"/>
+                <rect x="0" y="60" width="90" height="80" fill="#DCDCDC"/>
+                <rect x="100" y="60" width="120" height="50" fill="#DCDCDC"/>
+                <rect x="0" y="160" width="70" height="100" fill="#DCDCDC"/>
+                <rect x="80" y="130" width="80" height="70" fill="#DCDCDC"/>
+                <rect x="170" y="130" width="50" height="90" fill="#DCDCDC"/>
+                <rect x="0" y="280" width="100" height="80" fill="#DCDCDC"/>
+                <rect x="110" y="240" width="110" height="100" fill="#DCDCDC"/>
+                <rect x="90" y="0" width="10" height="440" fill="#F0F0F0"/>
+                <rect x="0" y="150" width="220" height="10" fill="#F0F0F0"/>
+                <rect x="0" y="270" width="220" height="10" fill="#F0F0F0"/>
+                <rect x="160" y="0" width="10" height="220" fill="#F0F0F0"/>
+                <rect x="100" y="160" width="60" height="80" fill="#D8E8D0" rx="4"/>
+              </svg>
+              <!-- proximity ring around marker -->
+              <div class="prox-ring" style="width:90px;height:90px;top:145px;left:90px;transform:translate(-50%,-50%);"></div>
+              <!-- user getting closer -->
+              <div class="user-dot" style="top:190px;left:115px;transform:translate(-50%,-50%);"></div>
+              <!-- markers -->
+              <div class="marker selected" style="top:145px;left:90px;transform:translate(-50%,-50%);"><div class="inner"></div></div>
+              <div class="marker" style="top:295px;left:60px;"><div class="inner"></div></div>
+              <div class="marker" style="top:240px;left:160px;"><div class="inner"></div></div>
+              <!-- distance chip -->
+              <div style="position:absolute;top:110px;left:50%;transform:translateX(-50%);background:rgba(193,99,47,.92);border-radius:12px;padding:4px 10px;z-index:10;">
+                <span style="font-size:9px;font-weight:700;color:white;letter-spacing:.5px">~80m</span>
+              </div>
+              <!-- topbar -->
+              <div class="s2-topbar">
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </div>
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 2 · Aproxime-se</div>
+          <div class="slide-title">Caminhe até a obra</div>
+          <div class="slide-desc">Quando você entrar no raio de 150m de uma obra, o app detecta automaticamente sua proximidade. Não precisa tocar em nada.</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SLIDE 4 · Card da Obra ═══════════════ -->
+      <div class="slide" id="slide-3">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="status-bar">
+              <span class="sb-time" style="color:#0D0D0D">9:41</span>
+              <div class="sb-icons">
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><rect x="1" y="7" width="3" height="10" rx="1"/><rect x="6" y="4" width="3" height="13" rx="1"/><rect x="11" y="1" width="3" height="16" rx="1"/></svg>
+                <svg viewBox="0 0 24 24" fill="#0D0D0D"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="#0D0D0D" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2" ry="2" fill="none" stroke="#0D0D0D" stroke-width="1.8"/><path d="M22 11v3" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"/><rect x="4" y="9" width="12" height="7" rx="1" fill="#0D0D0D"/></svg>
+              </div>
+            </div>
+            <div class="s4-screen">
+              <!-- map -->
+              <svg class="map-roads" viewBox="0 0 220 440" xmlns="http://www.w3.org/2000/svg">
+                <rect width="220" height="440" fill="#E8E8E8"/>
+                <rect x="0" y="60" width="90" height="80" fill="#DCDCDC"/>
+                <rect x="100" y="60" width="120" height="50" fill="#DCDCDC"/>
+                <rect x="0" y="160" width="70" height="100" fill="#DCDCDC"/>
+                <rect x="80" y="130" width="80" height="70" fill="#DCDCDC"/>
+                <rect x="170" y="130" width="50" height="90" fill="#DCDCDC"/>
+                <rect x="90" y="0" width="10" height="440" fill="#F0F0F0"/>
+                <rect x="0" y="150" width="220" height="10" fill="#F0F0F0"/>
+                <rect x="100" y="160" width="60" height="80" fill="#D8E8D0" rx="4"/>
+              </svg>
+              <div class="prox-ring" style="width:90px;height:90px;top:155px;left:120px;transform:translate(-50%,-50%);border-color:rgba(193,99,47,.4);"></div>
+              <div class="user-dot" style="top:158px;left:123px;transform:translate(-50%,-50%);"></div>
+              <div class="marker selected" style="top:155px;left:120px;transform:translate(-50%,-50%);border-color:#0D0D0D;"><div class="inner"></div></div>
+              <div class="s2-topbar">
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </div>
+                <div class="map-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                </div>
+              </div>
+              <!-- card -->
+              <div class="s4-card">
+                <div class="s4-handle"></div>
+                <div class="s4-img">
+                  <!-- abstract art texture -->
+                  <svg width="100%" height="100%" viewBox="0 0 196 90" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="196" height="90" fill="#1A1A2E"/>
+                    <circle cx="60" cy="40" r="50" fill="rgba(193,99,47,.3)"/>
+                    <circle cx="140" cy="60" r="40" fill="rgba(123,82,255,.2)"/>
+                    <path d="M0 60 Q50 20 100 60 Q150 100 196 50" stroke="rgba(255,255,255,.15)" stroke-width="1.5" fill="none"/>
+                    <path d="M0 30 Q80 80 196 20" stroke="rgba(193,99,47,.4)" stroke-width="1" fill="none"/>
+                  </svg>
+                  <div class="s4-img-close">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </div>
+                </div>
+                <div class="s4-loc">
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Jardim Botânico · Curitiba
+                </div>
+                <div class="s4-name">Threads of Silence</div>
+                <div class="s4-artist">
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Chiharu Shiota
+                </div>
+                <div class="s4-ar-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  <span>Abrir em AR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 3 · Desbloqueio</div>
+          <div class="slide-title">A obra aparece automaticamente</div>
+          <div class="slide-desc">Ao ficar 3 segundos dentro do raio, a obra é desbloqueada. Um cartão sobe com informações e o botão <strong style="color:white">Abrir em AR</strong>.</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SLIDE 5 · AR View ════════════════════ -->
+      <div class="slide" id="slide-4">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="s5-screen">
+              <div class="s5-camera-bg"></div>
+
+              <!-- distant cityscape silhouette -->
+              <svg style="position:absolute;bottom:100px;left:0;right:0;width:100%;opacity:.18" viewBox="0 0 220 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="40" width="220" height="40" fill="rgba(26,58,92,.4)"/>
+                <rect x="10" y="20" width="18" height="40" fill="white"/>
+                <rect x="35" y="10" width="14" height="50" fill="white"/>
+                <rect x="55" y="30" width="22" height="30" fill="white"/>
+                <rect x="85" y="15" width="12" height="45" fill="white"/>
+                <rect x="105" y="25" width="20" height="35" fill="white"/>
+                <rect x="135" y="8" width="16" height="52" fill="white"/>
+                <rect x="160" y="22" width="24" height="38" fill="white"/>
+                <rect x="192" y="18" width="18" height="42" fill="white"/>
+              </svg>
+
+              <!-- 3D object glow -->
+              <div class="s5-obj-glow"></div>
+
+              <!-- Floating 3D artwork (abstract sculpture) -->
+              <svg style="position:absolute;top:22%;left:50%;transform:translateX(-50%);filter:drop-shadow(0 0 14px rgba(193,99,47,.6))" width="80" height="100" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- abstract woven sculpture like Shiota -->
+                <ellipse cx="40" cy="50" rx="28" ry="36" fill="none" stroke="rgba(255,220,180,.7)" stroke-width=".8"/>
+                <ellipse cx="40" cy="50" rx="18" ry="28" fill="none" stroke="rgba(193,99,47,.8)" stroke-width=".8"/>
+                <ellipse cx="40" cy="50" rx="8" ry="16" fill="rgba(193,99,47,.2)" stroke="rgba(193,99,47,.9)" stroke-width=".8"/>
+                <!-- thread lines -->
+                <line x1="12" y1="25" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <line x1="68" y1="25" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <line x1="12" y1="75" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <line x1="68" y1="75" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <line x1="40" y1="14" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <line x1="40" y1="86" x2="40" y2="50" stroke="rgba(255,180,120,.3)" stroke-width=".6"/>
+                <!-- glow center dot -->
+                <circle cx="40" cy="50" r="3" fill="rgba(193,99,47,.9)"/>
+                <!-- shadow on ground -->
+                <ellipse cx="40" cy="92" rx="16" ry="4" fill="rgba(0,0,0,.3)"/>
+              </svg>
+
+              <!-- scanning reticle -->
+              <div class="s5-reticle" style="top:18%;left:50%;transform:translate(-50%,-10%);">
+                <div class="s5-reticle-corner"></div>
+                <div class="s5-reticle-corner"></div>
+                <div class="s5-reticle-corner"></div>
+                <div class="s5-reticle-corner"></div>
+              </div>
+
+              <!-- status bar -->
+              <div class="s5-status-bar">
+                <span>9:41</span>
+                <span style="font-size:8px;letter-spacing:.5px;color:#5BA3D9;font-weight:700;">● AR ATIVO</span>
+              </div>
+
+              <!-- artwork tag -->
+              <div class="s5-tag">
+                <span>Threads of Silence · Chiharu Shiota</span>
+              </div>
+
+              <!-- bottom controls -->
+              <div class="s5-bottom-bar">
+                <div class="s5-ctrl-btn">
+                  <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </div>
+                <div class="s5-shutter"></div>
+                <div class="s5-ctrl-btn">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 4 · Realidade Aumentada</div>
+          <div class="slide-title">Aponte a câmera e veja a arte</div>
+          <div class="slide-desc">O modelo 3D da obra aparece no mundo real pela câmera. Mova-se ao redor para explorar a escultura em escala real.</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SLIDE 6 · Explore Mais ═══════════════ -->
+      <div class="slide" id="slide-5">
+        <div class="phone">
+          <div class="phone-shell"></div>
+          <div class="phone-screen">
+            <div class="status-bar">
+              <span class="sb-time" style="color:rgba(26,58,92,.6)">9:41</span>
+            </div>
+            <div class="s6-screen">
+              <div class="s6-glow"></div>
+              <div class="s6-check">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="s6-title">Você desbloqueou uma obra!</div>
+              <div class="s6-subtitle">Continue explorando a Bienal para descobrir mais artistas e instalações em AR.</div>
+              <div class="s6-artworks">
+                <div class="s6-thumb">
+                  <svg width="44" height="44" viewBox="0 0 44 44"><rect width="44" height="44" fill="#1A1A2E"/><circle cx="22" cy="22" r="12" fill="none" stroke="rgba(193,99,47,.6)" stroke-width="1.5"/><circle cx="22" cy="22" r="5" fill="rgba(193,99,47,.7)"/></svg>
+                </div>
+                <div class="s6-thumb">
+                  <svg width="44" height="44" viewBox="0 0 44 44"><rect width="44" height="44" fill="#0D1A0D"/><rect x="10" y="10" width="24" height="24" fill="none" stroke="rgba(120,200,120,.5)" stroke-width="1.5" transform="rotate(45 22 22)"/><rect x="16" y="16" width="12" height="12" fill="rgba(120,200,120,.3)" transform="rotate(45 22 22)"/></svg>
+                </div>
+                <div class="s6-thumb">
+                  <svg width="44" height="44" viewBox="0 0 44 44"><rect width="44" height="44" fill="#1A0D0D"/><path d="M8 36 Q22 8 36 36" fill="none" stroke="rgba(255,100,100,.5)" stroke-width="2"/><path d="M14 36 Q22 16 30 36" fill="rgba(255,100,100,.15)" stroke="rgba(255,100,100,.4)" stroke-width="1.5"/></svg>
+                </div>
+                <div class="s6-thumb" style="border:1.5px dashed rgba(255,255,255,.15);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+              </div>
+              <!-- mini bottom nav -->
+              <div style="position:absolute;bottom:0;left:0;right:0;height:54px;background:white;display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(91,163,217,.15);">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BA3D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  <span style="font-size:7px;color:#5BA3D9;font-weight:600">Mapa</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(26,58,92,.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  <span style="font-size:7px;color:rgba(26,58,92,.3);font-weight:500">Obras</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(26,58,92,.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  <span style="font-size:7px;color:rgba(26,58,92,.3);font-weight:500">Menu</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-text">
+          <div class="slide-step">Passo 5 · Imersão</div>
+          <div class="slide-title">Visualize a obra em AR</div>
+          <div class="slide-desc">Mais do que ver — você está dentro da obra. A realidade aumentada traz a instalação ao espaço físico para uma experiência artística genuinamente imersiva.</div>
+        </div>
+      </div>
+
+    </div><!-- /track -->
+  </div><!-- /track-wrap -->
+
+  <div class="dots" id="dots">
+    <div class="dot active" data-i="0"></div>
+    <div class="dot" data-i="1"></div>
+    <div class="dot" data-i="2"></div>
+    <div class="dot" data-i="3"></div>
+    <div class="dot" data-i="4"></div>
+    <div class="dot" data-i="5"></div>
+  </div>
+
+  <div class="swipe-hint" id="swipeHint">deslize para navegar</div>
+</div>
+
+<script>
+(function() {
+  const TOTAL = 6;
+  let current = 0;
+
+  const track   = document.getElementById('track');
+  const dots    = document.querySelectorAll('.dot');
+  const counter = document.getElementById('counter');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const swipeHint = document.getElementById('swipeHint');
+  const stage   = document.getElementById('stage');
+
+  // Compute slide width = viewport width
+  function slideW() { return window.innerWidth; }
+
+  function setSlide(n, instant) {
+    current = Math.max(0, Math.min(TOTAL - 1, n));
+    track.style.transition = instant ? 'none' : 'transform .55s cubic-bezier(.65,0,.35,1)';
+    track.style.transform  = `translateX(${-current * slideW()}px)`;
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    counter.textContent = `${current + 1} / ${TOTAL}`;
+    btnPrev.classList.toggle('hidden', current === 0);
+    btnNext.classList.toggle('hidden', current === TOTAL - 1);
+  }
+
+  function init() {
+    // Set slide widths
+    document.querySelectorAll('.slide').forEach(s => {
+      s.style.width = slideW() + 'px';
+    });
+    setSlide(current, true);
+  }
+
+  btnPrev.addEventListener('click', () => { setSlide(current - 1); hideHint(); });
+  btnNext.addEventListener('click', () => { setSlide(current + 1); hideHint(); });
+
+  dots.forEach(d => d.addEventListener('click', () => { setSlide(+d.dataset.i); hideHint(); }));
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { setSlide(current + 1); hideHint(); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { setSlide(current - 1); hideHint(); }
+  });
+
+  // Touch / swipe
+  let tx0 = null, ty0 = null;
+  stage.addEventListener('touchstart', e => {
+    tx0 = e.touches[0].clientX;
+    ty0 = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    if (tx0 === null) return;
+    const dx = e.changedTouches[0].clientX - tx0;
+    const dy = e.changedTouches[0].clientY - ty0;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+      setSlide(dx < 0 ? current + 1 : current - 1);
+      hideHint();
+    }
+    tx0 = null;
+  }, { passive: true });
+
+  // Mouse drag
+  let mx0 = null;
+  stage.addEventListener('mousedown', e => { mx0 = e.clientX; });
+  stage.addEventListener('mouseup',   e => {
+    if (mx0 === null) return;
+    const dx = e.clientX - mx0;
+    if (Math.abs(dx) > 40) { setSlide(dx < 0 ? current + 1 : current - 1); hideHint(); }
+    mx0 = null;
+  });
+
+  function hideHint() {
+    swipeHint.classList.add('gone');
+  }
+
+  window.addEventListener('resize', init);
+  init();
+})();
+</script>
+</body>
+</html>

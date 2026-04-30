@@ -7,6 +7,7 @@ import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
 
 class DetailsArtistPage extends StatefulWidget {
@@ -68,7 +69,12 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                     const SizedBox(height: 20),
                     // Bio
                     if (bio.isNotEmpty) ...[
-                      _buildBio(bio, bioPreview, hasBioMore, paras),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        alignment: Alignment.topCenter,
+                        child: _buildBio(bio, bioPreview, hasBioMore, paras),
+                      ),
                       const SizedBox(height: 32),
                       Divider(height: 1, color: AppColors.border),
                       const SizedBox(height: 28),
@@ -117,6 +123,8 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
               ? Image.network(
                   artist.artistPhoto,
                   fit: BoxFit.cover,
+                  loadingBuilder: (_, child, progress) =>
+                      progress == null ? child : const ShimmerBox(),
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.bg2),
                 )
@@ -252,6 +260,8 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                   ? Image.network(
                       artwork.imageUrl!,
                       fit: BoxFit.cover,
+                      loadingBuilder: (_, child, progress) =>
+                          progress == null ? child : const ShimmerBox(),
                       errorBuilder: (_, __, ___) =>
                           Container(color: AppColors.bg2),
                     )
@@ -289,26 +299,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _navArrow(false, count),
-        const SizedBox(width: 20),
-        Row(
-          children: List.generate(count, (i) {
-            final active = i == _artworkIdx;
-            return GestureDetector(
-              onTap: () => setState(() => _artworkIdx = i),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 220),
-                margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                width: active ? 16 : 5,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: active ? AppColors.accent : AppColors.fg3,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-            );
-          }),
-        ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 16),
         _navArrow(true, count),
       ],
     );

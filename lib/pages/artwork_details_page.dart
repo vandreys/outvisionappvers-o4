@@ -7,6 +7,7 @@ import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
 
 class ArtworkDetailsPage extends StatefulWidget {
@@ -18,12 +19,31 @@ class ArtworkDetailsPage extends StatefulWidget {
   State<ArtworkDetailsPage> createState() => _ArtworkDetailsPageState();
 }
 
-class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
+class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
+    with SingleTickerProviderStateMixin {
   late Future<Artwork?> _artworkFuture;
   Stream<List<Artist>>? _artistStream;
   bool _descExpanded = false;
+  late final AnimationController _enterCtrl;
+  late final Animation<double> _fadeAnim;
+  late final Animation<Offset> _slideAnim;
+  bool _animStarted = false;
 
   static const int _descPreviewLength = 240;
+
+  @override
+  void initState() {
+    super.initState();
+    _enterCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 420),
+    );
+    _fadeAnim = CurvedAnimation(parent: _enterCtrl, curve: Curves.easeOut);
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.04),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _enterCtrl, curve: Curves.easeOutCubic));
+  }
 
   @override
   void didChangeDependencies() {
@@ -37,6 +57,19 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   }
 
   @override
+  void dispose() {
+    _enterCtrl.dispose();
+    super.dispose();
+  }
+
+  void _triggerEnter() {
+    if (!_animStarted) {
+      _animStarted = true;
+      _enterCtrl.forward();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -44,8 +77,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         future: _artworkFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator(strokeWidth: 1.5));
+            return _buildSkeleton();
           }
           if (snapshot.hasError ||
               !snapshot.hasData ||
@@ -54,13 +86,18 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           }
 
           final artwork = snapshot.data!;
+          _triggerEnter();
           final description = artwork.description ?? '';
           final descIsTruncated = description.length > _descPreviewLength;
           final descText = (!_descExpanded && descIsTruncated)
               ? description.substring(0, _descPreviewLength)
               : description;
 
-          return CustomScrollView(
+          return FadeTransition(
+            opacity: _fadeAnim,
+            child: SlideTransition(
+              position: _slideAnim,
+              child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: _buildHero(artwork)),
               SliverPadding(
@@ -152,9 +189,43 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                 ),
               ),
             ],
+          ),
+            ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildSkeleton() {
+    final heroH = Rsp.isTablet(context) ? 300.0 : 230.0;
+    return CustomScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: ShimmerBox(height: heroH),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(22, 14, 22, 0),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              ShimmerBox(height: 10, width: 120, borderRadius: BorderRadius.circular(3)),
+              const SizedBox(height: 10),
+              ShimmerBox(height: 28, borderRadius: BorderRadius.circular(4)),
+              const SizedBox(height: 8),
+              ShimmerBox(height: 28, width: 180, borderRadius: BorderRadius.circular(4)),
+              const SizedBox(height: 28),
+              const Divider(height: 1),
+              const SizedBox(height: 22),
+              ShimmerBox(height: 13, borderRadius: BorderRadius.circular(3)),
+              const SizedBox(height: 6),
+              ShimmerBox(height: 13, borderRadius: BorderRadius.circular(3)),
+              const SizedBox(height: 6),
+              ShimmerBox(height: 13, width: 200, borderRadius: BorderRadius.circular(3)),
+            ]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -168,6 +239,8 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
               ? Image.network(
                   artwork.imageUrl!,
                   fit: BoxFit.cover,
+                  loadingBuilder: (_, child, progress) =>
+                      progress == null ? child : const ShimmerBox(),
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.bg2),
                 )
@@ -189,24 +262,13 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             ),
           ),
         ),
-        // Back + share
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _GlassCircleButton(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.chevron_left,
-                      size: 22, color: Colors.white),
-                ),
-                _GlassCircleButton(
-                  onTap: () {},
-                  child: const Icon(Icons.ios_share,
-                      size: 16, color: Colors.white),
-                ),
-              ],
+            child: _GlassCircleButton(
+              onTap: () => Navigator.of(context).pop(),
+              child: const Icon(Icons.chevron_left,
+                  size: 22, color: Colors.white),
             ),
           ),
         ),
@@ -233,6 +295,8 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   ? Image.network(
                       artist.artistPhoto,
                       fit: BoxFit.cover,
+                      loadingBuilder: (_, child, progress) =>
+                          progress == null ? child : const ShimmerBox(),
                       errorBuilder: (_, __, ___) =>
                           Container(color: AppColors.bg2),
                     )

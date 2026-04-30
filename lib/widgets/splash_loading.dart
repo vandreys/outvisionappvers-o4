@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/utils/app_theme.dart';
 
 class SplashLoading extends StatefulWidget {
   const SplashLoading({super.key});
@@ -18,7 +20,7 @@ class _SplashLoadingState extends State<SplashLoading>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
-    )..repeat(); // fica animando enquanto o GPS carrega
+    )..repeat();
     _progress = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
@@ -31,41 +33,35 @@ class _SplashLoadingState extends State<SplashLoading>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(flex: 3),
-
-              const Text(
+              Text(
                 'Bienal de\nCuritiba',
-                style: TextStyle(
-                  color: Colors.white,
+                style: GoogleFonts.inter(
+                  color: AppColors.fg,
                   fontSize: 42,
                   fontWeight: FontWeight.w700,
                   height: 1.1,
-                  letterSpacing: -1,
+                  letterSpacing: -1.0,
                 ),
               ),
-
               const SizedBox(height: 10),
-
-              const Text(
+              Text(
                 '2026',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+                style: GoogleFonts.inter(
+                  color: AppColors.fg3,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
                   letterSpacing: 4,
                 ),
               ),
-
               const Spacer(flex: 3),
-
               AnimatedBuilder(
                 animation: _progress,
                 builder: (context, _) {
@@ -73,36 +69,34 @@ class _SplashLoadingState extends State<SplashLoading>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(1),
                         child: SizedBox(
-                          height: 2,
+                          height: 1,
                           width: double.infinity,
                           child: Stack(
                             children: [
-                              Container(color: Colors.white12, width: double.infinity),
+                              Container(color: AppColors.border),
                               FractionallySizedBox(
                                 widthFactor: _progress.value,
-                                child: Container(color: Colors.white),
+                                child: Container(color: AppColors.accent),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Carregando...',
-                        style: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
+                      const SizedBox(height: 14),
+                      Text(
+                        'Carregando',
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          letterSpacing: 1.5,
+                          color: AppColors.fg3,
                         ),
                       ),
                     ],
                   );
                 },
               ),
-
               const SizedBox(height: 48),
             ],
           ),

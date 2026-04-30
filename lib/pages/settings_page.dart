@@ -57,10 +57,12 @@ class SettingsPage extends StatelessWidget {
                     label: 'APP',
                     items: [
                       _SettingsItem(
-                        icon: Icons.help_outline,
-                        title: t.settings.getHelp,
-                        subtitle: 'Suporte e perguntas frequentes',
-                        onTap: () {},
+                        icon: Icons.touch_app_outlined,
+                        title: 'Como Usar',
+                        subtitle: 'Guia de uso do aplicativo',
+                        onTap: () => Navigator.pushNamed(
+                            context, AppRouter.settingsHowToUse),
+                        isNav: true,
                       ),
                       _SettingsItem(
                         icon: Icons.language,

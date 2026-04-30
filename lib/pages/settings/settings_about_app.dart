@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,12 +14,11 @@ class AboutAppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.bg,
       body: CustomScrollView(
         slivers: [
-          // ── Hero image com card branco sobreposto ──────────────────────
           SliverAppBar(
-            expandedHeight: 320,
+            expandedHeight: 220,
             pinned: false,
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -33,135 +34,94 @@ class AboutAppPage extends StatelessWidget {
                 _heroUrl,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, progress) =>
-                    progress == null ? child : Container(color: const Color(0xFFBBBBBB)),
+                    progress == null ? child : Container(color: AppColors.bg2),
                 errorBuilder: (context, _, __) =>
-                    Container(color: const Color(0xFFBBBBBB)),
+                    Container(color: AppColors.bg2),
               ),
             ),
-            // Card branco com cantos arredondados sobreposto à imagem
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(32),
+              preferredSize: const Size.fromHeight(24),
               child: Container(
-                height: 32,
+                height: 24,
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.bg,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(28),
-                    topRight: Radius.circular(28),
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
               ),
             ),
           ),
-
-          // ── Conteúdo ───────────────────────────────────────────────────
           SliverToBoxAdapter(
             child: Container(
-              color: Colors.white,
+              color: AppColors.bg,
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 48),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Subtitle + título
-                  const Text(
-                    '16ª Edição · 2026',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black45,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Text('16ª Edição · 2026', style: AppText.caption()),
                   const SizedBox(height: 6),
-                  const Text(
+                  Text(
                     'Bienal de\nCuritiba',
-                    style: TextStyle(
-                      fontSize: 38,
-                      fontWeight: FontWeight.w800,
+                    style: GoogleFonts.inter(
+                      fontSize: Rsp.fs(context, 38),
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -0.5,
                       height: 1.1,
-                      color: Colors.black,
+                      color: AppColors.fg,
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Container(height: 1, color: Colors.black12),
+                  Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 28),
-
-                  // ── Sobre o App ──────────────────────────────────────
-                  const Text(
-                    'SOBRE O APP',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                      color: Colors.black45,
-                    ),
-                  ),
+                  Text('SOBRE O APP', style: AppText.label()),
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     'O app da Bienal de Curitiba é sua porta de entrada para uma experiência artística que vai além do espaço físico da exposição. Desenvolvido especialmente para a 16ª edição, o aplicativo permite que você explore obras de arte em Realidade Aumentada — diretamente nos locais onde as obras estão instaladas.',
-                    style: TextStyle(fontSize: 15, height: 1.75, color: Colors.black87),
+                    style: AppText.body(),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  const SizedBox(height: 14),
+                  Text(
                     'Ao se aproximar de uma obra participante, o app reconhece sua localização e libera a experiência em AR. Apontando a câmera para o espaço ao redor, você vê a obra tomar vida em três dimensões — fundindo o digital com o mundo real.',
-                    style: TextStyle(fontSize: 15, height: 1.75, color: Colors.black87),
+                    style: AppText.body(),
                   ),
                   const SizedBox(height: 32),
-
-                  // ── Features ─────────────────────────────────────────
                   const _FeatureRow(
                     icon: Icons.view_in_ar,
                     title: 'Realidade Aumentada',
-                    description: 'Visualize obras em 3D no espaço real, nos locais da Bienal.',
+                    description:
+                        'Visualize obras em 3D no espaço real, nos locais da Bienal.',
                   ),
                   const SizedBox(height: 16),
                   const _FeatureRow(
                     icon: Icons.map_outlined,
                     title: 'Mapa Interativo',
-                    description: 'Navegue pelos pontos da exposição e encontre obras próximas.',
+                    description:
+                        'Navegue pelos pontos da exposição e encontre obras próximas.',
                   ),
                   const SizedBox(height: 16),
                   const _FeatureRow(
                     icon: Icons.person_outline,
                     title: 'Artistas',
-                    description: 'Conheça a trajetória e a obra dos artistas participantes.',
+                    description:
+                        'Conheça a trajetória e a obra dos artistas participantes.',
                   ),
                   const SizedBox(height: 40),
-
-                  Container(height: 1, color: Colors.black12),
+                  Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 32),
-
-                  // ── Desenvolvido por ──────────────────────────────────
-                  const Text(
-                    'DESENVOLVIDO POR',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                      color: Colors.black45,
-                    ),
-                  ),
+                  Text('DESENVOLVIDO POR', style: AppText.label()),
                   const SizedBox(height: 16),
-                  const Text(
-                    'OutVisionXR',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -0.5,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Container(height: 2, width: 36, color: Colors.black38),
+                  Text('OutVisionXR', style: AppText.display(fontSize: 22)),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     'A OutVisionXR é uma empresa especializada em experiências imersivas que conectam arte, cultura e tecnologia. Com foco em Realidade Aumentada e Realidade Virtual, desenvolvemos soluções digitais para museus, galerias, festivais e instituições culturais.',
-                    style: TextStyle(fontSize: 15, height: 1.75, color: Colors.black87),
+                    style: AppText.body(),
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
+                  const SizedBox(height: 14),
+                  Text(
                     'Nossa missão é ampliar a forma como as pessoas percebem e interagem com a arte — tornando o invisível visível e o espaço um suporte para novas narrativas.',
-                    style: TextStyle(fontSize: 15, height: 1.75, color: Colors.black87),
+                    style: AppText.body(),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -174,7 +134,7 @@ class AboutAppPage extends StatelessWidget {
                           mode: LaunchMode.externalApplication,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       _LinkChip(
                         label: '@outvisionxr',
                         icon: Icons.camera_alt_outlined,
@@ -186,9 +146,7 @@ class AboutAppPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 48),
-
-                  // ── Versão ────────────────────────────────────────────
-                  Container(height: 1, color: Colors.black12),
+                  Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 20),
                   Center(
                     child: FutureBuilder<PackageInfo>(
@@ -198,19 +156,13 @@ class AboutAppPage extends StatelessWidget {
                         final build = snapshot.data?.buildNumber ?? '';
                         return Column(
                           children: [
-                            Text(
-                              'Versão $version ($build)',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black38,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
+                            Text('Versão $version ($build)',
+                                style: AppText.caption()),
                             const SizedBox(height: 4),
-                            const Text(
+                            Text(
                               '© 2026 OutVisionXR. Todos os direitos reservados.',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 11, color: Colors.black38),
+                              style: AppText.caption(),
                             ),
                           ],
                         );
@@ -239,20 +191,13 @@ class _NavButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 44,
-        height: 44,
+        width: 36,
+        height: 36,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(6),
         ),
-        child: Icon(icon, size: 26, color: Colors.black),
+        child: Icon(icon, size: 22, color: Colors.black),
       ),
     );
   }
@@ -275,35 +220,30 @@ class _FeatureRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          width: 36,
+          height: 36,
           decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(10),
+            color: AppColors.bg2,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: AppColors.border),
           ),
-          child: Icon(icon, color: Colors.white, size: 20),
+          child: Icon(icon, color: AppColors.fg, size: 16),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.fg,
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
-                description,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.5,
-                  color: Colors.black54,
-                ),
-              ),
+              Text(description, style: AppText.caption()),
             ],
           ),
         ),
@@ -328,23 +268,23 @@ class _LinkChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.black12),
+          color: AppColors.bg,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: Colors.black54),
+            Icon(icon, size: 12, color: AppColors.fg3),
             const SizedBox(width: 6),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 13,
+              style: GoogleFonts.inter(
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                color: AppColors.fg2,
               ),
             ),
           ],

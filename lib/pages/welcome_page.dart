@@ -51,7 +51,13 @@ class _WelcomePageState extends State<WelcomePage> {
         children: [
           // Slideshow
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 700),
+            switchInCurve: Curves.easeIn,
+            switchOutCurve: Curves.easeOut,
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
             child: Image.network(
               _images[_current],
               key: ValueKey(_current),

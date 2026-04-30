@@ -21,6 +21,9 @@ class Artwork {
   final double? eyeLevelOffsetMeters;
   final bool? faceUser;
 
+  // Campo para obras de video art (MP4)
+  final String? videoUrl;
+
   Artwork({
     required this.id,
     required this.title,
@@ -37,6 +40,7 @@ class Artwork {
     this.iosUsdzUrl,
     this.eyeLevelOffsetMeters,
     this.faceUser,
+    this.videoUrl,
   });
 
   /// Nome do artista: prefere artist_name (novo schema), fallback para artist (legado)
@@ -120,6 +124,10 @@ class Artwork {
       final String? iosUsdzUrl =
           (data['ios_usdz_url'] ?? data['iosUsdzUrl']) as String?;
 
+      // --- URL de vídeo (video art) ---
+      final String? videoUrl =
+          (data['video_url'] ?? data['videoUrl']) as String?;
+
       // --- AR params: snake_case (novo) e camelCase (legado) ---
       final double? eyeLevel =
           ((data['eye_level_offset_meters'] ?? data['eyeLevelOffsetMeters']) as num?)
@@ -149,6 +157,7 @@ class Artwork {
         iosUsdzUrl: iosUsdzUrl?.isNotEmpty == true ? iosUsdzUrl : null,
         eyeLevelOffsetMeters: eyeLevel,
         faceUser: faceUser,
+        videoUrl: videoUrl?.isNotEmpty == true ? videoUrl : null,
       );
     } catch (e) {
       assert(() {

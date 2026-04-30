@@ -8,6 +8,7 @@ import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
 
 class ArtistsPage extends StatefulWidget {
@@ -79,21 +80,6 @@ class _ArtistsPageState extends State<ArtistsPage> {
                           style: AppText.display(fontSize: Rsp.fs(context, 40)),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () =>
-                            Navigator.pushNamed(context, AppRouter.settings),
-                        child: Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            color: AppColors.bg2,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.border),
-                          ),
-                          child: const Icon(Icons.tune_rounded,
-                              size: 15, color: AppColors.fg),
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -140,8 +126,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     !snapshot.hasData) {
                   if (_timedOut) return _buildError();
-                  return const Center(
-                      child: CircularProgressIndicator(strokeWidth: 1.5));
+                  return _buildShimmerList();
                 }
                 if (snapshot.hasError) return _buildError();
                 if (snapshot.hasData) _loadingTimer?.cancel();
@@ -172,8 +157,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
                       child: ListView.builder(
                         padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
                         itemCount: artists.length,
-                        itemBuilder: (context, index) =>
-                            _buildArtistItem(artists[index]),
+                        itemBuilder: (context, index) => FadeSlideIn(
+                          index: index,
+                          child: _buildArtistItem(artists[index]),
+                        ),
                       ),
                     ),
                   ],
@@ -184,6 +171,43 @@ class _ArtistsPageState extends State<ArtistsPage> {
         ],
       ),
       bottomNavigationBar: SafeArea(child: bottomNavBar(context, 2)),
+    );
+  }
+
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+      itemCount: 6,
+      itemBuilder: (_, __) => Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Row(
+          children: [
+            ShimmerBox(
+              width: 56,
+              height: 56,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerBox(
+                    height: 14,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  const SizedBox(height: 6),
+                  ShimmerBox(
+                    height: 11,
+                    width: 100,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -239,6 +263,8 @@ class _ArtistsPageState extends State<ArtistsPage> {
                     ? Image.network(
                         artist.artistPhoto,
                         fit: BoxFit.cover,
+                        loadingBuilder: (_, child, progress) =>
+                            progress == null ? child : const ShimmerBox(),
                         errorBuilder: (_, __, ___) =>
                             Container(color: AppColors.bg2),
                       )

@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId = "works.outvision.bienaldecuritiba"
 
-        minSdk = flutter.minSdkVersion
+        minSdk = 24 // ARCore requires API 24+
 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -76,6 +76,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     // Splash screen API (Android 12+)
     implementation("androidx.core:core-splashscreen:1.0.1")
+    // ARCore
+    implementation("com.google.ar:core:1.46.0")
+    // ExoPlayer (media3) — reliable HTTPS video streaming
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-datasource:1.4.1")
 }
 
 flutter {

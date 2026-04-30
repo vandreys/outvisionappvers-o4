@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import ARKit
+import AVFoundation
 import CoreLocation
 import SceneKit
 
@@ -21,6 +22,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     private let eyeLevelOffset: Double
     private let faceUser: Bool
     private let iosAsset: String
+    private let videoUrl: String?
 
     // State
     private var lastStatus: String?
@@ -29,6 +31,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     private var userLocation: CLLocation?
     // After first GPS fix, wait up to 10 s for good accuracy before forcing placement
     private var locationDeadline: Date?
+    private var avPlayer: AVPlayer?
 
     init(frame: CGRect, viewId: Int64, args: Any?, messenger: FlutterBinaryMessenger) {
         self.viewId = viewId
@@ -39,6 +42,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
         faceUser = params?["faceUser"] as? Bool ?? true
         iosAsset = params?["iosUsdzAsset"] as? String
             ?? params?["androidGlbAsset"] as? String ?? ""
+        videoUrl = params?["videoUrl"] as? String
 
         arView = ARSCNView(frame: frame)
         // 2x MSAA instead of default 4x — halves GPU memory bandwidth for multisampling
@@ -89,11 +93,11 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
             coaching.bottomAnchor.constraint(equalTo: arView.bottomAnchor),
         ])
 
-        // CoreLocation
+        // CoreLocation (skip if video-only mode)
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        if videoUrl == nil { locationManager.startUpdatingLocation() }
 
         // AR session — gravityAndHeading aligns +X=East, +Y=Up, -Z=North
         let config = ARWorldTrackingConfiguration()
@@ -127,9 +131,17 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
             return
         }
 
-        // Model already placed — just keep status current and bail out
         if modelPlaced {
             emitStatus("ready")
+            return
+        }
+
+        // Video AR mode: place plane without GPS
+        if videoUrl != nil {
+            if !modelLoading {
+                modelLoading = true
+                placeVideoPlane(frame: frame)
+            }
             return
         }
 
@@ -173,6 +185,67 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
     func locationManager(_ manager: CLLocationManager,
                          didFailWithError error: Error) {
         NSLog("\(TAG): Location error: \(error.localizedDescription)")
+    }
+
+    // MARK: - Place Video Plane
+
+    private func placeVideoPlane(frame: ARFrame) {
+        guard let urlStr = videoUrl, let url = URL(string: urlStr) else {
+            emitError("Invalid video URL")
+            return
+        }
+
+        let camTransform = frame.camera.transform
+
+        // Camera forward direction projected onto horizontal plane
+        let fwdWorld = simd_float3(
+            -camTransform.columns.2.x,
+             0,
+            -camTransform.columns.2.z
+        )
+        let fwdNorm = simd_length(fwdWorld) > 0.001 ? simd_normalize(fwdWorld) : simd_float3(0, 0, -1)
+
+        let camPos = simd_float3(
+            camTransform.columns.3.x,
+            camTransform.columns.3.y,
+            camTransform.columns.3.z
+        )
+        let dist: Float = 2.0
+        let planePos = camPos + fwdNorm * dist
+
+        // 16:9 plane — 1.6 m wide × 0.9 m tall
+        let plane = SCNPlane(width: 1.6, height: 0.9)
+
+        let player = AVPlayer(url: url)
+        avPlayer = player
+
+        NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem,
+            queue: .main
+        ) { _ in player.seek(to: .zero); player.play() }
+
+        let mat = SCNMaterial()
+        mat.diffuse.contents = player
+        mat.isDoubleSided = true
+        plane.materials = [mat]
+
+        let node = SCNNode(geometry: plane)
+        node.position = SCNVector3(planePos.x, planePos.y, planePos.z)
+
+        if faceUser {
+            let billboard = SCNBillboardConstraint()
+            billboard.freeAxes = .Y
+            node.constraints = [billboard]
+        }
+
+        DispatchQueue.main.async {
+            self.arView.scene.rootNode.addChildNode(node)
+            player.play()
+            self.modelPlaced = true
+            NSLog("\(self.TAG): Video plane placed at \(planePos)")
+            self.emitStatus("ready")
+        }
     }
 
     // MARK: - Place Artwork
@@ -325,6 +398,9 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
         NSLog("\(TAG): deinit")
         arView.session.pause()
         locationManager.stopUpdatingLocation()
+        avPlayer?.pause()
+        avPlayer = nil
+        NotificationCenter.default.removeObserver(self)
         eventSink = nil
     }
 }

@@ -6,7 +6,7 @@ class AppColors {
   static const Color bg2 = Color(0xFFF6F6F6);
   static const Color fg = Color(0xFF0D0D0D);
   static Color get fg2 => const Color(0xFF0D0D0D).withValues(alpha: 0.68);
-  static Color get fg3 => const Color(0xFF0D0D0D).withValues(alpha: 0.40);
+  static Color get fg3 => const Color(0xFF0D0D0D).withValues(alpha: 0.55);
   static Color get border => const Color(0xFF0D0D0D).withValues(alpha: 0.07);
   static const Color accent = Color(0xFFC1632F);
 }
@@ -35,7 +35,7 @@ class AppText {
         fontSize: 13,
         height: 1.75,
         color: color ?? AppColors.fg2,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w400,
       );
 
   static TextStyle display({double fontSize = 22, Color? color}) =>

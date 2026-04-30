@@ -14,6 +14,8 @@ import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -195,10 +197,10 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
         canvas.drawImageRect(image, src, dst, Paint());
         canvas.restore();
       } catch (_) {
-        canvas.drawCircle(center, radius - border, Paint()..color = const Color(0xFF7B52FF));
+        canvas.drawCircle(center, radius - border, Paint()..color = AppColors.fg);
       }
     } else {
-      canvas.drawCircle(center, radius - border, Paint()..color = const Color(0xFF7B52FF));
+      canvas.drawCircle(center, radius - border, Paint()..color = AppColors.fg);
     }
 
     final picture = recorder.endRecording();
@@ -495,24 +497,38 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Icon(Icons.location_off_outlined, size: 36, color: AppColors.fg3),
+                        const SizedBox(height: 16),
                         Text(
                           _locationError!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-    
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppText.body(),
                         ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _isLoading = true;
-                              _locationError = null;
-                            });
-                            _initLocationService();
-                          },
-                          child: Text(t.ar.tryAgain),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 46,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _isLoading = true;
+                                _locationError = null;
+                              });
+                              _initLocationService();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.fg,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6)),
+                            ),
+                            child: Text(
+                              t.ar.tryAgain,
+                              style: GoogleFonts.inter(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -630,10 +646,18 @@ class _ArtworkTapCard extends StatelessWidget {
     final imageUrl = data['imageUrl'] as String? ?? '';
     final locationName = data['locationName'] as String? ?? '';
 
-    return Material(
-      color: Colors.white,
-      elevation: 16,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.bg,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 24,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -643,35 +667,31 @@ class _ArtworkTapCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12),
             child: Center(
               child: Container(
-                width: 36,
-                height: 4,
+                width: 32,
+                height: 3,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
           ),
+          const SizedBox(height: 12),
 
-          // Imagem hero com botão X sobreposto
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Stack(
+          // Imagem hero
+          Stack(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: SizedBox(
-                height: 190,
+              SizedBox(
+                height: 180,
                 width: double.infinity,
                 child: imageUrl.isNotEmpty
                     ? Image.network(
                         imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) =>
-                            Container(color: Colors.grey[200]),
+                            Container(color: AppColors.bg2),
                       )
-                    : Container(color: Colors.grey[200]),
-              ),
+                    : Container(color: AppColors.bg2),
               ),
               Positioned(
                 top: 12,
@@ -679,18 +699,17 @@ class _ArtworkTapCard extends StatelessWidget {
                 child: GestureDetector(
                   onTap: onClose,
                   child: Container(
-                    width: 34,
-                    height: 34,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.45),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.close, size: 18, color: Colors.white),
+                    child: const Icon(Icons.close, size: 15, color: Colors.white),
                   ),
                 ),
               ),
             ],
-          ),
           ),
 
           // Info + botão
@@ -702,62 +721,56 @@ class _ArtworkTapCard extends StatelessWidget {
               children: [
                 if (locationName.isNotEmpty)
                   Text(
-                    locationName,
-                    style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                    locationName.toUpperCase(),
+                    style: AppText.label(color: AppColors.accent),
                   ),
                 const SizedBox(height: 4),
                 Text(
                   name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+                  style: AppText.display(fontSize: 18),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (artist.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.person_outline, size: 14, color: Colors.grey[600]),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          artist,
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 3),
+                  Text(
+                    artist,
+                    style: AppText.caption(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: isNearby ? onOpenAr : _navigate,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: AppColors.fg,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    icon: Icon(
-                      isNearby ? Icons.view_in_ar : Icons.turn_right,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    label: Text(
-                      isNearby ? context.t.map.openArButton : context.t.map.navigate,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          isNearby ? Icons.view_in_ar : Icons.turn_right,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          isNearby ? context.t.map.openArButton : context.t.map.navigate,
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -785,60 +798,58 @@ class _NoNearbyArtworkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 16,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.bg,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 24,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Handle bar
             Center(
               child: Container(
-                width: 36,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
+                width: 32,
+                height: 3,
+                margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
             Text(
               context.t.map.noNearbyArtwork,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
+              style: AppText.display(fontSize: 14),
             ),
-            const SizedBox(height: 8),
-            Text(
-              context.t.map.noNearbyArtworkDesc,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.5),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 44,
               child: ElevatedButton(
                 onPressed: nearest != null ? _navigateToNearest : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: AppColors.fg,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
                 child: Text(
                   context.t.map.takeToNearest,
-                  style: const TextStyle(
+                  style: GoogleFonts.inter(
                     color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

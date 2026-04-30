@@ -16,7 +16,7 @@ class LimiaresPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 320,
+            expandedHeight: 220,
             pinned: false,
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -29,11 +29,8 @@ class LimiaresPage extends StatelessWidget {
                 _photoUrl,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, progress) =>
-                    progress == null
-                        ? child
-                        : const SizedBox.shrink(),
-                errorBuilder: (_, __, ___) =>
-                    Container(color: AppColors.bg2),
+                    progress == null ? child : const SizedBox.shrink(),
+                errorBuilder: (_, __, ___) => Container(color: AppColors.bg2),
               ),
             ),
             bottom: PreferredSize(
@@ -118,20 +115,13 @@ class _BackButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 44,
-        height: 44,
+        width: 36,
+        height: 36,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(6),
         ),
-        child: const Icon(Icons.chevron_left, size: 26, color: Colors.black),
+        child: const Icon(Icons.chevron_left, size: 22, color: Colors.black),
       ),
     );
   }

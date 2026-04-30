@@ -8,7 +8,9 @@ import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ArtworkPage extends StatefulWidget {
   const ArtworkPage({super.key});
@@ -48,6 +50,19 @@ class _ArtworkPageState extends State<ArtworkPage> {
     super.initState();
     _searchController
         .addListener(() => setState(() => _query = _searchController.text));
+    _loadViewPref();
+  }
+
+  Future<void> _loadViewPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) setState(() => _isGridView = prefs.getBool('artwork_grid_view') ?? true);
+  }
+
+  Future<void> _toggleView() async {
+    final next = !_isGridView;
+    setState(() => _isGridView = next);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('artwork_grid_view', next);
   }
 
   @override
@@ -81,8 +96,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () =>
-                            setState(() => _isGridView = !_isGridView),
+                        onTap: _toggleView,
                         child: Container(
                           width: 34,
                           height: 34,
@@ -146,8 +160,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     !snapshot.hasData) {
                   if (_timedOut) return _buildError();
-                  return const Center(
-                      child: CircularProgressIndicator(strokeWidth: 1.5));
+                  return _isGridView ? _buildShimmerGrid() : _buildShimmerList();
                 }
                 if (snapshot.hasError) return _buildError();
                 if (snapshot.hasData) _loadingTimer?.cancel();
@@ -192,6 +205,55 @@ class _ArtworkPageState extends State<ArtworkPage> {
     );
   }
 
+  Widget _buildShimmerGrid() {
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 20,
+        childAspectRatio: 0.72,
+      ),
+      itemCount: 6,
+      itemBuilder: (_, __) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: ShimmerBox(borderRadius: BorderRadius.zero)),
+          const SizedBox(height: 8),
+          ShimmerBox(height: 14, borderRadius: BorderRadius.circular(3)),
+          const SizedBox(height: 4),
+          ShimmerBox(height: 11, width: 80, borderRadius: BorderRadius.circular(3)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+      itemCount: 6,
+      itemBuilder: (_, __) => Padding(
+        padding: const EdgeInsets.only(bottom: 18),
+        child: Row(
+          children: [
+            ShimmerBox(width: 68, height: 68, borderRadius: BorderRadius.circular(4)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerBox(height: 15, borderRadius: BorderRadius.circular(3)),
+                  const SizedBox(height: 6),
+                  ShimmerBox(height: 11, width: 120, borderRadius: BorderRadius.circular(3)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildGrid(List<Artwork> artworks) {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
@@ -202,7 +264,10 @@ class _ArtworkPageState extends State<ArtworkPage> {
         childAspectRatio: 0.72,
       ),
       itemCount: artworks.length,
-      itemBuilder: (context, index) => _buildGridItem(artworks[index]),
+      itemBuilder: (context, index) => FadeSlideIn(
+        index: index,
+        child: _buildGridItem(artworks[index]),
+      ),
     );
   }
 
@@ -225,6 +290,8 @@ class _ArtworkPageState extends State<ArtworkPage> {
                     ? Image.network(
                         artwork.imageUrl!,
                         fit: BoxFit.cover,
+                        loadingBuilder: (_, child, progress) =>
+                            progress == null ? child : const ShimmerBox(),
                         errorBuilder: (_, __, ___) =>
                             Container(color: AppColors.bg2),
                       )
@@ -259,7 +326,10 @@ class _ArtworkPageState extends State<ArtworkPage> {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
       itemCount: artworks.length,
-      itemBuilder: (context, index) => _buildListItem(artworks[index]),
+      itemBuilder: (context, index) => FadeSlideIn(
+        index: index,
+        child: _buildListItem(artworks[index]),
+      ),
     );
   }
 
@@ -289,6 +359,8 @@ class _ArtworkPageState extends State<ArtworkPage> {
                     ? Image.network(
                         artwork.imageUrl!,
                         fit: BoxFit.cover,
+                        loadingBuilder: (_, child, progress) =>
+                            progress == null ? child : const ShimmerBox(),
                         errorBuilder: (_, __, ___) =>
                             Container(color: AppColors.bg2),
                       )

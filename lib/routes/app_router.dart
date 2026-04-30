@@ -11,9 +11,31 @@ import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
 import 'package:outvisionxr/pages/settings/settings_about.dart';
 import 'package:outvisionxr/pages/settings/settings_about_app.dart';
+import 'package:outvisionxr/pages/settings/settings_howtouse.dart';
 import 'package:outvisionxr/pages/settings/settings_limiares.dart';
 import 'package:outvisionxr/pages/splash_screen.dart';
 import 'package:outvisionxr/pages/welcome_page.dart';
+
+PageRouteBuilder<T> _fadeSlideRoute<T>({required Widget page}) {
+  return PageRouteBuilder<T>(
+    transitionDuration: const Duration(milliseconds: 340),
+    reverseTransitionDuration: const Duration(milliseconds: 280),
+    pageBuilder: (_, __, ___) => page,
+    transitionsBuilder: (_, animation, __, child) {
+      return FadeTransition(
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.035),
+            end: Offset.zero,
+          ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+          child: child,
+        ),
+      );
+    },
+  );
+}
 
 class AppRouter {
   static const String splash         = '/splash';
@@ -26,6 +48,7 @@ class AppRouter {
   static const String settingsAbout     = '/settings/about';
   static const String settingsApp       = '/settings/about-app';
   static const String settingsLimiares  = '/settings/limiares';
+  static const String settingsHowToUse  = '/settings/how-to-use';
   static const String artworkDetails = '/artwork/details';
   static const String artistDetails  = '/artist/details';
   static const String ar             = '/ar';
@@ -71,17 +94,16 @@ class AppRouter {
       case settingsLimiares:
         return MaterialPageRoute(builder: (_) => const LimiaresPage());
 
+      case settingsHowToUse:
+        return MaterialPageRoute(builder: (_) => const HowToUsePage());
+
       case artworkDetails:
         final id = route.arguments as String;
-        return MaterialPageRoute(
-          builder: (_) => ArtworkDetailsPage(artworkId: id),
-        );
+        return _fadeSlideRoute(page: ArtworkDetailsPage(artworkId: id));
 
       case artistDetails:
         final artist = route.arguments as Artist;
-        return MaterialPageRoute(
-          builder: (_) => DetailsArtistPage(artist: artist),
-        );
+        return _fadeSlideRoute(page: DetailsArtistPage(artist: artist));
 
       case ar:
         final artworkModel = route.arguments as Artwork;

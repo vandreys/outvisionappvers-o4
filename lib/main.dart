@@ -25,7 +25,8 @@ void main() async {
   };
 
   if (kReleaseMode) {
-    ErrorWidget.builder = (details) => _ErrorScreen(details.exception.toString());
+    ErrorWidget.builder =
+        (details) => _ErrorScreen(details.exception.toString());
   }
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -73,29 +74,23 @@ class BienalDeCuritibaApp extends StatelessWidget {
       locale: TranslationProvider.of(context).flutterLocale,
       debugShowCheckedModeBanner: false,
       title: 'Bienal de Curitiba App',
-
       theme: ThemeData(
         useMaterial3: true,
-
         textTheme: GoogleFonts.interTextTheme(),
-
         iconTheme: const IconThemeData(
           color: Colors.black,
           size: 24,
         ),
-
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,
           brightness: Brightness.light,
         ),
-
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
           foregroundColor: Colors.black,
         ),
-
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             textStyle: const TextStyle(
@@ -104,7 +99,6 @@ class BienalDeCuritibaApp extends StatelessWidget {
           ),
         ),
       ),
-
       initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
@@ -127,7 +121,8 @@ class _ErrorScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.black54),
+                const Icon(Icons.error_outline,
+                    size: 48, color: Colors.black54),
                 const SizedBox(height: 16),
                 Text(
                   t.errorScreen.message,
