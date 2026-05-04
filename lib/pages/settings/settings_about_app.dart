@@ -11,10 +11,41 @@ class AboutAppPage extends StatelessWidget {
   static const _heroUrl =
       'https://firebasestorage.googleapis.com/v0/b/outvision-app-24329.firebasestorage.app/o/Fotos%20Bienal%2Fintro%203.jpg?alt=media&token=12dd3951-c1fc-424d-84f8-e80b5cd64f73';
 
+  Widget _buildFooter(BuildContext context) {
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        final version = snapshot.data?.version ?? '—';
+        final build = snapshot.data?.buildNumber ?? '';
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          decoration: BoxDecoration(
+            color: AppColors.bg,
+            border: Border(top: BorderSide(color: AppColors.border)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Versão $version ($build)', style: AppText.caption()),
+              const SizedBox(height: 4),
+              Text(
+                '© 2026 OutVisionXR. Todos os direitos reservados.',
+                textAlign: TextAlign.center,
+                style: AppText.caption(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isTablet = Rsp.isTablet(context);
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: isTablet ? _buildFooter(context) : null,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -145,31 +176,13 @@ class AboutAppPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 48),
-                  Divider(height: 1, color: AppColors.border),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
-                        final version = snapshot.data?.version ?? '—';
-                        final build = snapshot.data?.buildNumber ?? '';
-                        return Column(
-                          children: [
-                            Text('Versão $version ($build)',
-                                style: AppText.caption()),
-                            const SizedBox(height: 4),
-                            Text(
-                              '© 2026 OutVisionXR. Todos os direitos reservados.',
-                              textAlign: TextAlign.center,
-                              style: AppText.caption(),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                  if (!isTablet) ...[
+                    const SizedBox(height: 48),
+                    Divider(height: 1, color: AppColors.border),
+                    const SizedBox(height: 20),
+                    Center(child: _buildFooter(context)),
+                    const SizedBox(height: 24),
+                  ],
                 ],
               ),
             ),

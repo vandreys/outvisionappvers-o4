@@ -16,6 +16,8 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
   };

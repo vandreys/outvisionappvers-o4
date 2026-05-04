@@ -245,10 +245,10 @@ class _MockupMap extends StatelessWidget {
       double py(double y) => y / 440 * h;
       return Stack(children: [
         CustomPaint(painter: const _MapPainter(), size: Size(w, h)),
-        _PhoneStatusBar(textColor: AppColors.fg),
+        const _PhoneStatusBar(textColor: AppColors.fg),
         Positioned(
           top: py(46), left: px(14), right: px(14),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child: const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _MapBtn(icon: Icons.menu),
             _MapBtn(icon: Icons.near_me_outlined),
           ]),
@@ -306,10 +306,10 @@ class _MockupProximity extends StatelessWidget {
       final ringH = 90 / 440 * h;
       return Stack(children: [
         CustomPaint(painter: const _MapPainter(), size: Size(w, h)),
-        _PhoneStatusBar(textColor: AppColors.fg),
+        const _PhoneStatusBar(textColor: AppColors.fg),
         Positioned(
           top: py(46), left: px(14), right: px(14),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child: const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _MapBtn(icon: Icons.menu),
             _MapBtn(icon: Icons.near_me_outlined),
           ]),
@@ -363,10 +363,10 @@ class _MockupCard extends StatelessWidget {
       final ringH = 90 / 440 * h;
       return Stack(children: [
         CustomPaint(painter: const _MapPainter(), size: Size(w, h)),
-        _PhoneStatusBar(textColor: AppColors.fg),
+        const _PhoneStatusBar(textColor: AppColors.fg),
         Positioned(
           top: py(46), left: px(14), right: px(14),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child: const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _MapBtn(icon: Icons.menu),
             _MapBtn(icon: Icons.near_me_outlined),
           ]),
@@ -459,15 +459,15 @@ class _MockupAR extends StatelessWidget {
             ),
           ),
         ),
-        Align(
-          alignment: const Alignment(0, -0.25),
-          child: CustomPaint(size: const Size(60, 78), painter: const _SculpturePainter()),
+        const Align(
+          alignment: Alignment(0, -0.25),
+          child: CustomPaint(size: Size(60, 78), painter: _SculpturePainter()),
         ),
-        Align(
-          alignment: const Alignment(0, -0.25),
+        const Align(
+          alignment: Alignment(0, -0.25),
           child: SizedBox(
             width: 80, height: 80,
-            child: CustomPaint(painter: const _ReticlePainter()),
+            child: CustomPaint(painter: _ReticlePainter()),
           ),
         ),
         Positioned(

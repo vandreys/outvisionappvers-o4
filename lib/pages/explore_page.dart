@@ -539,13 +539,13 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                     if (!_isArActive)
                       GoogleMap(
                       mapType: MapType.normal,
+                      style: _grayMapStyle,
                       initialCameraPosition: CameraPosition(
                         target: _currentPosition!,
                         zoom: 17,
                       ),
                       onMapCreated: (controller) {
                         _controller.complete(controller);
-                        controller.setMapStyle(_grayMapStyle);
                       },
                       markers: _markers,
 
@@ -607,9 +607,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       ),
                   ],
                 ),
-      bottomNavigationBar: SafeArea(
-        child: bottomNavBar(context, 0),
-      ),
+      bottomNavigationBar: Rsp.isTablet(context)
+          ? bottomNavBar(context, 0)
+          : SafeArea(child: bottomNavBar(context, 0)),
     );
   }
 

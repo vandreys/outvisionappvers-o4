@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -20,7 +19,6 @@ class DetailsArtistPage extends StatefulWidget {
 }
 
 class _DetailsArtistPageState extends State<DetailsArtistPage> {
-  bool _bioExpanded = false;
   int _artworkIdx = 0;
   Stream<List<Artwork>>? _artworkStream;
 
@@ -35,10 +33,6 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
   Widget build(BuildContext context) {
     final artist = widget.artist;
     final bio = artist.getBio(LocaleSettings.currentLocale.languageTag);
-    final paras =
-        bio.split('\n\n').where((p) => p.trim().isNotEmpty).toList();
-    final bioPreview = paras.isNotEmpty ? paras.first : bio;
-    final hasBioMore = paras.length > 1;
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -69,12 +63,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                     const SizedBox(height: 20),
                     // Bio
                     if (bio.isNotEmpty) ...[
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        alignment: Alignment.topCenter,
-                        child: _buildBio(bio, bioPreview, hasBioMore, paras),
-                      ),
+                      _buildBio(bio),
                       const SizedBox(height: 32),
                       Divider(height: 1, color: AppColors.border),
                       const SizedBox(height: 28),
@@ -184,55 +173,14 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
     );
   }
 
-  Widget _buildBio(
-      String bio, String preview, bool hasBioMore, List<String> paras) {
+  Widget _buildBio(String bio) {
     final tablet = Rsp.isTablet(context);
-    final bodyStyle = AppText.body().copyWith(
-      fontSize: tablet ? 13 : 11.5,
-      height: tablet ? 1.75 : 1.6,
-    );
-    if (!hasBioMore) {
-      return Text(bio, style: bodyStyle);
-    }
-    if (!_bioExpanded) {
-      return Text.rich(
-        TextSpan(
-          style: bodyStyle,
-          children: [
-            TextSpan(text: '$preview '),
-            TextSpan(
-              text: 'ler mais',
-              style: GoogleFonts.inter(
-                fontSize: tablet ? 13 : 11,
-                fontWeight: FontWeight.w500,
-                color: AppColors.accent,
-              ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => setState(() => _bioExpanded = true),
-            ),
-          ],
-        ),
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ...paras.map((p) => Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Text(p, style: bodyStyle),
-            )),
-        GestureDetector(
-          onTap: () => setState(() => _bioExpanded = false),
-          child: Text(
-            'menos ↑',
-            style: GoogleFonts.inter(
-              fontSize: tablet ? 12 : 11,
-              fontWeight: FontWeight.w500,
-              color: AppColors.accent,
-            ),
-          ),
-        ),
-      ],
+    return Text(
+      bio,
+      style: AppText.body().copyWith(
+        fontSize: tablet ? 13 : 11.5,
+        height: tablet ? 1.75 : 1.6,
+      ),
     );
   }
 

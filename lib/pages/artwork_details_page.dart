@@ -23,13 +23,10 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
     with SingleTickerProviderStateMixin {
   late Future<Artwork?> _artworkFuture;
   Stream<List<Artist>>? _artistStream;
-  bool _descExpanded = false;
   late final AnimationController _enterCtrl;
   late final Animation<double> _fadeAnim;
   late final Animation<Offset> _slideAnim;
   bool _animStarted = false;
-
-  static const int _descPreviewLength = 240;
 
   @override
   void initState() {
@@ -88,10 +85,6 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
           final artwork = snapshot.data!;
           _triggerEnter();
           final description = artwork.description ?? '';
-          final descIsTruncated = description.length > _descPreviewLength;
-          final descText = (!_descExpanded && descIsTruncated)
-              ? description.substring(0, _descPreviewLength)
-              : description;
 
           return FadeTransition(
             opacity: _fadeAnim,
@@ -124,64 +117,28 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
                     const SizedBox(height: 22),
                     // Description
                     if (description.isNotEmpty) ...[
-                      Text.rich(
-                        TextSpan(
-                          style: AppText.body(),
-                          children: [
-                            TextSpan(text: descText),
-                            if (!_descExpanded && descIsTruncated)
-                              WidgetSpan(
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      setState(() => _descExpanded = true),
-                                  child: Text(
-                                    ' ${t.gallery.bioMore}',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.accent,
-                                      height: 1.75,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      if (_descExpanded) ...[
-                        const SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () =>
-                              setState(() => _descExpanded = false),
-                          child: Text(
-                            'menos ↑',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.accent,
-                            ),
-                          ),
-                        ),
-                      ],
+                      Text(description, style: AppText.body()),
                       const SizedBox(height: 28),
                       Divider(height: 1, color: AppColors.border),
                       const SizedBox(height: 28),
                     ],
                     // Artist section
-                    StreamBuilder<List<Artist>>(
-                      stream: _artistStream,
-                      builder: (context, artistSnap) {
-                        if (!artistSnap.hasData) return const SizedBox.shrink();
-                        final artist = artistSnap.data!
-                            .where((a) => a.name == artwork.displayArtist)
-                            .firstOrNull;
-                        if (artist == null) return const SizedBox.shrink();
-                        return _buildArtistRow(artist, context);
-                      },
-                    ),
-                    const SizedBox(height: 28),
-                    Divider(height: 1, color: AppColors.border),
-                    const SizedBox(height: 24),
+                    if (artwork.displayArtist.isNotEmpty) ...[
+                      Text(t.gallery.artist, style: AppText.label()),
+                      const SizedBox(height: 12),
+                      StreamBuilder<List<Artist>>(
+                        stream: _artistStream,
+                        builder: (context, artistSnap) {
+                          final artist = artistSnap.data
+                              ?.where((a) => a.name == artwork.displayArtist)
+                              .firstOrNull;
+                          return _buildArtistRow(artwork.displayArtist, artist, context);
+                        },
+                      ),
+                      const SizedBox(height: 28),
+                      Divider(height: 1, color: AppColors.border),
+                      const SizedBox(height: 24),
+                    ],
                     // Buttons
                     _buildButtons(artwork, context),
                     const SizedBox(height: 48),
@@ -276,13 +233,12 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
     );
   }
 
-  Widget _buildArtistRow(Artist artist, BuildContext context) {
+  Widget _buildArtistRow(String artistName, Artist? artist, BuildContext context) {
+    final tappable = artist != null;
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRouter.artistDetails,
-        arguments: artist,
-      ),
+      onTap: tappable
+          ? () => Navigator.pushNamed(context, AppRouter.artistDetails, arguments: artist)
+          : null,
       behavior: HitTestBehavior.opaque,
       child: Row(
         children: [
@@ -291,7 +247,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
             child: SizedBox(
               width: 52,
               height: 52,
-              child: artist.artistPhoto.isNotEmpty
+              child: (artist != null && artist.artistPhoto.isNotEmpty)
                   ? Image.network(
                       artist.artistPhoto,
                       fit: BoxFit.cover,
@@ -302,8 +258,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
                     )
                   : Container(
                       color: AppColors.bg2,
-                      child: Icon(Icons.person_outline,
-                          size: 22, color: AppColors.fg3),
+                      child: Icon(Icons.person_outline, size: 22, color: AppColors.fg3),
                     ),
             ),
           ),
@@ -313,7 +268,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  artist.name,
+                  artistName,
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -325,7 +280,8 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
               ],
             ),
           ),
-          Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
+          if (tappable)
+            Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
         ],
       ),
     );

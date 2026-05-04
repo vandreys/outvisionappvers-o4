@@ -201,7 +201,9 @@ class _ArtworkPageState extends State<ArtworkPage> {
           ),
         ],
       ),
-      bottomNavigationBar: SafeArea(child: bottomNavBar(context, 1)),
+      bottomNavigationBar: Rsp.isTablet(context)
+          ? bottomNavBar(context, 1)
+          : SafeArea(child: bottomNavBar(context, 1)),
     );
   }
 
@@ -218,7 +220,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
       itemBuilder: (_, __) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: ShimmerBox(borderRadius: BorderRadius.zero)),
+          const Expanded(child: ShimmerBox(borderRadius: BorderRadius.zero)),
           const SizedBox(height: 8),
           ShimmerBox(height: 14, borderRadius: BorderRadius.circular(3)),
           const SizedBox(height: 4),
