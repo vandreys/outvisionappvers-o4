@@ -5,6 +5,7 @@ import 'package:outvisionxr/widgets/splash_loading.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -16,7 +17,6 @@ import 'package:outvisionxr/routes/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 
 class ExplorePage extends StatefulWidget {
@@ -433,19 +433,59 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
       };
     });
     _updateMarkers();
+    _moveCameraToPosition(LatLng(point.lat, point.lng));
   }
 
-  ArtworkPoint? _getNearestArtworkPoint() {
-    if (_artworkPoints.isEmpty || _currentPosition == null) return null;
-    ArtworkPoint nearest = _artworkPoints.first;
-    double minDist = double.infinity;
-    for (final p in _artworkPoints) {
-      final d = Geolocator.distanceBetween(
-        _currentPosition!.latitude, _currentPosition!.longitude, p.lat, p.lng,
+  Widget _buildBottomCard() {
+    if (_selectedArtworkData != null) {
+      return _ArtworkTapCard(
+        key: ValueKey('card_${_selectedArtworkData!['id']}'),
+        data: _selectedArtworkData!,
+        isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
+        onClose: () {
+          setState(() {
+            _gateOpen = false;
+            _activeArtwork = null;
+            _enteredRadiusAt = null;
+            _selectedArtworkId = null;
+            _selectedArtworkData = null;
+          });
+          _updateMarkers();
+        },
+        onOpenAr: _openArViewNow,
       );
-      if (d < minDist) { minDist = d; nearest = p; }
     }
-    return nearest;
+    if (!_isArActive && _artworkPoints.isNotEmpty) {
+      return _NoNearbyArtworkCard(
+        key: const ValueKey('no_nearby'),
+        onShowOnMap: _fitAllArtworks,
+      );
+    }
+    return const SizedBox.shrink(key: ValueKey('empty'));
+  }
+
+  Future<void> _fitAllArtworks() async {
+    if (_artworkPoints.isEmpty) return;
+    final controller = await _controller.future;
+    double minLat = _artworkPoints.first.lat;
+    double maxLat = _artworkPoints.first.lat;
+    double minLng = _artworkPoints.first.lng;
+    double maxLng = _artworkPoints.first.lng;
+    for (final p in _artworkPoints) {
+      if (p.lat < minLat) minLat = p.lat;
+      if (p.lat > maxLat) maxLat = p.lat;
+      if (p.lng < minLng) minLng = p.lng;
+      if (p.lng > maxLng) maxLng = p.lng;
+    }
+    controller.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          southwest: LatLng(minLat, minLng),
+          northeast: LatLng(maxLat, maxLng),
+        ),
+        80,
+      ),
+    );
   }
 
   Future<void> _openArViewNow() async {
@@ -576,35 +616,24 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                       }),
                     ),
 
-                    if (_selectedArtworkData == null && _artworkPoints.isNotEmpty && !_isArActive)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: _NoNearbyArtworkCard(nearest: _getNearestArtworkPoint()),
-                      ),
-
-                    if (_selectedArtworkData != null)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: _ArtworkTapCard(
-                          data: _selectedArtworkData!,
-                          isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
-                          onClose: () {
-                            setState(() {
-                              _gateOpen = false;
-                              _activeArtwork = null;
-                              _enteredRadiusAt = null;
-                              _selectedArtworkId = null;
-                              _selectedArtworkData = null;
-                            });
-                            _updateMarkers();
-                          },
-                          onOpenAr: _openArViewNow,
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 380),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeIn,
+                        transitionBuilder: (child, animation) => SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 1),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: FadeTransition(opacity: animation, child: child),
                         ),
+                        child: _buildBottomCard(),
                       ),
+                    ),
                   ],
                 ),
       bottomNavigationBar: Rsp.isTablet(context)
@@ -619,42 +648,87 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   ]);
 }
 
-class _ArtworkTapCard extends StatelessWidget {
+class _ArtworkTapCard extends StatefulWidget {
   final Map<String, dynamic> data;
   final VoidCallback onClose;
   final bool isNearby;
   final VoidCallback onOpenAr;
 
   const _ArtworkTapCard({
+    super.key,
     required this.data,
     required this.onClose,
     required this.isNearby,
     required this.onOpenAr,
   });
 
+  @override
+  State<_ArtworkTapCard> createState() => _ArtworkTapCardState();
+}
+
+class _ArtworkTapCardState extends State<_ArtworkTapCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulseCtrl;
+  late final Animation<double> _scaleAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 950),
+    );
+    _scaleAnim = Tween<double>(begin: 1.0, end: 1.025)
+        .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
+    if (widget.isNearby) _pulseCtrl.repeat(reverse: true);
+  }
+
+  @override
+  void didUpdateWidget(_ArtworkTapCard old) {
+    super.didUpdateWidget(old);
+    if (widget.isNearby && !old.isNearby) {
+      _pulseCtrl.repeat(reverse: true);
+    } else if (!widget.isNearby && old.isNearby) {
+      _pulseCtrl.stop();
+      _pulseCtrl.reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
   Future<void> _navigate() async {
-    final lat = data['lat'];
-    final lng = data['lng'];
-    final uri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=walking');
-    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+    final lat = widget.data['lat'] as double?;
+    final lng = widget.data['lng'] as double?;
+    if (lat == null || lng == null) return;
+
+    final uri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=walking',
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = data['name'] as String? ?? '';
-    final artist = data['artist'] as String? ?? '';
-    final imageUrl = data['imageUrl'] as String? ?? '';
-    final locationName = data['locationName'] as String? ?? '';
+    final name = widget.data['name'] as String? ?? '';
+    final artist = widget.data['artist'] as String? ?? '';
+    final imageUrl = widget.data['imageUrl'] as String? ?? '';
+    final locationName = widget.data['locationName'] as String? ?? '';
 
     return Container(
       decoration: BoxDecoration(
         color: AppColors.bg,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 24,
-            offset: const Offset(0, -4),
+            color: Colors.black.withValues(alpha: 0.10),
+            blurRadius: 32,
+            offset: const Offset(0, -6),
           ),
         ],
       ),
@@ -662,13 +736,12 @@ class _ArtworkTapCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Handle bar
+          // Handle
           Padding(
             padding: const EdgeInsets.only(top: 12),
             child: Center(
               child: Container(
-                width: 32,
-                height: 3,
+                width: 32, height: 3,
                 decoration: BoxDecoration(
                   color: AppColors.border,
                   borderRadius: BorderRadius.circular(2),
@@ -678,34 +751,59 @@ class _ArtworkTapCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Imagem hero
+          // Hero image + arrived banner
           Stack(
             children: [
               SizedBox(
-                height: 180,
+                height: 160,
                 width: double.infinity,
                 child: imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
-                            Container(color: AppColors.bg2),
-                      )
+                    ? Image.network(imageUrl, fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(color: AppColors.bg2))
                     : Container(color: AppColors.bg2),
               ),
-              Positioned(
-                top: 12,
-                right: 12,
-                child: GestureDetector(
-                  onTap: onClose,
+              // Arrived strip — desliza de cima quando chegou
+              AnimatedSlide(
+                offset: widget.isNearby ? Offset.zero : const Offset(0, -1),
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOutCubic,
+                child: AnimatedOpacity(
+                  opacity: widget.isNearby ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                    color: AppColors.accent,
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle_outline, color: Colors.white, size: 13),
+                        const SizedBox(width: 6),
+                        Text(
+                          context.t.map.arrivedTitle,
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Close button
+              Positioned(
+                top: 10, right: 10,
+                child: GestureDetector(
+                  onTap: widget.onClose,
+                  child: Container(
+                    width: 28, height: 28,
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.45),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.close, size: 15, color: Colors.white),
+                    child: const Icon(Icons.close, size: 14, color: Colors.white),
                   ),
                 ),
               ),
@@ -714,63 +812,65 @@ class _ArtworkTapCard extends StatelessWidget {
 
           // Info + botão
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (locationName.isNotEmpty)
-                  Text(
-                    locationName.toUpperCase(),
-                    style: AppText.label(color: AppColors.accent),
-                  ),
+                  Text(locationName.toUpperCase(), style: AppText.label(color: AppColors.accent)),
                 const SizedBox(height: 4),
-                Text(
-                  name,
-                  style: AppText.display(fontSize: 18),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(name, style: AppText.display(fontSize: 18),
+                    maxLines: 2, overflow: TextOverflow.ellipsis),
                 if (artist.isNotEmpty) ...[
                   const SizedBox(height: 3),
-                  Text(
-                    artist,
-                    style: AppText.caption(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(artist, style: AppText.caption(),
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
                 ],
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: isNearby ? onOpenAr : _navigate,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.fg,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
+                // Botão com pulse + transição de cor ao chegar
+                ScaleTransition(
+                  scale: widget.isNearby ? _scaleAnim : const AlwaysStoppedAnimation(1.0),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 450),
+                    curve: Curves.easeInOut,
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: widget.isNearby ? AppColors.accent : AppColors.fg,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          isNearby ? Icons.view_in_ar : Icons.turn_right,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          isNearby ? context.t.map.openArButton : context.t.map.navigate,
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                      child: InkWell(
+                        onTap: widget.isNearby ? widget.onOpenAr : _navigate,
+                        borderRadius: BorderRadius.circular(8),
+                        splashColor: Colors.white.withValues(alpha: 0.12),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                widget.isNearby ? Icons.view_in_ar : Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                widget.isNearby
+                                    ? context.t.map.openArButton
+                                    : context.t.map.navigate,
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -784,17 +884,9 @@ class _ArtworkTapCard extends StatelessWidget {
 }
 
 class _NoNearbyArtworkCard extends StatelessWidget {
-  final ArtworkPoint? nearest;
+  final VoidCallback onShowOnMap;
 
-  const _NoNearbyArtworkCard({this.nearest});
-
-  Future<void> _navigateToNearest() async {
-    if (nearest == null) return;
-    final uri = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1&destination=${nearest!.lat},${nearest!.lng}&travelmode=walking',
-    );
-    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
+  const _NoNearbyArtworkCard({super.key, required this.onShowOnMap});
 
   @override
   Widget build(BuildContext context) {
@@ -836,7 +928,7 @@ class _NoNearbyArtworkCard extends StatelessWidget {
               width: double.infinity,
               height: 44,
               child: ElevatedButton(
-                onPressed: nearest != null ? _navigateToNearest : null,
+                onPressed: onShowOnMap,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.fg,
                   elevation: 0,

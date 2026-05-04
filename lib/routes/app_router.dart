@@ -9,7 +9,6 @@ import 'package:outvisionxr/pages/details_artist_page.dart';
 import 'package:outvisionxr/pages/explore_page.dart';
 import 'package:outvisionxr/pages/settings_page.dart';
 import 'package:outvisionxr/pages/settings/settings_language.dart';
-import 'package:outvisionxr/pages/settings/settings_about.dart';
 import 'package:outvisionxr/pages/settings/settings_about_app.dart';
 import 'package:outvisionxr/pages/settings/settings_howtouse.dart';
 import 'package:outvisionxr/pages/settings/settings_limiares.dart';
@@ -45,7 +44,6 @@ class AppRouter {
   static const String artists        = '/artists';
   static const String settings       = '/settings';
   static const String settingsLang      = '/settings/language';
-  static const String settingsAbout     = '/settings/about';
   static const String settingsApp       = '/settings/about-app';
   static const String settingsLimiares  = '/settings/limiares';
   static const String settingsHowToUse  = '/settings/how-to-use';
@@ -84,9 +82,6 @@ class AppRouter {
 
       case settingsLang:
         return MaterialPageRoute(builder: (_) => const LanguagePage());
-
-      case settingsAbout:
-        return MaterialPageRoute(builder: (_) => const AboutPage());
 
       case settingsApp:
         return MaterialPageRoute(builder: (_) => const AboutAppPage());
