@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
+import 'package:provider/provider.dart';
 
 class LimiaresPage extends StatelessWidget {
   const LimiaresPage({super.key});
@@ -11,6 +14,7 @@ class LimiaresPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: CustomScrollView(
@@ -25,12 +29,11 @@ class LimiaresPage extends StatelessWidget {
               child: _BackButton(onTap: () => Navigator.of(context).pop()),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                _photoUrl,
+              background: CachedNetworkImage(
+                imageUrl: _photoUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) =>
-                    progress == null ? child : const SizedBox.shrink(),
-                errorBuilder: (_, __, ___) => Container(color: AppColors.bg2),
+                placeholder: (_, __) => const SizedBox.shrink(),
+                errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
               ),
             ),
             bottom: PreferredSize(
@@ -54,7 +57,7 @@ class LimiaresPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '16ª Bienal de Curitiba · 2026',
+                    t.limiares.editionCaption,
                     style: AppText.caption(),
                   ),
                   const SizedBox(height: 6),
@@ -67,7 +70,7 @@ class LimiaresPage extends StatelessWidget {
                   const SizedBox(height: 28),
 
                   // Conceito
-                  Text('CONCEITO', style: AppText.label()),
+                  Text(t.limiares.conceptLabel, style: AppText.label()),
                   const SizedBox(height: 12),
                   Text(t.limiares.conceptText, style: AppText.body()),
                   const SizedBox(height: 32),

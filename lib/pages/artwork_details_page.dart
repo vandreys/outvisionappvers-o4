@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -5,8 +6,10 @@ import 'package:outvisionxr/models/artist_model.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artist_service.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
+import 'package:outvisionxr/services/download_service.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +71,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: FutureBuilder<Artwork?>(
@@ -84,7 +88,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
 
           final artwork = snapshot.data!;
           _triggerEnter();
-          final description = artwork.description ?? '';
+          final description = artwork.localizedDescription;
 
           return FadeTransition(
             opacity: _fadeAnim,
@@ -193,13 +197,11 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
           height: Rsp.isTablet(context) ? 300 : 230,
           width: double.infinity,
           child: artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty
-              ? Image.network(
-                  artwork.imageUrl!,
+              ? CachedNetworkImage(
+                  imageUrl: artwork.imageUrl!,
                   fit: BoxFit.cover,
-                  loadingBuilder: (_, child, progress) =>
-                      progress == null ? child : const ShimmerBox(),
-                  errorBuilder: (_, __, ___) =>
-                      Container(color: AppColors.bg2),
+                  placeholder: (_, __) => const ShimmerBox(),
+                  errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                 )
               : Container(color: AppColors.bg2),
         ),
@@ -248,13 +250,11 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
               width: 52,
               height: 52,
               child: (artist != null && artist.artistPhoto.isNotEmpty)
-                  ? Image.network(
-                      artist.artistPhoto,
+                  ? CachedNetworkImage(
+                      imageUrl: artist.artistPhoto,
                       fit: BoxFit.cover,
-                      loadingBuilder: (_, child, progress) =>
-                          progress == null ? child : const ShimmerBox(),
-                      errorBuilder: (_, __, ___) =>
-                          Container(color: AppColors.bg2),
+                      placeholder: (_, __) => const ShimmerBox(),
+                      errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                     )
                   : Container(
                       color: AppColors.bg2,
@@ -276,7 +276,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text('Artista participante', style: AppText.caption()),
+                Text(t.gallery.participatingArtist, style: AppText.caption()),
               ],
             ),
           ),
@@ -290,6 +290,8 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
   Widget _buildButtons(Artwork artwork, BuildContext context) {
     return Column(
       children: [
+        _OfflineButton(artwork: artwork),
+        const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -323,6 +325,110 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
           ),
         ),
       ],
+    );
+  }
+}
+
+class _OfflineButton extends StatefulWidget {
+  final Artwork artwork;
+  const _OfflineButton({required this.artwork});
+
+  @override
+  State<_OfflineButton> createState() => _OfflineButtonState();
+}
+
+class _OfflineButtonState extends State<_OfflineButton> {
+  bool? _offline;
+
+  @override
+  void initState() {
+    super.initState();
+    _check();
+  }
+
+  Future<void> _check() async {
+    final dl = context.read<DownloadService>();
+    final v = await dl.isOffline(widget.artwork.id);
+    if (mounted) setState(() => _offline = v);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dl = context.watch<DownloadService>();
+    final id = widget.artwork.id;
+    final downloading = dl.isDownloading(id);
+    final progress = dl.progressOf(id);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: OutlinedButton(
+        onPressed: downloading
+            ? null
+            : () async {
+                if (_offline == true) {
+                  await dl.remove(id);
+                  if (mounted) setState(() => _offline = false);
+                } else {
+                  await dl.download(widget.artwork);
+                  if (mounted) setState(() => _offline = true);
+                }
+              },
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            color: _offline == true ? AppColors.accent : AppColors.border,
+            width: 1,
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        ),
+        child: downloading
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      value: progress > 0 ? progress : null,
+                      strokeWidth: 2,
+                      color: AppColors.fg,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '${(progress * 100).toInt()}%',
+                    style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.fg),
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _offline == true
+                        ? t.gallery.makeAvailableOffline
+                        : t.gallery.makeAvailableOffline,
+                    style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: _offline == true
+                            ? AppColors.accent
+                            : AppColors.fg),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(
+                    _offline == true
+                        ? Icons.check_circle_outline
+                        : Icons.download_outlined,
+                    size: 15,
+                    color: _offline == true ? AppColors.accent : AppColors.fg,
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }

@@ -12,6 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
+import 'package:outvisionxr/services/download_service.dart';
+import 'package:provider/provider.dart';
 
 enum _ArStatus { localizing, ready, error }
 
@@ -35,6 +37,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
   bool _cameraPermissionGranted = false;
   bool _arInitFailed = false;
   Timer? _arInitTimer;
+  Map<String, dynamic>? _resolvedArParams;
 
   Artwork get _artwork => widget.artwork;
 
@@ -69,13 +72,23 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
       await Future.delayed(const Duration(milliseconds: 400));
     }
     if (!mounted) return;
-    setState(() => _cameraPermissionGranted = status.isGranted);
-    if (status.isGranted) _startArInitTimer();
+    if (status.isGranted) {
+      final params = await _buildVideoArParams();
+      if (!mounted) return;
+      setState(() {
+        _cameraPermissionGranted = true;
+        _resolvedArParams = params;
+      });
+      _startArInitTimer();
+    } else {
+      setState(() => _cameraPermissionGranted = false);
+    }
   }
 
   void _startArInitTimer() {
     _arInitTimer?.cancel();
-    _arInitTimer = Timer(const Duration(seconds: 8), () {
+    final seconds = _artwork.preset.arInitTimeoutSeconds;
+    _arInitTimer = Timer(Duration(seconds: seconds), () {
       if (mounted && _status != _ArStatus.ready) {
         setState(() => _arInitFailed = true);
       }
@@ -189,13 +202,38 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
     }
   }
 
-  Map<String, dynamic> get _videoArParams => {
-    'videoUrl': _artwork.videoUrl,
-    'eyeLevelOffsetMeters': _artwork.eyeLevelOffsetMeters ?? 1.5,
-    'faceUser': _artwork.faceUser ?? true,
-    'lat': 0.0,
-    'lng': 0.0,
-  };
+  Future<Map<String, dynamic>> _buildVideoArParams() async {
+    final dl = context.read<DownloadService>();
+    final localVideo = await dl.localVideoPath(_artwork.id);
+    return {
+      'videoUrl': localVideo ?? _artwork.videoUrl,
+      'eyeLevelOffsetMeters': _artwork.eyeLevelOffsetMeters ?? 1.5,
+      'faceUser': _artwork.faceUser ?? (_artwork.spawnMode == SpawnMode.billboard),
+      'spawnMode': _artwork.spawnMode.value,
+      'preset': _artwork.preset.value,
+      'lat': 0.0,
+      'lng': 0.0,
+    };
+  }
+
+  Future<Map<String, dynamic>> _buildModelArParams() async {
+    final dl = context.read<DownloadService>();
+    String? modelUrl = _modelUrl;
+    if (Platform.isAndroid) {
+      modelUrl = await dl.localModelPath(_artwork.id, 'glb') ?? modelUrl;
+    } else {
+      modelUrl = await dl.localModelPath(_artwork.id, 'usdz') ?? modelUrl;
+    }
+    return {
+      'lat': _artwork.location.latitude,
+      'lng': _artwork.location.longitude,
+      'eyeLevelOffsetMeters': _artwork.eyeLevelOffsetMeters ?? 1.5,
+      'faceUser': _artwork.faceUser ?? (_artwork.spawnMode == SpawnMode.billboard),
+      'spawnMode': _artwork.spawnMode.value,
+      'preset': _artwork.preset.value,
+      'iosUsdzAsset': modelUrl,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +275,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                     id: params.id,
                     viewType: 'outvisionxr/ar_video_view',
                     layoutDirection: TextDirection.ltr,
-                    creationParams: _videoArParams,
+                    creationParams: _resolvedArParams ?? {},
                     creationParamsCodec: const StandardMessageCodec(),
                     onFocus: () => params.onFocusChanged(true),
                   )
@@ -249,7 +287,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
             )
           : UiKitView(
               viewType: 'outvisionxr/ar_view',
-              creationParams: _videoArParams,
+              creationParams: _resolvedArParams ?? {},
               creationParamsCodec: const StandardMessageCodec(),
               onPlatformViewCreated: _onPlatformViewCreated,
             );
@@ -311,17 +349,17 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
         children: [
           // iOS: native ARKit view full screen
           if (Platform.isIOS && _hasModel)
-            UiKitView(
-              viewType: 'outvisionxr/ar_view',
-              creationParams: {
-                'lat': _artwork.location.latitude,
-                'lng': _artwork.location.longitude,
-                'eyeLevelOffsetMeters': _artwork.eyeLevelOffsetMeters ?? 1.5,
-                'faceUser': _artwork.faceUser ?? true,
-                'iosUsdzAsset': _modelUrl,
+            FutureBuilder<Map<String, dynamic>>(
+              future: _buildModelArParams(),
+              builder: (context, snap) {
+                if (!snap.hasData) return const SizedBox.shrink();
+                return UiKitView(
+                  viewType: 'outvisionxr/ar_view',
+                  creationParams: snap.data,
+                  creationParamsCodec: const StandardMessageCodec(),
+                  onPlatformViewCreated: _onPlatformViewCreated,
+                );
               },
-              creationParamsCodec: const StandardMessageCodec(),
-              onPlatformViewCreated: _onPlatformViewCreated,
             )
           else
             _buildFallback(),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -9,6 +10,7 @@ import 'package:outvisionxr/widgets/bottom_nav_bar.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:outvisionxr/widgets/shimmer_box.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,6 +76,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: Column(
@@ -185,7 +188,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(22, 0, 22, 12),
                       child: Text(
-                        '${artworks.length} ${artworks.length == 1 ? 'OBRA' : 'OBRAS'}',
+                        '${artworks.length} ${artworks.length == 1 ? t.gallery.artworkSingular : t.gallery.artworkPlural}',
                         style: AppText.label(),
                       ),
                     ),
@@ -214,13 +217,16 @@ class _ArtworkPageState extends State<ArtworkPage> {
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 20,
-        childAspectRatio: 0.72,
+        childAspectRatio: 0.65,
       ),
       itemCount: 6,
       itemBuilder: (_, __) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Expanded(child: ShimmerBox(borderRadius: BorderRadius.zero)),
+          const AspectRatio(
+            aspectRatio: 1.0,
+            child: ShimmerBox(borderRadius: BorderRadius.zero),
+          ),
           const SizedBox(height: 8),
           ShimmerBox(height: 14, borderRadius: BorderRadius.circular(3)),
           const SizedBox(height: 4),
@@ -263,7 +269,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 20,
-        childAspectRatio: 0.72,
+        childAspectRatio: 0.65,
       ),
       itemCount: artworks.length,
       itemBuilder: (context, index) => FadeSlideIn(
@@ -283,19 +289,18 @@ class _ArtworkPageState extends State<ArtworkPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          AspectRatio(
+            aspectRatio: 1.0,
             child: ClipRRect(
               borderRadius: BorderRadius.zero,
               child: SizedBox.expand(
                 child: artwork.imageUrl != null &&
                         artwork.imageUrl!.isNotEmpty
-                    ? Image.network(
-                        artwork.imageUrl!,
+                    ? CachedNetworkImage(
+                        imageUrl: artwork.imageUrl!,
                         fit: BoxFit.cover,
-                        loadingBuilder: (_, child, progress) =>
-                            progress == null ? child : const ShimmerBox(),
-                        errorBuilder: (_, __, ___) =>
-                            Container(color: AppColors.bg2),
+                        placeholder: (_, __) => const ShimmerBox(),
+                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                       )
                     : Container(color: AppColors.bg2),
               ),
@@ -310,11 +315,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
           ),
           const SizedBox(height: 3),
           Text(
-            [
-              if (artwork.displayArtist.isNotEmpty) artwork.displayArtist,
-              if (artwork.year != null && artwork.year!.isNotEmpty)
-                artwork.year!,
-            ].join(' · '),
+            artwork.displayArtist,
             style: AppText.caption(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -358,13 +359,11 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 height: 68,
                 child: artwork.imageUrl != null &&
                         artwork.imageUrl!.isNotEmpty
-                    ? Image.network(
-                        artwork.imageUrl!,
+                    ? CachedNetworkImage(
+                        imageUrl: artwork.imageUrl!,
                         fit: BoxFit.cover,
-                        loadingBuilder: (_, child, progress) =>
-                            progress == null ? child : const ShimmerBox(),
-                        errorBuilder: (_, __, ___) =>
-                            Container(color: AppColors.bg2),
+                        placeholder: (_, __) => const ShimmerBox(),
+                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                       )
                     : Container(color: AppColors.bg2),
               ),
@@ -395,13 +394,6 @@ class _ArtworkPageState extends State<ArtworkPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (artwork.year != null && artwork.year!.isNotEmpty) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      artwork.year!,
-                      style: AppText.caption(color: AppColors.accent),
-                    ),
-                  ],
                 ],
               ),
             ),

@@ -2,13 +2,59 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 
+enum SpawnMode {
+  ground,    // modelo ancorado no plano do chão (requer scan de superfície)
+  floating,  // altura fixa via eye_level_offset_meters, sem scan
+  billboard, // floating + sempre vira para o usuário
+}
+
+enum ArtworkPreset {
+  sculpture,    // escultura 3D no chão
+  installation, // instalação grande no chão
+  animation,    // GLB animado flutuando
+  videoArt,     // vídeo como billboard no espaço AR
+}
+
+extension SpawnModeX on SpawnMode {
+  String get value => name;
+  static SpawnMode fromString(String? s) => SpawnMode.values
+      .firstWhere((e) => e.name == s, orElse: () => SpawnMode.ground);
+}
+
+extension ArtworkPresetX on ArtworkPreset {
+  String get value => name;
+
+  SpawnMode get defaultSpawnMode => switch (this) {
+        ArtworkPreset.sculpture    => SpawnMode.ground,
+        ArtworkPreset.installation => SpawnMode.ground,
+        ArtworkPreset.animation    => SpawnMode.floating,
+        ArtworkPreset.videoArt     => SpawnMode.billboard,
+      };
+
+  int get arInitTimeoutSeconds => switch (this) {
+        ArtworkPreset.sculpture    => 15,
+        ArtworkPreset.installation => 15,
+        ArtworkPreset.animation    => 10,
+        ArtworkPreset.videoArt     => 8,
+      };
+
+  static ArtworkPreset fromString(String? s) {
+    if (s == null) return ArtworkPreset.sculpture;
+    final normalized = s.replaceAll('_', '').toLowerCase();
+    return ArtworkPreset.values.firstWhere(
+      (e) => e.name.toLowerCase() == normalized,
+      orElse: () => ArtworkPreset.sculpture,
+    );
+  }
+}
+
 class Artwork {
   final String id;
   final Map<String, dynamic> title;
   final String? artist;       // campo legado: 'artist' ou 'artist_id'
   final String? artistName;   // novo: 'artist_name' (denormalizado)
   final String? year;
-  final String? description;
+  final Map<String, String> descriptionMap;
   final String? locationName;
   final String? imageUrl;
   final GeoPoint location;
@@ -24,13 +70,17 @@ class Artwork {
   // Campo para obras de video art (MP4)
   final String? videoUrl;
 
+  // Comportamento AR
+  final ArtworkPreset preset;
+  final SpawnMode spawnMode;
+
   Artwork({
     required this.id,
     required this.title,
     this.artist,
     this.artistName,
     this.year,
-    this.description,
+    this.descriptionMap = const {},
     this.locationName,
     this.imageUrl,
     required this.location,
@@ -41,10 +91,21 @@ class Artwork {
     this.eyeLevelOffsetMeters,
     this.faceUser,
     this.videoUrl,
-  });
+    this.preset = ArtworkPreset.sculpture,
+    SpawnMode? spawnMode,
+  }) : spawnMode = spawnMode ?? preset.defaultSpawnMode;
 
   /// Nome do artista: prefere artist_name (novo schema), fallback para artist (legado)
   String get displayArtist => artistName ?? artist ?? '';
+
+  /// Descrição localizada com fallback pt → en → qualquer disponível
+  String get localizedDescription {
+    final lang = LocaleSettings.currentLocale.languageCode;
+    return descriptionMap[lang] ??
+        descriptionMap['pt'] ??
+        descriptionMap['en'] ??
+        descriptionMap.values.firstWhere((v) => v.isNotEmpty, orElse: () => '');
+  }
 
   /// Título localizado: suporte a i18n (Map) ou string simples
   String get localizedTitle {
@@ -52,7 +113,7 @@ class Artwork {
     return title[currentLang] ?? title['en'] ?? title['pt'] ?? 'Artwork';
   }
 
-  static Artwork? fromFirestore(DocumentSnapshot doc) {
+static Artwork? fromFirestore(DocumentSnapshot doc) {
     try {
       final data = doc.data() as Map<String, dynamic>?;
       if (data == null) return null;
@@ -146,7 +207,20 @@ class Artwork {
         artist: artist,
         artistName: data['artist_name'] as String?,
         year: (data['year'] ?? data['Year'])?.toString(),
-        description: data['description'] as String?,
+        descriptionMap: () {
+          final raw = data['description'];
+          if (raw is Map) {
+            return {
+              'pt': (raw['pt'] ?? '') as String,
+              'en': (raw['en'] ?? '') as String,
+              'es': (raw['es'] ?? '') as String,
+            };
+          }
+          if (raw is String && raw.isNotEmpty) {
+            return {'pt': raw, 'en': raw, 'es': raw};
+          }
+          return <String, String>{};
+        }(),
         locationName: data['location_name'] as String?,
         imageUrl: imageUrl?.isNotEmpty == true ? imageUrl : null,
         location: location,
@@ -158,6 +232,8 @@ class Artwork {
         eyeLevelOffsetMeters: eyeLevel,
         faceUser: faceUser,
         videoUrl: videoUrl?.isNotEmpty == true ? videoUrl : null,
+        preset: ArtworkPresetX.fromString(data['preset'] as String?),
+        spawnMode: SpawnModeX.fromString(data['spawn_mode'] as String?),
       );
     } catch (e) {
       assert(() {

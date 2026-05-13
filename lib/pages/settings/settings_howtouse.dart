@@ -1,7 +1,10 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
+import 'package:provider/provider.dart';
 
 class HowToUsePage extends StatefulWidget {
   const HowToUsePage({super.key});
@@ -14,30 +17,30 @@ class _HowToUsePageState extends State<HowToUsePage> {
   final _pageController = PageController();
   int _currentPage = 0;
 
-  static const _slides = [
+  List<_Slide> get _slides => [
     _Slide(
-      step: 'PASSO 1 · EXPLORE',
-      title: 'Abra o mapa\ne explore',
-      description: 'Os marcadores no mapa indicam onde estão as obras. Toque em um para ver detalhes e obter direções.',
-      mockup: _MockupMap(),
+      step: t.howToUse.step1Label,
+      title: t.howToUse.step1Title,
+      description: t.howToUse.step1Desc,
+      mockup: const _MockupMap(),
     ),
     _Slide(
-      step: 'PASSO 2 · APROXIME-SE',
-      title: 'Caminhe até\na obra',
-      description: 'Quando você entrar no raio de 150m de uma obra, o app detecta automaticamente sua proximidade.',
-      mockup: _MockupProximity(),
+      step: t.howToUse.step2Label,
+      title: t.howToUse.step2Title,
+      description: t.howToUse.step2Desc,
+      mockup: const _MockupProximity(),
     ),
     _Slide(
-      step: 'PASSO 3 · DESBLOQUEIO',
-      title: 'A obra aparece\nautomaticamente',
-      description: 'Após 3 segundos no raio, um card sobe com informações e o botão para abrir em AR.',
-      mockup: _MockupCard(),
+      step: t.howToUse.step3Label,
+      title: t.howToUse.step3Title,
+      description: t.howToUse.step3Desc,
+      mockup: const _MockupCard(),
     ),
     _Slide(
-      step: 'PASSO 4 · REALIDADE AUMENTADA',
-      title: 'Aponte a câmera\ne veja a arte',
-      description: 'O modelo 3D aparece no mundo real pela câmera. Mova-se ao redor para explorar em escala real.',
-      mockup: _MockupAR(),
+      step: t.howToUse.step4Label,
+      title: t.howToUse.step4Title,
+      description: t.howToUse.step4Desc,
+      mockup: const _MockupAR(),
     ),
   ];
 
@@ -60,6 +63,7 @@ class _HowToUsePageState extends State<HowToUsePage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     final isLast = _currentPage == _slides.length - 1;
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -77,7 +81,7 @@ class _HowToUsePageState extends State<HowToUsePage> {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: Text('Pular', style: AppText.caption(color: AppColors.accent)),
+                      child: Text(t.howToUse.skip, style: AppText.caption(color: AppColors.accent)),
                     ),
                   ],
                 ],
@@ -124,7 +128,7 @@ class _HowToUsePageState extends State<HowToUsePage> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                       ),
                       child: Text(
-                        isLast ? 'Entendi' : 'Próximo',
+                        isLast ? t.howToUse.done : t.howToUse.next,
                         style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.2),
                       ),
                     ),
@@ -270,16 +274,16 @@ class _MockupMap extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
               Center(child: Container(width: 20, height: 2.5, margin: const EdgeInsets.only(bottom: 7),
                   decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2)))),
-              Text('Nenhuma obra por perto',
+              Text(t.howToUse.mockNoNearby,
                 style: GoogleFonts.inter(fontSize: 8, fontWeight: FontWeight.w700, color: AppColors.fg)),
               const SizedBox(height: 2),
-              Text('Caminhe em direção aos marcadores.',
+              Text(t.howToUse.mockWalk,
                 style: GoogleFonts.inter(fontSize: 6.5, color: AppColors.fg3, height: 1.5)),
               const SizedBox(height: 7),
               Container(
                 width: double.infinity, height: 22,
                 decoration: BoxDecoration(color: AppColors.fg, borderRadius: BorderRadius.circular(5)),
-                child: Center(child: Text('Ir à obra mais próxima',
+                child: Center(child: Text(t.howToUse.mockGoNearest,
                     style: GoogleFonts.inter(fontSize: 7, fontWeight: FontWeight.w600, color: Colors.white))),
               ),
             ]),
@@ -421,7 +425,7 @@ class _MockupCard extends StatelessWidget {
               Container(
                 width: double.infinity, height: 22,
                 decoration: BoxDecoration(color: AppColors.fg, borderRadius: BorderRadius.circular(5)),
-                child: Center(child: Text('Abrir em AR',
+                child: Center(child: Text(t.ar.openAr,
                     style: GoogleFonts.inter(fontSize: 7, fontWeight: FontWeight.w600, color: Colors.white))),
               ),
             ]),

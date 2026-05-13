@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -12,6 +14,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -42,7 +45,7 @@ class SettingsPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Text('BIENAL DE CURITIBA', style: AppText.eyebrow()),
+                  Text(t.settings.bienalEyebrow, style: AppText.eyebrow()),
                   const SizedBox(height: 6),
                   Text(t.settings.title, style: AppText.display(fontSize: Rsp.fs(context, 38))),
                   const SizedBox(height: 28),
@@ -54,12 +57,12 @@ class SettingsPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
                 children: [
                   _buildSection(
-                    label: 'APP',
+                    label: t.settings.appSectionLabel,
                     items: [
                       _SettingsItem(
                         icon: Icons.touch_app_outlined,
-                        title: 'Como Usar',
-                        subtitle: 'Guia de uso do aplicativo',
+                        title: t.settings.getHelp,
+                        subtitle: t.settings.howToUseSubtitle,
                         onTap: () => Navigator.pushNamed(
                             context, AppRouter.settingsHowToUse),
                         isNav: true,
@@ -75,7 +78,7 @@ class SettingsPage extends StatelessWidget {
                       _SettingsItem(
                         icon: Icons.info_outline,
                         title: t.settings.aboutApp,
-                        subtitle: 'Versão e informações',
+                        subtitle: t.settings.aboutAppSubtitle,
                         onTap: () =>
                             Navigator.pushNamed(context, AppRouter.settingsApp),
                         isNav: true,
@@ -85,12 +88,12 @@ class SettingsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   _buildSection(
-                    label: 'BIENAL',
+                    label: t.settings.bienalSectionLabel,
                     items: [
                       _SettingsItem(
                         icon: Icons.auto_awesome_outlined,
-                        title: 'Limiares',
-                        subtitle: 'Conceito curatorial da 16ª edição',
+                        title: t.settings.limiares,
+                        subtitle: t.settings.limiaresSubtitle,
                         onTap: () => Navigator.pushNamed(
                             context, AppRouter.settingsLimiares),
                         isNav: true,
@@ -120,7 +123,7 @@ class SettingsPage extends StatelessWidget {
                       _SettingsItem(
                         icon: Icons.shield_outlined,
                         title: t.settings.privacyPolicy,
-                        subtitle: 'Política de privacidade',
+                        subtitle: t.settings.privacySubtitle,
                         isExternal: true,
                         onTap: () => launchUrl(
                           Uri.parse('https://outvisionxr.com/privacy-bienal'),
@@ -130,7 +133,7 @@ class SettingsPage extends StatelessWidget {
                       _SettingsItem(
                         icon: Icons.description_outlined,
                         title: t.settings.termsOfUse,
-                        subtitle: 'Termos e condições',
+                        subtitle: t.settings.termsSubtitle,
                         isExternal: true,
                         isLast: true,
                         onTap: () => launchUrl(
@@ -166,11 +169,11 @@ class SettingsPage extends StatelessWidget {
   String _currentLangLabel() {
     switch (LocaleSettings.currentLocale.languageCode) {
       case 'en':
-        return 'English';
+        return t.languagePage.english;
       case 'es':
-        return 'Español';
+        return t.languagePage.spanish;
       default:
-        return 'Português';
+        return t.languagePage.portuguese;
     }
   }
 

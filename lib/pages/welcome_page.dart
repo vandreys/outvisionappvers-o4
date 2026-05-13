@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -42,6 +45,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -58,12 +62,14 @@ class _WelcomePageState extends State<WelcomePage> {
               opacity: animation,
               child: child,
             ),
-            child: Image.network(
-              _images[_current],
+            child: CachedNetworkImage(
+              imageUrl: _images[_current],
               key: ValueKey(_current),
               fit: BoxFit.cover,
               width: size.width,
               height: size.height,
+              placeholder: (_, __) => Container(color: Colors.black),
+              errorWidget: (_, __, ___) => Container(color: Colors.black),
             ),
           ),
 
@@ -98,7 +104,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
                   // Concept subtitle
                   Text(
-                    'Limiares · 16ª Edição',
+                    t.welcome.subtitle,
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w300,
@@ -154,12 +160,7 @@ class _TypewriterHeadline extends StatefulWidget {
 }
 
 class _TypewriterHeadlineState extends State<_TypewriterHeadline> {
-  static const _phrases = [
-    'Habitar a fronteira',
-    'Permanecer no entre',
-    'Criar a partir da incerteza',
-    'Gerando novos caminhos',
-  ];
+  List<String> get _phrases => t.welcome.phrases;
 
   // Timing (ms)
   static const _typeDelay = 48;

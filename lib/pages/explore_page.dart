@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:outvisionxr/widgets/splash_loading.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,7 @@ import 'package:outvisionxr/widgets/rounded_square_button.dart';
 import 'package:outvisionxr/models/artwork_point.dart';
 import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/routes/app_router.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
@@ -527,6 +529,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     return Scaffold(
       body: _isLoading
           ? const SplashLoading()
@@ -758,8 +761,11 @@ class _ArtworkTapCardState extends State<_ArtworkTapCard>
                 height: 160,
                 width: double.infinity,
                 child: imageUrl.isNotEmpty
-                    ? Image.network(imageUrl, fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(color: AppColors.bg2))
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
+                      )
                     : Container(color: AppColors.bg2),
               ),
               // Arrived strip — desliza de cima quando chegou

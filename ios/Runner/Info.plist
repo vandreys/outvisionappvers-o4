@@ -29,18 +29,18 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Este app precisa da câmera para a experiência de Realidade Aumentada.</string>
 
-	<!-- Location (required for AR geospatial + map) -->
+	<!-- Location (required for map + nearby artwork detection) -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Este app precisa da localização para mostrar obras próximas na Bienal.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Este app precisa da localização para navegação AR em tempo real.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Este app precisa da localização para navegação AR em tempo real.</string>
+	<string>Este app precisa da localização para mostrar obras próximas na Bienal.</string>
+
+	<!-- Encryption: only standard HTTPS/TLS (exempt) -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

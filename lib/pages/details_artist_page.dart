@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -6,6 +7,7 @@ import 'package:outvisionxr/models/artwork_model.dart';
 import 'package:outvisionxr/services/artwork_service.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +33,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     final artist = widget.artist;
     final bio = artist.getBio(LocaleSettings.currentLocale.languageTag);
 
@@ -109,13 +112,11 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
           height: Rsp.isTablet(context) ? 310 : 240,
           width: double.infinity,
           child: artist.artistPhoto.isNotEmpty
-              ? Image.network(
-                  artist.artistPhoto,
+              ? CachedNetworkImage(
+                  imageUrl: artist.artistPhoto,
                   fit: BoxFit.cover,
-                  loadingBuilder: (_, child, progress) =>
-                      progress == null ? child : const ShimmerBox(),
-                  errorBuilder: (_, __, ___) =>
-                      Container(color: AppColors.bg2),
+                  placeholder: (_, __) => const ShimmerBox(),
+                  errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                 )
               : Container(color: AppColors.bg2),
         ),
@@ -205,13 +206,11 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
               height: 220,
               width: double.infinity,
               child: artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty
-                  ? Image.network(
-                      artwork.imageUrl!,
+                  ? CachedNetworkImage(
+                      imageUrl: artwork.imageUrl!,
                       fit: BoxFit.cover,
-                      loadingBuilder: (_, child, progress) =>
-                          progress == null ? child : const ShimmerBox(),
-                      errorBuilder: (_, __, ___) =>
-                          Container(color: AppColors.bg2),
+                      placeholder: (_, __) => const ShimmerBox(),
+                      errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
                     )
                   : Container(color: AppColors.bg2),
             ),

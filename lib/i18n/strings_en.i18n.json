@@ -18,7 +18,12 @@
     "bioMore": " more",
     "showOnMap": "Show on map",
     "makeAvailableOffline": "Make available offline",
-    "artist": "Artist"
+    "artist": "Artist",
+    "participatingArtist": "Participating artist",
+    "artworkSingular": "ARTWORK",
+    "artworkPlural": "ARTWORKS",
+    "artistSingular": "ARTIST",
+    "artistPlural": "ARTISTS"
   },
   "settings": {
     "title": "Settings",
@@ -31,10 +36,20 @@
     "instagram": "Instagram",
     "aboutApp": "About the App",
     "privacyPolicy": "Privacy Policy",
-    "termsOfUse": "Terms of Use"
+    "termsOfUse": "Terms of Use",
+    "bienalEyebrow": "BIENNIAL OF CURITIBA",
+    "appSectionLabel": "APP",
+    "bienalSectionLabel": "BIENNIAL",
+    "howToUseSubtitle": "App usage guide",
+    "aboutAppSubtitle": "Version and information",
+    "limiaresSubtitle": "Curatorial concept of the 16th edition",
+    "privacySubtitle": "Privacy policy",
+    "termsSubtitle": "Terms and conditions"
   },
   "limiares": {
     "title": "LIMIARES",
+    "editionCaption": "16th Biennial of Curitiba · 2026",
+    "conceptLabel": "CONCEPT",
     "conceptText": "The 16th International Biennial of Curitiba draws on the concept of LIMIAR (THRESHOLD), understood as the space between what is not yet and what is already beginning to be. In a world marked by the dissolution of boundaries between the human and the technological, the natural and the artificial, the Biennial presents itself as a territory of transition, a laboratory of listening, risk, and transformation.\n\nHere, art acts as a mediating force between worlds, opening passages to new modes of existence and perception.\n\nOn the threshold between crisis and creation, art reveals its power of invention and its capacity to imagine possible futures.",
     "statementTitle": "CURATORIAL STATEMENT",
     "statementText": "In a world traversed by accelerating technological, social, and environmental transformations, the 16th International Biennial of Curitiba, taking place between March and August 2026, presents itself as a transdisciplinary laboratory of experimentation, where art, science, technology, and critical thinking converge to explore the challenges of contemporaneity.\n\nThis edition tests the limits between artistic production, audiences, critical thought, and civic action, investigating hybrid modes of existence and the dissolved boundaries between the biological and the synthetic, the human and the nonhuman. These zones of friction between the natural and the artificial, the sensory and the programmable, inform the practices of the future and offer fertile ground for the aesthetic and emergent existence of art.\n\nWe live in an era marked by the omnipresence of algorithms, the rise of artificial intelligence, and the supremacy of digital capitalism. In this context, artistic practice is no longer exclusively individual expression but becomes an expanded field of collaboration between humans, machines, and intelligent systems. The traditional concept of authorship is called into question, making space for the artist as programmer, mediator, or facilitator of algorithmic processes.\n\nHow does aesthetic experience transform in times of augmented realities, big data, and digital ecologies? Art, more than representing the world, becomes a living, responsive, and critical interface that questions the regimes of visuality and the systems of power that structure our daily lives. Hybrid languages, fusing the physical and the virtual, the organic and the computational, expand the horizons of sensibility and open pathways to new forms of activism, memory, and subjectivity.\n\nAnother fundamental axis of this edition lies in the critique of the neutrality of technology. Artificial intelligence and algorithmic systems are shaped by political, economic, and ideological interests. Art, in this context, emerges as a device of resistance against data extractivism, mass surveillance, and the mechanisms of control and inequality operating behind the scenes of the digital age.\n\nThe 16th International Biennial of Curitiba summons artists, researchers, scientists, technologists, and activists to imagine possible futures and reflect on the impacts of technological innovation on forms of life, identities, and the materialities of the contemporary world. Through immersive installations, generative art, interactive environments, virtual reality simulations, and post-humanist practices, the Biennial proposes to map the speculative terrain of emerging practices, placing the local and the global, the body and the code, the sensory and the synthetic in dialogue.\n\nThe public will be invited to participate in transformative experiences, interacting with works that reconfigure the ways of perceiving, acting, and imagining. In this encounter between art and technopolitics, the Biennial seeks to be a platform of listening, invention, and risk, opening breaches in the present to rehearse more just, conscious, and sensitive forms of coexistence.",
@@ -48,13 +63,46 @@
     "missionTitle": "About Outvision XR",
     "missionText": "Outvision XR is a platform specialized in art experiences with Augmented Reality. Combining technology and culture, we enhance the connection between artworks, artists, and audiences, making contemporary art more accessible, sensory, and memorable.",
     "visionTitle": "Limiares (Thresholds)",
-    "visionText": "The curatorial theme Limiares (Thresholds) invites reflection on the boundaries — physical, cultural, symbolic — that separate and unite us. Through Augmented Reality, the app transforms these thresholds into portals, allowing each artwork to be experienced beyond the visible.",
+    "visionText": "The curatorial theme Limiares (Thresholds) invites reflection on the boundaries, physical, cultural, symbolic, that separate and unite us. Through Augmented Reality, the app transforms these thresholds into portals, allowing each artwork to be experienced beyond the visible.",
     "connectTitle": "Connect With Us",
     "website": "Website",
     "email": "Email",
     "instagram": "Instagram",
     "share": "Share",
-    "copyright": "Outvision XR © 2026. All rights reserved."
+    "copyright": "Outvision XR © 2026. All rights reserved.",
+    "editionLabel": "16th Edition · 2026",
+    "heroTitle": "Biennial of\nCuritiba",
+    "aboutLabel": "ABOUT THE APP",
+    "appText1": "The Biennial of Curitiba app is your gateway to an artistic experience that goes beyond the physical exhibition space. Developed especially for the 16th edition, the app lets you explore artworks through Augmented Reality, directly at the locations where the works are installed.",
+    "appText2": "When you approach a participating artwork, the app recognizes your location and unlocks the AR experience. Pointing the camera at the surrounding space, you see the artwork come to life in three dimensions, merging the digital with the real world.",
+    "featureArTitle": "Augmented Reality",
+    "featureArDesc": "View artworks in 3D in real space, at the Biennial's venues.",
+    "featureMapTitle": "Interactive Map",
+    "featureMapDesc": "Navigate the exhibition points and find nearby artworks.",
+    "featureArtistsTitle": "Artists",
+    "featureArtistsDesc": "Discover the career and work of the participating artists.",
+    "devByLabel": "DEVELOPED BY",
+    "studioText": "OutVision XR is a creative studio and ecosystem of digital experiences focused on the world of art and culture. We develop apps and digital products that transform the way people experience art. In partnership with museums, galleries, and international biennials, we create immersive experiences in virtual and augmented reality, turning spectators into active participants of living, interactive narratives."
+  },
+  "howToUse": {
+    "skip": "Skip",
+    "next": "Next",
+    "done": "Got it",
+    "step1Label": "STEP 1 · EXPLORE",
+    "step1Title": "Open the map\nand explore",
+    "step1Desc": "The markers on the map show where the artworks are. Tap one to see details and get directions.",
+    "step2Label": "STEP 2 · GET CLOSER",
+    "step2Title": "Walk to\nthe artwork",
+    "step2Desc": "When you enter the 150m radius of an artwork, the app automatically detects your proximity.",
+    "step3Label": "STEP 3 · UNLOCK",
+    "step3Title": "The artwork appears\nautomatically",
+    "step3Desc": "After 3 seconds in the radius, a card rises with information and the button to open in AR.",
+    "step4Label": "STEP 4 · AUGMENTED REALITY",
+    "step4Title": "Point the camera\nand see the art",
+    "step4Desc": "The 3D model appears in the real world through the camera. Move around to explore at real scale.",
+    "mockNoNearby": "No artwork nearby",
+    "mockWalk": "Walk towards the markers.",
+    "mockGoNearest": "Go to nearest artwork"
   },
   "languagePage": {
     "title": "Language",
@@ -87,9 +135,21 @@
     "gallery": "Artworks",
     "settings": "Settings"
   },
+  "splash": {
+    "loading": "Loading",
+    "editionLabel": "16TH EDITION · 2026",
+    "conceptLabel": "Limiares"
+  },
   "welcome": {
     "headline": "Art and design\nat its best",
-    "startButton": "Start"
+    "startButton": "Start",
+    "subtitle": "Limiares · 16th Edition",
+    "phrases": [
+      "Inhabit the threshold",
+      "Stay in the in-between",
+      "Create from uncertainty",
+      "Finding new paths"
+    ]
   },
   "errorScreen": {
     "message": "Something went wrong.\nRestart the application."
@@ -104,7 +164,7 @@
     "permissionContent": "To view the artwork, we need access to your camera and location.",
     "allowAccess": "Allow Access",
     "notNow": "Not Now",
-    "onboardingContent": "Move the device slowly to help the Artwork localize itself.",
+    "onboardingContent": "Move the device slowly to help the artwork find its position.",
     "onboardingButton": "Got it, let's start",
     "errorTitle": "An Error Occurred",
     "backButton": "Back",

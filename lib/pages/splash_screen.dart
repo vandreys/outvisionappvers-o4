@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
 
@@ -66,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     // Eyebrow
                     Text(
-                      '16ª EDIÇÃO · 2026',
+                      t.splash.editionLabel,
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         letterSpacing: 2.5,
@@ -78,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     // Title
                     Text(
-                      'Bienal de\nCuritiba',
+                      t.about.heroTitle,
                       style: GoogleFonts.inter(
                         fontSize: Rsp.fs(context, 44),
                         fontWeight: FontWeight.w700,
@@ -91,7 +92,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                     // Concept name
                     Text(
-                      'Limiares',
+                      t.splash.conceptLabel,
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
@@ -127,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Carregando',
+                              t.splash.loading,
                               style: GoogleFonts.inter(
                                 fontSize: 10,
                                 letterSpacing: 1.5,

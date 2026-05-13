@@ -18,7 +18,12 @@
     "bioMore": " más",
     "showOnMap": "Ver en el mapa",
     "makeAvailableOffline": "Hacer disponible sin conexión",
-    "artist": "Artista"
+    "artist": "Artista",
+    "participatingArtist": "Artista participante",
+    "artworkSingular": "OBRA",
+    "artworkPlural": "OBRAS",
+    "artistSingular": "ARTISTA",
+    "artistPlural": "ARTISTAS"
   },
   "settings": {
     "title": "Configuración",
@@ -31,13 +36,23 @@
     "instagram": "Instagram",
     "aboutApp": "Sobre la App",
     "privacyPolicy": "Política de Privacidad",
-    "termsOfUse": "Términos de Uso"
+    "termsOfUse": "Términos de Uso",
+    "bienalEyebrow": "BIENAL DE CURITIBA",
+    "appSectionLabel": "APP",
+    "bienalSectionLabel": "BIENAL",
+    "howToUseSubtitle": "Guía de uso de la app",
+    "aboutAppSubtitle": "Versión e información",
+    "limiaresSubtitle": "Concepto curatorial de la 16ª edición",
+    "privacySubtitle": "Política de privacidad",
+    "termsSubtitle": "Términos y condiciones"
   },
   "limiares": {
     "title": "LIMIARES",
-    "conceptText": "La 16ª Bienal Internacional de Curitiba parte del concepto LIMIAR (UMBRAL), entendido como el espacio entre lo que aún no es y lo que ya comienza a ser. En un mundo marcado por la disolución de las fronteras entre lo humano y lo tecnológico, lo natural y lo artificial, la Bienal se propone como un territorio de transición, un laboratorio de escucha, riesgo y transformación.\n\nAquí, el arte actúa como fuerza mediadora entre mundos, abrindo pasajes hacia nuevos modos de existencia y percepción.\n\nEn el umbral entre crisis y creación, el arte revela su potencia de invención y su capacidad de imaginar futuros posibles.",
+    "editionCaption": "16ª Bienal de Curitiba · 2026",
+    "conceptLabel": "CONCEPTO",
+    "conceptText": "La 16ª Bienal Internacional de Curitiba parte del concepto LIMIAR (UMBRAL), entendido como el espacio entre lo que aún no es y lo que ya comienza a ser. En un mundo marcado por la disolución de las fronteras entre lo humano y lo tecnológico, lo natural y lo artificial, la Bienal se propone como un territorio de transición, un laboratorio de escucha, riesgo y transformación.\n\nAquí, el arte actúa como fuerza mediadora entre mundos, abriendo pasajes hacia nuevos modos de existencia y percepción.\n\nEn el umbral entre crisis y creación, el arte revela su potencia de invención y su capacidad de imaginar futuros posibles.",
     "statementTitle": "STATEMENT CURATORIAL",
-    "statementText": "En un mundo atravesado por aceleradas transformaciones tecnológicas, sociales y ambientales, la 16ª Bienal Internacional de Curitiba, que tiene lugar entre marzo y agosto de 2026, se propone como un laboratorio transdisciplinar de experimentación, donde arte, ciencia, tecnología y pensamiento crítico convergen para explorar los desafíos de la contemporaneidad.\n\nEsta edición tensiona los límites entre producción artística, públicos, pensamiento crítico y acción ciudadana, investigando los modos de existencia híbridos e las fronteras disueltas entre lo biológico y lo sintético, lo humano y lo no humano. Son estas zonas de fricción entre lo natural y lo artificial, lo sensible y lo programable, las que informan las prácticas del porvenir y ofrecen terreno fértil para la existencia estética y emergencial del arte.\n\nVivemos una era marcada por la omnipresencia de los algoritmos, el auge de la inteligencia artificial y la supremacía del capitalismo digital. En este contexto, la práctica artística deja de ser exclusivamente expresión individual para convertirse en un campo expandido de colaboración entre humanos, máquinas y sistemas inteligentes. El concepto tradicional de autoría es puesto en cuestión, abriendo espacio para el artista como programador, mediador o facilitador de procesos algorítmicos.\n\n¿Cómo se transforma la experiencia estética en tiempos de realidades aumentadas, big data y ecologías digitales? El arte, más que representar el mundo, se convierte en una interfaz viva, responsiva y crítica, que cuestiona los regímenes de visualidad y los sistemas de poder que estructuran nuestro cotidiano. Los lenguajes híbridos, que fusionan lo físico y lo virtual, lo orgánico y lo computacional, amplían los horizontes de la sensibilidad y abren caminos hacia nuevas formas de activismo, memoria y subjetividad.\n\nOtro eje fundamental de esta edición reside en la crítica a la neutralidad de la tecnología. La inteligencia artificial y los sistemas algorítmicos son moldeados por intereses políticos, económicos e ideológicos. El arte, en este contexto, emerge como un dispositivo de resistencia contra el extractivismo de datos, la vigilancia masiva y los mecanismos de control y desigualdad que operam entre bastidores de la era digital.\n\nLa 16ª Bienal Internacional de Curitiba convoca a artistas, investigadores, científicos, tecnólogos y activistas a imaginar futuros posibles y reflexionar sobre los impactos de la innovación tecnológica en las formas de vida, las identidades y las materialidades del mundo contemporáneo. A través de instalaciones inmersivas, arte generativo, ambientes interactivos, simulaciones en realidad virtual y prácticas posthumanistas, la Bienal se propone trazar un mapa especulativo de las prácticas emergentes, poniendo en diálogo lo local y lo global, el cuerpo y el código, lo sensible y lo sintético.\n\nEl público será invitado a participar de experiencias transformadoras, interactuando con obras que reconfiguran los modos de percibir, actuar e imaginar. En este encuentro entre arte y tecnopolítica, la Bienal quiere ser plataforma de escucha, de invención y de riesgo, abriendo brechas en el presente para ensayar formas de coexistencia más justas, conscientes y sensibles.",
+    "statementText": "En un mundo atravesado por aceleradas transformaciones tecnológicas, sociales y ambientales, la 16ª Bienal Internacional de Curitiba, que tiene lugar entre marzo y agosto de 2026, se propone como un laboratorio transdisciplinar de experimentación, donde arte, ciencia, tecnología y pensamiento crítico convergen para explorar los desafíos de la contemporaneidad.\n\nEsta edición tensiona los límites entre producción artística, públicos, pensamiento crítico y acción ciudadana, investigando los modos de existencia híbridos y las fronteras disueltas entre lo biológico y lo sintético, lo humano y lo no humano. Son estas zonas de fricción entre lo natural y lo artificial, lo sensible y lo programable, las que informan las prácticas del porvenir y ofrecen terreno fértil para la existencia estética y emergencial del arte.\n\nVivimos una era marcada por la omnipresencia de los algoritmos, el auge de la inteligencia artificial y la supremacía del capitalismo digital. En este contexto, la práctica artística deja de ser exclusivamente expresión individual para convertirse en un campo expandido de colaboración entre humanos, máquinas y sistemas inteligentes. El concepto tradicional de autoría es puesto en cuestión, abriendo espacio para el artista como programador, mediador o facilitador de procesos algorítmicos.\n\n¿Cómo se transforma la experiencia estética en tiempos de realidades aumentadas, big data y ecologías digitales? El arte, más que representar el mundo, se convierte en una interfaz viva, responsiva y crítica, que cuestiona los regímenes de visualidad y los sistemas de poder que estructuran nuestro cotidiano. Los lenguajes híbridos, que fusionan lo físico y lo virtual, lo orgánico y lo computacional, amplían los horizontes de la sensibilidad y abren caminos hacia nuevas formas de activismo, memoria y subjetividad.\n\nOtro eje fundamental de esta edición reside en la crítica a la neutralidad de la tecnología. La inteligencia artificial y los sistemas algorítmicos son moldeados por intereses políticos, económicos e ideológicos. El arte, en este contexto, emerge como un dispositivo de resistencia contra el extractivismo de datos, la vigilancia masiva y los mecanismos de control y desigualdad que operan entre bastidores de la era digital.\n\nLa 16ª Bienal Internacional de Curitiba convoca a artistas, investigadores, científicos, tecnólogos y activistas a imaginar futuros posibles y reflexionar sobre los impactos de la innovación tecnológica en las formas de vida, las identidades y las materialidades del mundo contemporáneo. A través de instalaciones inmersivas, arte generativo, ambientes interactivos, simulaciones en realidad virtual y prácticas posthumanistas, la Bienal se propone trazar un mapa especulativo de las prácticas emergentes, poniendo en diálogo lo local y lo global, el cuerpo y el código, lo sensible y lo sintético.\n\nEl público será invitado a participar de experiencias transformadoras, interactuando con obras que reconfiguran los modos de percibir, actuar e imaginar. En este encuentro entre arte y tecnopolítica, la Bienal quiere ser plataforma de escucha, de invención y de riesgo, abriendo brechas en el presente para ensayar formas de coexistencia más justas, conscientes y sensibles.",
     "curatorsLabel": "Curadoras",
     "curatorsNames": "Adriana Almada y Tereza de Arruda"
   },
@@ -48,13 +63,46 @@
     "missionTitle": "Sobre Outvision XR",
     "missionText": "Outvision XR es una plataforma especializada en experiencias de arte con Realidad Aumentada. Uniendo tecnología y cultura, potenciamos la conexión entre obras, artistas y públicos, haciendo que el arte contemporáneo sea más accesible, sensorial y memorable.",
     "visionTitle": "Limiares (Umbrales)",
-    "visionText": "El tema curatorial Limiares (Umbrales) propone una reflexión sobre las fronteras — físicas, culturales, simbólicas — que nos separan y nos unen. A través de la Realidad Aumentada, la app transforma esos umbrales en portales, permitiendo que cada obra sea vivida más allá de lo visible.",
+    "visionText": "El tema curatorial Limiares (Umbrales) propone una reflexión sobre las fronteras, físicas, culturales, simbólicas, que nos separan y nos unen. A través de la Realidad Aumentada, la app transforma esos umbrales en portales, permitiendo que cada obra sea vivida más allá de lo visible.",
     "connectTitle": "Conéctate con Nosotros",
     "website": "Sitio Web",
     "email": "Correo Electrónico",
     "instagram": "Instagram",
     "share": "Compartir",
-    "copyright": "Outvision XR © 2026. Todos los derechos reservados."
+    "copyright": "Outvision XR © 2026. Todos los derechos reservados.",
+    "editionLabel": "16ª Edición · 2026",
+    "heroTitle": "Bienal de\nCuritiba",
+    "aboutLabel": "SOBRE LA APP",
+    "appText1": "La app de la Bienal de Curitiba es tu puerta de entrada a una experiencia artística que va más allá del espacio físico de la exposición. Desarrollada especialmente para la 16ª edición, la app te permite explorar obras de arte en Realidad Aumentada, directamente en los lugares donde las obras están instaladas.",
+    "appText2": "Al acercarte a una obra participante, la app reconoce tu ubicación y activa la experiencia en RA. Apuntando la cámara al espacio a tu alrededor, verás la obra cobrar vida en tres dimensiones, fusionando lo digital con el mundo real.",
+    "featureArTitle": "Realidad Aumentada",
+    "featureArDesc": "Visualiza obras en 3D en el espacio real, en los lugares de la Bienal.",
+    "featureMapTitle": "Mapa Interactivo",
+    "featureMapDesc": "Navega por los puntos de la exposición y encuentra obras cercanas.",
+    "featureArtistsTitle": "Artistas",
+    "featureArtistsDesc": "Conoce la trayectoria y la obra de los artistas participantes.",
+    "devByLabel": "DESARROLLADO POR",
+    "studioText": "OutVision XR es un estudio creativo y ecosistema de experiencias digitales orientado al universo del arte y la cultura. Desarrollamos aplicaciones y productos digitales que transforman la manera en que las personas vivencian el arte. En asociación con museos, galerías y bienales internacionales, creamos experiencias inmersivas en realidad virtual y aumentada, convirtiendo espectadores en participantes activos de narrativas vivas e interactivas."
+  },
+  "howToUse": {
+    "skip": "Omitir",
+    "next": "Siguiente",
+    "done": "Entendido",
+    "step1Label": "PASO 1 · EXPLORAR",
+    "step1Title": "Abre el mapa\ny explora",
+    "step1Desc": "Los marcadores en el mapa indican dónde están las obras. Toca uno para ver detalles y obtener indicaciones.",
+    "step2Label": "PASO 2 · ACÉRCATE",
+    "step2Title": "Camina hacia\nla obra",
+    "step2Desc": "Cuando entres en el radio de 150m de una obra, la app detecta automáticamente tu proximidad.",
+    "step3Label": "PASO 3 · DESBLOQUEO",
+    "step3Title": "La obra aparece\nautomáticamente",
+    "step3Desc": "Tras 3 segundos en el radio, aparece una tarjeta con información y el botón para abrir en RA.",
+    "step4Label": "PASO 4 · REALIDAD AUMENTADA",
+    "step4Title": "Apunta la cámara\ny ve el arte",
+    "step4Desc": "El modelo 3D aparece en el mundo real a través de la cámara. Muévete alrededor para explorar a escala real.",
+    "mockNoNearby": "Sin obras cercanas",
+    "mockWalk": "Camina hacia los marcadores.",
+    "mockGoNearest": "Ir a la obra más cercana"
   },
   "languagePage": {
     "title": "Idioma",
@@ -87,9 +135,21 @@
     "gallery": "Obras",
     "settings": "Configuración"
   },
+  "splash": {
+    "loading": "Cargando",
+    "editionLabel": "16ª EDICIÓN · 2026",
+    "conceptLabel": "Limiares"
+  },
   "welcome": {
     "headline": "Arte y diseño\nen su máximo esplendor",
-    "startButton": "Comenzar"
+    "startButton": "Comenzar",
+    "subtitle": "Limiares · 16ª Edición",
+    "phrases": [
+      "Habitar el umbral",
+      "Permanecer en el entre",
+      "Crear desde la incertidumbre",
+      "Encontrando nuevos caminos"
+    ]
   },
   "errorScreen": {
     "message": "Algo salió mal.\nReinicia la aplicación."
@@ -104,7 +164,7 @@
     "permissionContent": "Para visualizar la obra, necesitamos acceso a tu cámara y ubicación.",
     "allowAccess": "Permitir Acceso",
     "notNow": "Ahora no",
-    "onboardingContent": "Mueve el dispositivo lentamente para ayudar a la Obra a localizarse.",
+    "onboardingContent": "Mueve el dispositivo lentamente para ayudar a la obra a localizarse.",
     "onboardingButton": "Entendido, empecemos",
     "errorTitle": "Ocurrió un Error",
     "backButton": "Volver",

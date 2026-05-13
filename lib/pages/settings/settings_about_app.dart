@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
+import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutAppPage extends StatelessWidget {
@@ -42,6 +46,7 @@ class AboutAppPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageProvider>();
     final isTablet = Rsp.isTablet(context);
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -61,13 +66,11 @@ class AboutAppPage extends StatelessWidget {
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                _heroUrl,
+              background: CachedNetworkImage(
+                imageUrl: _heroUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) =>
-                    progress == null ? child : Container(color: AppColors.bg2),
-                errorBuilder: (context, _, __) =>
-                    Container(color: AppColors.bg2),
+                placeholder: (_, __) => Container(color: AppColors.bg2),
+                errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
               ),
             ),
             bottom: PreferredSize(
@@ -91,10 +94,10 @@ class AboutAppPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('16ª Edição · 2026', style: AppText.caption()),
+                  Text(t.about.editionLabel, style: AppText.caption()),
                   const SizedBox(height: 6),
                   Text(
-                    'Bienal de\nCuritiba',
+                    t.about.heroTitle,
                     style: GoogleFonts.inter(
                       fontSize: Rsp.fs(context, 38),
                       fontWeight: FontWeight.w700,
@@ -106,54 +109,37 @@ class AboutAppPage extends StatelessWidget {
                   const SizedBox(height: 24),
                   Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 28),
-                  Text('SOBRE O APP', style: AppText.label()),
+                  Text(t.about.aboutLabel, style: AppText.label()),
                   const SizedBox(height: 12),
-                  Text(
-                    'O app da Bienal de Curitiba é sua porta de entrada para uma experiência artística que vai além do espaço físico da exposição. Desenvolvido especialmente para a 16ª edição, o aplicativo permite que você explore obras de arte em Realidade Aumentada — diretamente nos locais onde as obras estão instaladas.',
-                    style: AppText.body(),
-                  ),
+                  Text(t.about.appText1, style: AppText.body()),
                   const SizedBox(height: 14),
-                  Text(
-                    'Ao se aproximar de uma obra participante, o app reconhece sua localização e libera a experiência em AR. Apontando a câmera para o espaço ao redor, você vê a obra tomar vida em três dimensões — fundindo o digital com o mundo real.',
-                    style: AppText.body(),
-                  ),
+                  Text(t.about.appText2, style: AppText.body()),
                   const SizedBox(height: 32),
-                  const _FeatureRow(
+                  _FeatureRow(
                     icon: Icons.view_in_ar,
-                    title: 'Realidade Aumentada',
-                    description:
-                        'Visualize obras em 3D no espaço real, nos locais da Bienal.',
+                    title: t.about.featureArTitle,
+                    description: t.about.featureArDesc,
                   ),
                   const SizedBox(height: 16),
-                  const _FeatureRow(
+                  _FeatureRow(
                     icon: Icons.map_outlined,
-                    title: 'Mapa Interativo',
-                    description:
-                        'Navegue pelos pontos da exposição e encontre obras próximas.',
+                    title: t.about.featureMapTitle,
+                    description: t.about.featureMapDesc,
                   ),
                   const SizedBox(height: 16),
-                  const _FeatureRow(
+                  _FeatureRow(
                     icon: Icons.person_outline,
-                    title: 'Artistas',
-                    description:
-                        'Conheça a trajetória e a obra dos artistas participantes.',
+                    title: t.about.featureArtistsTitle,
+                    description: t.about.featureArtistsDesc,
                   ),
                   const SizedBox(height: 40),
                   Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 32),
-                  Text('DESENVOLVIDO POR', style: AppText.label()),
+                  Text(t.about.devByLabel, style: AppText.label()),
                   const SizedBox(height: 16),
-                  Text('OutVisionXR', style: AppText.display(fontSize: 22)),
+                  Text('OutVision XR', style: AppText.display(fontSize: 22)),
                   const SizedBox(height: 16),
-                  Text(
-                    'A OutVisionXR é uma empresa especializada em experiências imersivas que conectam arte, cultura e tecnologia. Com foco em Realidade Aumentada e Realidade Virtual, desenvolvemos soluções digitais para museus, galerias, festivais e instituições culturais.',
-                    style: AppText.body(),
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    'Nossa missão é ampliar a forma como as pessoas percebem e interagem com a arte — tornando o invisível visível e o espaço um suporte para novas narrativas.',
-                    style: AppText.body(),
-                  ),
+                  Text(t.about.studioText, style: AppText.body()),
                   const SizedBox(height: 24),
                   Row(
                     children: [
