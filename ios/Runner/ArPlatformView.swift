@@ -320,7 +320,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
         NSLog("\(TAG): Downloading model from \(url.lastPathComponent)")
         URLSession.shared.downloadTask(with: url) { [weak self] tempURL, _, error in
             guard let self = self, let tempURL = tempURL, error == nil else {
-                NSLog("\(self?.TAG ?? TAG): Download failed: \(error?.localizedDescription ?? "unknown")")
+                NSLog("\(self?.TAG ?? "OutvisionXR-AR"): Download failed: \(error?.localizedDescription ?? "unknown")")
                 completion(nil)
                 return
             }
@@ -346,15 +346,11 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
                 return
             }
 
-            NSLog("\(self.TAG): SCNScene failed, trying MDLAsset...")
-            let mdlAsset = MDLAsset(url: url)
-            mdlAsset.loadTextures()
-
-            if mdlAsset.count > 0 {
+            NSLog("\(self.TAG): SCNScene failed, trying SCNSceneSource...")
+            let sceneSource = SCNSceneSource(url: url, options: nil)
+            if let scene = sceneSource?.scene(options: nil) {
                 let container = SCNNode()
-                SCNScene(mdlAsset: mdlAsset).rootNode.childNodes.forEach {
-                    container.addChildNode($0.clone())
-                }
+                scene.rootNode.childNodes.forEach { container.addChildNode($0.clone()) }
                 completion(container)
                 return
             }

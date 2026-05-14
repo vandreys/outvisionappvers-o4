@@ -10,13 +10,14 @@ import GoogleMaps
   ) -> Bool {
     GMSServices.provideAPIKey("AIzaSyD-6SfQ7dWgYzPwgI7LR31oV7AJINjPKUw")
     GeneratedPluginRegistrant.register(with: self)
+    let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
 
-    // Register AR platform view
-    let controller = window?.rootViewController as! FlutterViewController
-    let factory = ArPlatformViewFactory(messenger: controller.binaryMessenger)
-    registrar(forPlugin: "ArPlatformViewPlugin")!
-      .register(factory, withId: "outvisionxr/ar_view")
+    if let controller = window?.rootViewController as? FlutterViewController {
+      let factory = ArPlatformViewFactory(messenger: controller.binaryMessenger)
+      registrar(forPlugin: "ArPlatformViewPlugin")?
+        .register(factory, withId: "outvisionxr/ar_view")
+    }
 
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    return result
   }
 }
