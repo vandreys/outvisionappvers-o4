@@ -175,7 +175,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
       ),
       bottomNavigationBar: Rsp.isTablet(context)
           ? bottomNavBar(context, 2)
-          : SafeArea(child: bottomNavBar(context, 2)),
+          : bottomNavBar(context, 2),
     );
   }
 

@@ -641,7 +641,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                 ),
       bottomNavigationBar: Rsp.isTablet(context)
           ? bottomNavBar(context, 0)
-          : SafeArea(child: bottomNavBar(context, 0)),
+          : bottomNavBar(context, 0),
     );
   }
 

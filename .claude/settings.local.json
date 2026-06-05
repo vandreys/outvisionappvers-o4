@@ -8,7 +8,24 @@
       "Read(//c/flutter/**)",
       "Bash(\"/c/Users/victo/OneDrive/Documentos/outvisionxr/flutter/bin/flutter\" pub:*)",
       "Bash(\"/c/Users/victo/OneDrive/Documentos/outvisionxr/flutter/bin/flutter.bat\" pub:*)",
-      "Bash(\"/c/Users/victo/OneDrive/Documentos/outvisionxr/flutter/bin/flutter.bat\" analyze:*)"
+      "Bash(\"/c/Users/victo/OneDrive/Documentos/outvisionxr/flutter/bin/flutter.bat\" analyze:*)",
+      "Bash(python3 -c ' *)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(flutter devices *)",
+      "Bash(flutter run *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(xcrun simctl *)",
+      "Bash(grep -v \"^$\")",
+      "WebFetch(domain:flutter.dev)",
+      "Bash(flutter build *)",
+      "Read(//Users/luizkraisch/flutter/packages/flutter_tools/templates/app/ios.tmpl/Runner/**)",
+      "Read(//Users/luizkraisch/flutter/packages/flutter_tools/templates/app/ios.tmpl/**)",
+      "Bash(xargs cat)",
+      "Bash(find /Users/luizkraisch/projects/outvisionappvers-o4/ios -name \"Flutter.xcframework\" -o -name \"Flutter.framework\" 2>/dev/null | head -3 && find /Users/luizkraisch/flutter/bin/cache -name \"FlutterSceneDelegate*\" 2>/dev/null | head -5)",
+      "Read(//Users/luizkraisch/flutter/bin/cache/**)",
+      "Bash(sed -i '' 's/: SafeArea\\(child: bottomNavBar\\(context, 2\\)\\),/: bottomNavBar\\(context, 2\\),/' /Users/luizkraisch/projects/outvisionappvers-o4/lib/pages/artist_page.dart)",
+      "Bash(sed -i '' 's/: SafeArea\\(child: bottomNavBar\\(context, 1\\)\\),/: bottomNavBar\\(context, 1\\),/' /Users/luizkraisch/projects/outvisionappvers-o4/lib/pages/artwork_page.dart)"
     ]
   }
 }

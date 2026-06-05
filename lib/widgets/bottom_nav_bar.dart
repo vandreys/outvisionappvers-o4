@@ -11,6 +11,7 @@ Widget bottomNavBar(BuildContext context, int currentIndex) {
       color: AppColors.bg,
       border: Border(top: BorderSide(color: AppColors.border)),
     ),
+    padding: const EdgeInsets.only(bottom: 8),
     child: Row(
       children: [
         _NavItem(
