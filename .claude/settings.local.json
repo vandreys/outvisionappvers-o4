@@ -25,7 +25,8 @@
       "Bash(find /Users/luizkraisch/projects/outvisionappvers-o4/ios -name \"Flutter.xcframework\" -o -name \"Flutter.framework\" 2>/dev/null | head -3 && find /Users/luizkraisch/flutter/bin/cache -name \"FlutterSceneDelegate*\" 2>/dev/null | head -5)",
       "Read(//Users/luizkraisch/flutter/bin/cache/**)",
       "Bash(sed -i '' 's/: SafeArea\\(child: bottomNavBar\\(context, 2\\)\\),/: bottomNavBar\\(context, 2\\),/' /Users/luizkraisch/projects/outvisionappvers-o4/lib/pages/artist_page.dart)",
-      "Bash(sed -i '' 's/: SafeArea\\(child: bottomNavBar\\(context, 1\\)\\),/: bottomNavBar\\(context, 1\\),/' /Users/luizkraisch/projects/outvisionappvers-o4/lib/pages/artwork_page.dart)"
+      "Bash(sed -i '' 's/: SafeArea\\(child: bottomNavBar\\(context, 1\\)\\),/: bottomNavBar\\(context, 1\\),/' /Users/luizkraisch/projects/outvisionappvers-o4/lib/pages/artwork_page.dart)",
+      "Bash(flutter analyze *)"
     ]
   }
 }
