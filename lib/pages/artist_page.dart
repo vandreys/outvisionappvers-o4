@@ -1,6 +1,5 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -70,43 +69,41 @@ class _ArtistsPageState extends State<ArtistsPage> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(22, 20, 22, 0),
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          t.gallery.tabArtists,
-                          style: AppText.display(fontSize: Rsp.fs(context, 40)),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    t.gallery.tabArtists,
+                    style: GoogleFonts.inter(
+                      fontSize: Rsp.fs(context, 40),
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.bg2,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(
+                        color: const Color(0xFF14110E).withValues(alpha: 0.18),
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       children: [
                         const SizedBox(width: 13),
-                        Icon(Icons.search, size: 14, color: AppColors.fg3),
+                        const Icon(Icons.search, size: 14, color: AppColors.muted),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
                             controller: _searchController,
                             style: GoogleFonts.inter(
-                                fontSize: 12, color: AppColors.fg),
+                                fontSize: 12, color: AppColors.ink),
                             decoration: InputDecoration(
                               hintText: t.gallery.search,
                               hintStyle: GoogleFonts.inter(
-                                  fontSize: 12, color: AppColors.fg3),
+                                  fontSize: 12, color: AppColors.muted),
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -141,8 +138,8 @@ class _ArtistsPageState extends State<ArtistsPage> {
 
                 if (artists.isEmpty) {
                   return Center(
-                    child: Text(t.gallery.noArtistFound,
-                        style: AppText.caption()),
+                    child:
+                        Text(t.gallery.noArtistFound, style: AppText.caption()),
                   );
                 }
 
@@ -150,19 +147,20 @@ class _ArtistsPageState extends State<ArtistsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 12),
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
                       child: Text(
-                        '${artists.length} ${artists.length == 1 ? t.gallery.artistSingular : t.gallery.artistPlural}',
+                        '${artists.length} ${artists.length == 1 ? t.gallery.artistSingular : t.gallery.artistPlural}'
+                            .toUpperCase(),
                         style: AppText.label(),
                       ),
                     ),
                     Expanded(
                       child: ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
                         itemCount: artists.length,
                         itemBuilder: (context, index) => FadeSlideIn(
                           index: index,
-                          child: _buildArtistItem(artists[index]),
+                          child: _buildArtistItem(artists[index], index),
                         ),
                       ),
                     ),
@@ -181,34 +179,19 @@ class _ArtistsPageState extends State<ArtistsPage> {
 
   Widget _buildShimmerList() {
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
       itemCount: 6,
-      itemBuilder: (_, __) => Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Row(
+      itemBuilder: (_, i) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 22),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.hairline, width: 1)),
+        ),
+        child: const Row(
           children: [
-            ShimmerBox(
-              width: 56,
-              height: 56,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            const SizedBox(width: 14),
+            ShimmerBox(width: 32, height: 14, borderRadius: BorderRadius.zero),
+            SizedBox(width: 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShimmerBox(
-                    height: 14,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  const SizedBox(height: 6),
-                  ShimmerBox(
-                    height: 11,
-                    width: 100,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ],
-              ),
+              child: ShimmerBox(height: 25, borderRadius: BorderRadius.zero),
             ),
           ],
         ),
@@ -221,24 +204,22 @@ class _ArtistsPageState extends State<ArtistsPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.wifi_off_rounded, size: 40, color: AppColors.fg3),
+          const Icon(Icons.wifi_off_rounded, size: 40, color: AppColors.muted),
           const SizedBox(height: 12),
           Text(t.ar.errorTitle, style: AppText.caption()),
           const SizedBox(height: 12),
           GestureDetector(
             onTap: () => setState(_startTimer),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.fg,
-                borderRadius: BorderRadius.circular(6),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              color: AppColors.ink,
+              child: Text(
+                t.ar.tryAgain.toUpperCase(),
+                style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
               ),
-              child: Text(t.ar.tryAgain,
-                  style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500)),
             ),
           ),
         ],
@@ -246,65 +227,51 @@ class _ArtistsPageState extends State<ArtistsPage> {
     );
   }
 
-  Widget _buildArtistItem(Artist artist) {
+  Widget _buildArtistItem(Artist artist, int index) {
+    final indexLabel = (index + 1).toString().padLeft(2, '0');
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, AppRouter.artistDetails, arguments: artist),
+      onTap: () => Navigator.pushNamed(context, AppRouter.artistDetails,
+          arguments: artist),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.only(bottom: 20),
-        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 22),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
+          border: Border(top: BorderSide(color: AppColors.hairline, width: 1)),
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: SizedBox(
-                width: 56,
-                height: 56,
-                child: artist.artistPhoto.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: artist.artistPhoto,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => const ShimmerBox(),
-                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
-                      )
-                    : Container(
-                        color: AppColors.bg2,
-                        child: Icon(Icons.person_outline,
-                            size: 24, color: AppColors.fg3),
-                      ),
+            SizedBox(
+              width: 32,
+              child: Text(
+                indexLabel,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  color: AppColors.faint,
+                ),
               ),
             ),
-            const SizedBox(width: 14),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    artist.name,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.fg,
-                    ),
-                  ),
-                  if (artist.website.isNotEmpty) ...[
-                    const SizedBox(height: 3),
-                    Text(
-                      artist.website,
-                      style: AppText.caption(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
+              child: Text(
+                artist.name,
+                style: GoogleFonts.inter(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.ink,
+                ),
               ),
             ),
-            const SizedBox(width: 8),
-            Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
+            if (artist.website.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              Text(
+                artist.website.length > 20
+                    ? '${artist.website.substring(0, 20)}…'
+                    : artist.website,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  color: AppColors.muted,
+                ),
+              ),
+            ],
           ],
         ),
       ),

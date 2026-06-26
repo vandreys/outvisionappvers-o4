@@ -13,7 +13,6 @@ import 'package:outvisionxr/pages/settings/settings_about_app.dart';
 import 'package:outvisionxr/pages/settings/settings_howtouse.dart';
 import 'package:outvisionxr/pages/settings/settings_limiares.dart';
 import 'package:outvisionxr/pages/splash_screen.dart';
-import 'package:outvisionxr/pages/welcome_page.dart';
 
 PageRouteBuilder<T> _fadeSlideRoute<T>({required Widget page}) {
   return PageRouteBuilder<T>(
@@ -38,7 +37,6 @@ PageRouteBuilder<T> _fadeSlideRoute<T>({required Widget page}) {
 
 class AppRouter {
   static const String splash         = '/splash';
-  static const String welcome        = '/welcome';
   static const String explore        = '/';
   static const String artwork        = '/artwork';
   static const String artists        = '/artists';
@@ -55,9 +53,6 @@ class AppRouter {
     switch (route.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-
-      case welcome:
-        return MaterialPageRoute(builder: (_) => const WelcomePage());
 
       case explore:
         final artworkId = route.arguments as String?;

@@ -2,7 +2,7 @@ name: outvisionxr
 description: "Bienal de Curitiba — experiências de Realidade Aumentada com obras da exposição."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.2.0
@@ -53,6 +53,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/fonts/
     - assets/images/bienal_ar_es.png
 
 flutter_launcher_icons:

@@ -5,6 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +19,12 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Force SurfaceView renderer — compatible with Impeller disabled + ARCore
+  final mapsImpl = GoogleMapsFlutterPlatform.instance;
+  if (mapsImpl is GoogleMapsFlutterAndroid) {
+    mapsImpl.useAndroidViewSurface = true;
+  }
 
   GoogleFonts.config.allowRuntimeFetching = false;
 

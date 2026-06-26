@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
@@ -6,50 +6,52 @@ import 'package:outvisionxr/utils/app_theme.dart';
 
 Widget bottomNavBar(BuildContext context, int currentIndex) {
   return Container(
-    height: 64,
     decoration: BoxDecoration(
       color: AppColors.bg,
-      border: Border(top: BorderSide(color: AppColors.border)),
+      border: Border(top: BorderSide(color: AppColors.hairline, width: 1)),
     ),
-    child: Row(
-      children: [
-        _NavItem(
-          index: 0,
-          currentIndex: currentIndex,
-          label: context.t.bottomNav.explore,
-          icon: Icons.location_on_outlined,
-          onTap: () {
-            if (currentIndex != 0) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, AppRouter.explore, (_) => false);
-            }
-          },
-        ),
-        _NavItem(
-          index: 1,
-          currentIndex: currentIndex,
-          label: context.t.bottomNav.gallery,
-          icon: Icons.grid_view_outlined,
-          onTap: () {
-            if (currentIndex != 1) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, AppRouter.artwork, (_) => false);
-            }
-          },
-        ),
-        _NavItem(
-          index: 2,
-          currentIndex: currentIndex,
-          label: context.t.gallery.tabArtists,
-          icon: Icons.person_outline,
-          onTap: () {
-            if (currentIndex != 2) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, AppRouter.artists, (_) => false);
-            }
-          },
-        ),
-      ],
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+      child: Row(
+        children: [
+          _NavItem(
+            index: 0,
+            currentIndex: currentIndex,
+            label: context.t.bottomNav.explore,
+            icon: Icons.location_on_outlined,
+            onTap: () {
+              if (currentIndex != 0) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRouter.explore, (_) => false);
+              }
+            },
+          ),
+          _NavItem(
+            index: 1,
+            currentIndex: currentIndex,
+            label: context.t.bottomNav.gallery,
+            icon: Icons.grid_view_outlined,
+            onTap: () {
+              if (currentIndex != 1) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRouter.artwork, (_) => false);
+              }
+            },
+          ),
+          _NavItem(
+            index: 2,
+            currentIndex: currentIndex,
+            label: context.t.gallery.tabArtists,
+            icon: Icons.person_outline,
+            onTap: () {
+              if (currentIndex != 2) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRouter.artists, (_) => false);
+              }
+            },
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -72,26 +74,27 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isActive = index == currentIndex;
-    final color = isActive ? AppColors.fg : AppColors.fg3;
+    final color = isActive ? AppColors.ink : AppColors.faint;
 
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 22, color: color),
-            const SizedBox(height: 4),
+            Icon(icon, size: 20, color: color),
+            const SizedBox(height: 5),
             Text(
-              label,
+              label.toUpperCase(),
               style: GoogleFonts.inter(
-                fontSize: 10,
-                fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
+                fontSize: 9,
+                fontWeight: FontWeight.w500,
                 color: color,
-                letterSpacing: 0.3,
+                letterSpacing: 1.6,
               ),
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
@@ -20,7 +21,7 @@ class LimiaresPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 220,
+            expandedHeight: 240,
             pinned: false,
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -40,13 +41,7 @@ class LimiaresPage extends StatelessWidget {
               preferredSize: const Size.fromHeight(28),
               child: Container(
                 height: 28,
-                decoration: const BoxDecoration(
-                  color: AppColors.bg,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
+                color: AppColors.bg,
               ),
             ),
           ),
@@ -56,23 +51,43 @@ class LimiaresPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Eyebrow caption
                   Text(
-                    t.limiares.editionCaption,
-                    style: AppText.caption(),
+                    t.limiares.editionCaption.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 2.0,
+                      color: AppColors.muted2,
+                    ),
                   ),
                   const SizedBox(height: 6),
+                  // Title
                   Text(
                     t.limiares.title,
-                    style: AppText.display(fontSize: 38),
+                    style: GoogleFonts.inter(
+                      fontSize: 42,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
+                      color: AppColors.ink,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  Divider(height: 1, color: AppColors.border),
+                  Divider(height: 1, color: AppColors.hairline),
                   const SizedBox(height: 28),
 
                   // Conceito
                   Text(t.limiares.conceptLabel, style: AppText.label()),
                   const SizedBox(height: 12),
-                  Text(t.limiares.conceptText, style: AppText.body()),
+                  Text(
+                    t.limiares.conceptText,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.body,
+                      height: 1.72,
+                    ),
+                  ),
                   const SizedBox(height: 32),
 
                   // Statement
@@ -81,10 +96,18 @@ class LimiaresPage extends StatelessWidget {
                     style: AppText.label(),
                   ),
                   const SizedBox(height: 12),
-                  Text(t.limiares.statementText, style: AppText.body()),
+                  Text(
+                    t.limiares.statementText,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.body,
+                      height: 1.72,
+                    ),
+                  ),
                   const SizedBox(height: 40),
 
-                  Divider(height: 1, color: AppColors.border),
+                  Divider(height: 1, color: AppColors.hairline),
                   const SizedBox(height: 24),
 
                   // Curadores
@@ -95,7 +118,11 @@ class LimiaresPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     t.limiares.curatorsNames,
-                    style: AppText.display(fontSize: 16),
+                    style: GoogleFonts.inter(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                    ),
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -120,11 +147,11 @@ class _BackButton extends StatelessWidget {
       child: Container(
         width: 36,
         height: 36,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
           color: Colors.white,
-          borderRadius: BorderRadius.circular(6),
         ),
-        child: const Icon(Icons.chevron_left, size: 22, color: Colors.black),
+        child: const Icon(Icons.chevron_left, size: 20, color: Colors.black),
       ),
     );
   }

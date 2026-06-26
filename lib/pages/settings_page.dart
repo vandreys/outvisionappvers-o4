@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
 import 'package:outvisionxr/routes/app_router.dart';
@@ -21,141 +20,114 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(22, 16, 22, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            // Sticky back bar
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColors.hairline, width: 1),
+                ),
+              ),
+              padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+              child: Row(
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: AppColors.bg2,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.border),
-                          ),
-                          child: const Icon(Icons.chevron_left,
-                              size: 22, color: AppColors.fg),
-                        ),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(Icons.chevron_left, size: 20, color: AppColors.ink),
                   ),
-                  const SizedBox(height: 20),
-                  Text(t.settings.bienalEyebrow, style: AppText.eyebrow()),
-                  const SizedBox(height: 6),
-                  Text(t.settings.title, style: AppText.display(fontSize: Rsp.fs(context, 38))),
-                  const SizedBox(height: 28),
                 ],
               ),
             ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
                 children: [
-                  _buildSection(
-                    label: t.settings.appSectionLabel,
-                    items: [
-                      _SettingsItem(
-                        icon: Icons.touch_app_outlined,
-                        title: t.settings.getHelp,
-                        subtitle: t.settings.howToUseSubtitle,
-                        onTap: () => Navigator.pushNamed(
-                            context, AppRouter.settingsHowToUse),
-                        isNav: true,
-                      ),
-                      _SettingsItem(
-                        icon: Icons.language,
-                        title: t.settings.language,
-                        subtitle: _currentLangLabel(),
-                        onTap: () =>
-                            Navigator.pushNamed(context, AppRouter.settingsLang),
-                        isNav: true,
-                      ),
-                      _SettingsItem(
-                        icon: Icons.info_outline,
-                        title: t.settings.aboutApp,
-                        subtitle: t.settings.aboutAppSubtitle,
-                        onTap: () =>
-                            Navigator.pushNamed(context, AppRouter.settingsApp),
-                        isNav: true,
-                        isLast: true,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildSection(
-                    label: t.settings.bienalSectionLabel,
-                    items: [
-                      _SettingsItem(
-                        icon: Icons.auto_awesome_outlined,
-                        title: t.settings.limiares,
-                        subtitle: t.settings.limiaresSubtitle,
-                        onTap: () => Navigator.pushNamed(
-                            context, AppRouter.settingsLimiares),
-                        isNav: true,
-                      ),
-                      _SettingsItem(
-                        icon: Icons.computer_outlined,
-                        title: t.settings.website,
-                        subtitle: 'bienaldecuritiba.org',
-                        isExternal: true,
-                        onTap: () => launchUrl(
-                          Uri.parse('https://www.bienaldecuritiba.org/'),
-                          mode: LaunchMode.externalApplication,
-                        ),
-                      ),
-                      _SettingsItem(
-                        iconWidget: const FaIcon(FontAwesomeIcons.instagram,
-                            size: 15, color: AppColors.fg),
-                        title: t.settings.instagram,
-                        subtitle: '@bienaldecuritiba',
-                        isExternal: true,
-                        onTap: () => launchUrl(
-                          Uri.parse(
-                              'https://www.instagram.com/bienaldecuritiba/'),
-                          mode: LaunchMode.externalApplication,
-                        ),
-                      ),
-                      _SettingsItem(
-                        icon: Icons.shield_outlined,
-                        title: t.settings.privacyPolicy,
-                        subtitle: t.settings.privacySubtitle,
-                        isExternal: true,
-                        onTap: () => launchUrl(
-                          Uri.parse('https://outvisionxr.com/privacy-bienal'),
-                          mode: LaunchMode.externalApplication,
-                        ),
-                      ),
-                      _SettingsItem(
-                        icon: Icons.description_outlined,
-                        title: t.settings.termsOfUse,
-                        subtitle: t.settings.termsSubtitle,
-                        isExternal: true,
-                        isLast: true,
-                        onTap: () => launchUrl(
-                          Uri.parse(
-                              'https://outvisionxr.com/terms-of-use-bienal'),
-                          mode: LaunchMode.externalApplication,
-                        ),
-                      ),
-                    ],
-                  ),
                   const SizedBox(height: 32),
-                  Center(
-                    child: FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snap) {
-                        final version = snap.data?.version ?? '—';
-                        return Text(
-                          'v$version · Bienal de Curitiba',
-                          style: AppText.caption(),
-                        );
-                      },
+                  Text(t.settings.bienalEyebrow, style: AppText.eyebrow()),
+                  const SizedBox(height: 6),
+                  Text(
+                    t.settings.title,
+                    style: GoogleFonts.inter(
+                      fontSize: Rsp.fs(context, 36),
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
                     ),
+                  ),
+                  const SizedBox(height: 36),
+                  Text(t.settings.appSectionLabel, style: AppText.label()),
+                  const SizedBox(height: 6),
+                  _MenuItem(
+                    title: t.settings.getHelp,
+                    onTap: () => Navigator.pushNamed(
+                        context, AppRouter.settingsHowToUse),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.language,
+                    onTap: () => Navigator.pushNamed(
+                        context, AppRouter.settingsLang),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.aboutApp,
+                    onTap: () => Navigator.pushNamed(
+                        context, AppRouter.settingsApp),
+                  ).build(),
+                  const SizedBox(height: 32),
+                  Text(t.settings.bienalSectionLabel, style: AppText.label()),
+                  const SizedBox(height: 6),
+                  _MenuItem(
+                    title: t.settings.limiares,
+                    onTap: () => Navigator.pushNamed(
+                        context, AppRouter.settingsLimiares),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.website,
+                    isExternal: true,
+                    onTap: () => launchUrl(
+                      Uri.parse('https://www.bienaldecuritiba.org/'),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.instagram,
+                    isExternal: true,
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                          'https://www.instagram.com/bienaldecuritiba/'),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.privacyPolicy,
+                    isExternal: true,
+                    onTap: () => launchUrl(
+                      Uri.parse('https://outvisionxr.com/privacy-bienal'),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ).build(),
+                  _MenuItem(
+                    title: t.settings.termsOfUse,
+                    isExternal: true,
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                          'https://outvisionxr.com/terms-of-use-bienal'),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ).build(),
+                  const SizedBox(height: 48),
+                  FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snap) {
+                      final version = snap.data?.version ?? '—';
+                      return Center(
+                        child: Text(
+                          'V$version · BIENAL DE CURITIBA'.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            color: AppColors.faint,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -166,117 +138,55 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  String _currentLangLabel() {
-    switch (LocaleSettings.currentLocale.languageCode) {
-      case 'en':
-        return t.languagePage.english;
-      case 'es':
-        return t.languagePage.spanish;
-      default:
-        return t.languagePage.portuguese;
-    }
-  }
-
-  Widget _buildSection(
-      {required String label, required List<_SettingsItem> items}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Text(label, style: AppText.label()),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Column(
-            children: items.map((item) => item._build()).toList(),
-          ),
-        ),
-      ],
-    );
-  }
 }
 
-class _SettingsItem {
-  final IconData? icon;
-  final Widget? iconWidget;
+class _MenuItem {
   final String title;
-  final String subtitle;
   final VoidCallback onTap;
   final bool isExternal;
-  final bool isNav;
-  final bool isLast;
 
-  const _SettingsItem({
-    this.icon,
-    this.iconWidget,
+  const _MenuItem({
     required this.title,
-    required this.subtitle,
     required this.onTap,
     this.isExternal = false,
-    this.isNav = false,
-    this.isLast = false,
   });
 
-  Widget _build() {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            child: Row(
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: AppColors.bg2,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: Center(
-                    child: iconWidget ??
-                        Icon(icon, size: 16, color: AppColors.fg),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: GoogleFonts.inter(
-                          fontSize: 13,
-                          color: AppColors.fg,
-                        ),
-                      ),
-                      const SizedBox(height: 1),
-                      Text(subtitle, style: AppText.caption()),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                if (isExternal)
-                  Icon(Icons.open_in_new, size: 12, color: AppColors.fg3)
-                else
-                  Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
-              ],
-            ),
+  Widget build() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: const Color(0xFF14110E).withValues(alpha: 0.12),
+            width: 1,
           ),
         ),
-        if (!isLast)
-          Divider(
-            height: 1,
-            indent: 60,
-            endIndent: 0,
-            color: AppColors.border,
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: GoogleFonts.inter(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.ink,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              if (isExternal)
+                const Icon(Icons.open_in_new, size: 11, color: AppColors.faint)
+              else
+                const Icon(Icons.chevron_right, size: 15, color: AppColors.faint),
+            ],
           ),
-      ],
+        ),
+      ),
     );
   }
 }

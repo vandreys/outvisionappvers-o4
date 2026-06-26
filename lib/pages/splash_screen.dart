@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed && mounted) {
-        Navigator.pushReplacementNamed(context, AppRouter.welcome);
+        Navigator.pushReplacementNamed(context, AppRouter.explore);
       }
     });
   }
@@ -68,35 +68,24 @@ class _SplashScreenState extends State<SplashScreen>
                     // Eyebrow
                     Text(
                       t.splash.editionLabel,
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        letterSpacing: 2.5,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.fg3,
-                      ),
+                      style: AppText.eyebrow(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
 
-                    // Title
+                    // Title — serifada editorial
                     Text(
                       t.about.heroTitle,
-                      style: GoogleFonts.inter(
-                        fontSize: Rsp.fs(context, 44),
-                        fontWeight: FontWeight.w700,
-                        height: 1.05,
-                        letterSpacing: -1.0,
-                        color: AppColors.fg,
-                      ),
+                      style: AppText.display(fontSize: Rsp.fs(context, 44)),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
 
                     // Concept name
                     Text(
                       t.splash.conceptLabel,
                       style: GoogleFonts.inter(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w300,
-                        letterSpacing: 0.5,
+                        letterSpacing: 0.3,
                         color: AppColors.fg3,
                       ),
                     ),
@@ -107,20 +96,17 @@ class _SplashScreenState extends State<SplashScreen>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(1),
-                          child: SizedBox(
-                            height: 1,
-                            width: double.infinity,
-                            child: Stack(
-                              children: [
-                                Container(color: AppColors.border),
-                                FractionallySizedBox(
-                                  widthFactor: _progress.value,
-                                  child: Container(color: AppColors.accent),
-                                ),
-                              ],
-                            ),
+                        SizedBox(
+                          height: 1,
+                          width: double.infinity,
+                          child: Stack(
+                            children: [
+                              Container(color: AppColors.border),
+                              FractionallySizedBox(
+                                widthFactor: _progress.value,
+                                child: Container(color: AppColors.fg),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -129,19 +115,11 @@ class _SplashScreenState extends State<SplashScreen>
                           children: [
                             Text(
                               t.splash.loading,
-                              style: GoogleFonts.inter(
-                                fontSize: 10,
-                                letterSpacing: 1.5,
-                                color: AppColors.fg3,
-                              ),
+                              style: AppText.label(),
                             ),
                             Text(
                               '${(_progress.value * 100).toInt()}%',
-                              style: GoogleFonts.inter(
-                                fontSize: 10,
-                                letterSpacing: 1,
-                                color: AppColors.fg3,
-                              ),
+                              style: AppText.label(),
                             ),
                           ],
                         ),

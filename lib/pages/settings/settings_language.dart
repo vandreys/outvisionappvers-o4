@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
+import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:provider/provider.dart';
-
 
 class LanguagePage extends StatelessWidget {
   const LanguagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Helper para obter o nome do idioma traduzido
     String getLanguageName(AppLocale locale) {
       switch (locale) {
         case AppLocale.pt:
@@ -21,7 +21,6 @@ class LanguagePage extends StatelessWidget {
       }
     }
 
-    // Define a ordem de exibição explicitamente: Português primeiro
     final orderedLocales = [
       AppLocale.pt,
       AppLocale.en,
@@ -29,65 +28,91 @@ class LanguagePage extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // Background Off-white / Gelo
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F5F5), // AppBar combinando com o fundo
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: Text(
-          context.t.languagePage.title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(24.0), // Padding similar ao da SettingsPage
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Container Branco (#ffffff)
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Column(
-                children: orderedLocales.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final locale = entry.value;
-                  final languageProvider = Provider.of<LanguageProvider>(context);
-                  final isSelected = languageProvider.currentLocale == locale;
-                  final isLast = index == orderedLocales.length - 1;
-
-                  return Column(
-                    children: [
-                      ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        title: Text(
-                          getLanguageName(locale),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                        trailing: isSelected
-                            ? const Icon(Icons.check, color: Colors.black)
-                            : null,
-                        onTap: () => languageProvider.setLocale(locale),
+      backgroundColor: AppColors.bg,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Back bar
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColors.hairline, width: 1),
+                ),
+              ),
+              padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      width: 34,
+                      height: 34,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.bg2,
                       ),
-                      // Adiciona o divisor apenas se não for o último item
-                      if (!isLast)
-                        Divider(height: 1, color: Colors.grey[300]),
-                    ],
-                  );
-                }).toList(),
+                      child: const Icon(Icons.chevron_left, size: 18, color: AppColors.ink),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+              child: Text(
+                context.t.languagePage.title,
+                style: GoogleFonts.inter(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.ink,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                itemCount: orderedLocales.length,
+                itemBuilder: (context, index) {
+                  final locale = orderedLocales[index];
+                  final languageProvider = Provider.of<LanguageProvider>(context);
+                  final isSelected = languageProvider.currentLocale == locale;
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: AppColors.hairline, width: 1),
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () => languageProvider.setLocale(locale),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                getLanguageName(locale),
+                                style: GoogleFonts.inter(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.ink,
+                                ),
+                              ),
+                            ),
+                            if (isSelected)
+                              const Icon(Icons.check,
+                                  size: 16, color: AppColors.ink),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

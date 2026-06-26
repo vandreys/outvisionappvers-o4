@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,17 +25,27 @@ class AboutAppPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
           decoration: BoxDecoration(
             color: AppColors.bg,
-            border: Border(top: BorderSide(color: AppColors.border)),
+            border: Border(top: BorderSide(color: AppColors.hairline, width: 1)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Versão $version ($build)', style: AppText.caption()),
+              Text(
+                'VERSÃO $version ($build)',
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  color: AppColors.faint,
+                  letterSpacing: 1.5,
+                ),
+              ),
               const SizedBox(height: 4),
               Text(
                 '© 2026 OutVisionXR. Todos os direitos reservados.',
                 textAlign: TextAlign.center,
-                style: AppText.caption(),
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  color: AppColors.faint,
+                ),
               ),
             ],
           ),
@@ -54,7 +64,7 @@ class AboutAppPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 220,
+            expandedHeight: 240,
             pinned: false,
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -79,10 +89,6 @@ class AboutAppPage extends StatelessWidget {
                 height: 24,
                 decoration: const BoxDecoration(
                   color: AppColors.bg,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
                 ),
               ),
             ),
@@ -94,20 +100,27 @@ class AboutAppPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(t.about.editionLabel, style: AppText.caption()),
+                  // Eyebrow
+                  Text(
+                    t.about.editionLabel.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 2.0,
+                      color: AppColors.muted2,
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   Text(
                     t.about.heroTitle,
                     style: GoogleFonts.inter(
-                      fontSize: Rsp.fs(context, 38),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.5,
-                      height: 1.1,
-                      color: AppColors.fg,
+                      fontSize: Rsp.fs(context, 36),
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Divider(height: 1, color: AppColors.border),
+                  Divider(height: 1, color: AppColors.hairline),
                   const SizedBox(height: 28),
                   Text(t.about.aboutLabel, style: AppText.label()),
                   const SizedBox(height: 12),
@@ -116,13 +129,13 @@ class AboutAppPage extends StatelessWidget {
                   Text(t.about.appText2, style: AppText.body()),
                   const SizedBox(height: 32),
                   _FeatureRow(
-                    icon: Icons.view_in_ar,
+                    icon: Icons.view_in_ar_outlined,
                     title: t.about.featureArTitle,
                     description: t.about.featureArDesc,
                   ),
                   const SizedBox(height: 16),
                   _FeatureRow(
-                    icon: Icons.map_outlined,
+                    icon: Icons.location_on_outlined,
                     title: t.about.featureMapTitle,
                     description: t.about.featureMapDesc,
                   ),
@@ -133,11 +146,18 @@ class AboutAppPage extends StatelessWidget {
                     description: t.about.featureArtistsDesc,
                   ),
                   const SizedBox(height: 40),
-                  Divider(height: 1, color: AppColors.border),
+                  Divider(height: 1, color: AppColors.hairline),
                   const SizedBox(height: 32),
                   Text(t.about.devByLabel, style: AppText.label()),
                   const SizedBox(height: 16),
-                  Text('OutVision XR', style: AppText.display(fontSize: 22)),
+                  Text(
+                    'OutVision XR',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   Text(t.about.studioText, style: AppText.body()),
                   const SizedBox(height: 24),
@@ -164,7 +184,7 @@ class AboutAppPage extends StatelessWidget {
                   ),
                   if (!isTablet) ...[
                     const SizedBox(height: 48),
-                    Divider(height: 1, color: AppColors.border),
+                    Divider(height: 1, color: AppColors.hairline),
                     const SizedBox(height: 20),
                     Center(child: _buildFooter(context)),
                     const SizedBox(height: 24),
@@ -190,13 +210,13 @@ class _NavButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
+        width: 40,
+        height: 40,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
           color: Colors.white,
-          borderRadius: BorderRadius.circular(6),
         ),
-        child: Icon(icon, size: 22, color: Colors.black),
+        child: Icon(icon, size: 20, color: Colors.black),
       ),
     );
   }
@@ -218,15 +238,9 @@ class _FeatureRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: AppColors.bg2,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: Icon(icon, color: AppColors.fg, size: 16),
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Icon(icon, size: 16, color: AppColors.muted),
         ),
         const SizedBox(width: 14),
         Expanded(
@@ -236,13 +250,19 @@ class _FeatureRow extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.inter(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.fg,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.ink,
                 ),
               ),
               const SizedBox(height: 2),
-              Text(description, style: AppText.caption()),
+              Text(
+                description,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppColors.muted,
+                ),
+              ),
             ],
           ),
         ),
@@ -270,20 +290,19 @@ class _LinkChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.bg,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: AppColors.hairline, width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 12, color: AppColors.fg3),
+            Icon(icon, size: 12, color: AppColors.muted),
             const SizedBox(width: 6),
             Text(
               label,
               style: GoogleFonts.inter(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: AppColors.fg2,
+                color: AppColors.body,
               ),
             ),
           ],

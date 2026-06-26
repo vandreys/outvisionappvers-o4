@@ -41,25 +41,10 @@ class _SplashLoadingState extends State<SplashLoading>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(flex: 3),
-              Text(
-                'Bienal de\nCuritiba',
-                style: GoogleFonts.inter(
-                  color: AppColors.fg,
-                  fontSize: 42,
-                  fontWeight: FontWeight.w700,
-                  height: 1.1,
-                  letterSpacing: -1.0,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '2026',
-                style: GoogleFonts.inter(
-                  color: AppColors.fg3,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                  letterSpacing: 4,
-                ),
+              Image.asset(
+                'assets/images/bienal_ar_es.png',
+                width: 180,
+                fit: BoxFit.contain,
               ),
               const Spacer(flex: 3),
               AnimatedBuilder(

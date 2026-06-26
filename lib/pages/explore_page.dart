@@ -540,7 +540,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.location_off_outlined, size: 36, color: AppColors.fg3),
+                        const Icon(Icons.location_off_outlined, size: 36, color: AppColors.fg3),
                         const SizedBox(height: 16),
                         Text(
                           _locationError!,
@@ -562,7 +562,7 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
                               backgroundColor: AppColors.fg,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6)),
+                                  borderRadius: BorderRadius.circular(3)),
                             ),
                             child: Text(
                               t.ar.tryAgain,
@@ -646,8 +646,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   static final String _grayMapStyle = jsonEncode([
-    {"featureType": "all", "stylers": [{"saturation": -100}, {"lightness": 40}, {"gamma": 0.5}]},
+    {"featureType": "all", "stylers": [{"saturation": -75}, {"lightness": 5}]},
     {"featureType": "poi", "stylers": [{"visibility": "off"}]},
+    {"featureType": "transit", "stylers": [{"visibility": "simplified"}]},
   ]);
 }
 
@@ -726,14 +727,8 @@ class _ArtworkTapCardState extends State<_ArtworkTapCard>
     return Container(
       decoration: BoxDecoration(
         color: AppColors.bg,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
-            blurRadius: 32,
-            offset: const Offset(0, -6),
-          ),
-        ],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -844,14 +839,14 @@ class _ArtworkTapCardState extends State<_ArtworkTapCard>
                     height: 50,
                     decoration: BoxDecoration(
                       color: widget.isNearby ? AppColors.accent : AppColors.fg,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(3),
                     ),
                     child: Material(
                       color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(3),
                       child: InkWell(
                         onTap: widget.isNearby ? widget.onOpenAr : _navigate,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(3),
                         splashColor: Colors.white.withValues(alpha: 0.12),
                         child: Center(
                           child: Row(
@@ -899,14 +894,8 @@ class _NoNearbyArtworkCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.bg,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 24,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+        border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
@@ -939,7 +928,7 @@ class _NoNearbyArtworkCard extends StatelessWidget {
                   backgroundColor: AppColors.fg,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(3),
                   ),
                 ),
                 child: Text(

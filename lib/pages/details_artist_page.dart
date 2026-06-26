@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:outvisionxr/i18n/strings.g.dart';
@@ -21,7 +21,6 @@ class DetailsArtistPage extends StatefulWidget {
 }
 
 class _DetailsArtistPageState extends State<DetailsArtistPage> {
-  int _artworkIdx = 0;
   Stream<List<Artwork>>? _artworkStream;
 
   @override
@@ -50,48 +49,52 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
             slivers: [
               SliverToBoxAdapter(child: _buildHero(artist)),
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(22, 4, 22, 0),
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    // Meta
-                    Text(
-                      [
-                        if (artist.website.isNotEmpty) artist.website,
-                      ].join(' · '),
-                      style: AppText.caption(),
-                    ),
-                    const SizedBox(height: 10),
                     // Name
-                    Text(artist.name, style: AppText.display(fontSize: Rsp.fs(context, 42))),
-                    const SizedBox(height: 20),
+                    Text(
+                      artist.name,
+                      style: GoogleFonts.inter(
+                        fontSize: Rsp.fs(context, 34),
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Meta: website
+                    if (artist.website.isNotEmpty)
+                      Text(
+                        artist.website,
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.muted,
+                        ),
+                      ),
+                    const SizedBox(height: 24),
                     // Bio
                     if (bio.isNotEmpty) ...[
-                      _buildBio(bio),
+                      Text(
+                        bio,
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          color: AppColors.body,
+                          height: 1.72,
+                        ),
+                      ),
                       const SizedBox(height: 32),
-                      Divider(height: 1, color: AppColors.border),
+                      Divider(height: 1, color: AppColors.hairline),
                       const SizedBox(height: 28),
                     ],
                     // Artworks section
                     if (artworks.isNotEmpty) ...[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(t.gallery.highlights,
-                              style: AppText.display(fontSize: 22)),
-                          const Spacer(),
-                          Text(
-                            '${_artworkIdx + 1}/${artworks.length}',
-                            style: AppText.caption(),
-                          ),
-                        ],
+                      Text(
+                        t.gallery.highlights.toUpperCase(),
+                        style: AppText.label(),
                       ),
-                      const SizedBox(height: 16),
-                      _buildArtworkCard(artworks, context),
-                      if (artworks.length > 1) ...[
-                        const SizedBox(height: 14),
-                        _buildDotsNav(artworks.length),
-                      ],
+                      Divider(height: 1, color: AppColors.hairline),
+                      ...artworks.map((artwork) => _buildArtworkItem(artwork, context)),
                       const SizedBox(height: 28),
                     ],
                     const SizedBox(height: 48),
@@ -109,7 +112,7 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
     return Stack(
       children: [
         SizedBox(
-          height: Rsp.isTablet(context) ? 310 : 240,
+          height: Rsp.isTablet(context) ? 310 : 360,
           width: double.infinity,
           child: artist.artistPhoto.isNotEmpty
               ? CachedNetworkImage(
@@ -120,53 +123,14 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                 )
               : Container(color: AppColors.bg2),
         ),
-        // Gradient
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 160,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [AppColors.bg, AppColors.bg.withValues(alpha: 0)],
-              ),
-            ),
-          ),
-        ),
-        // Back button + badge
+        // Back button — no badge
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _GlassButton(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.chevron_left,
-                      size: 22, color: Colors.white),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.22),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.12)),
-                  ),
-                  child: Text(
-                    'Bienal de Curitiba',
-                    style: GoogleFonts.inter(
-                      fontSize: 9,
-                      letterSpacing: 1.8,
-                      color: Colors.white.withValues(alpha: 0.85),
-                    ),
-                  ),
-                ),
-              ],
+            child: _GlassButton(
+              onTap: () => Navigator.of(context).pop(),
+              child: const Icon(Icons.chevron_left,
+                  size: 22, color: Colors.white),
             ),
           ),
         ),
@@ -174,37 +138,24 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
     );
   }
 
-  Widget _buildBio(String bio) {
-    final tablet = Rsp.isTablet(context);
-    return Text(
-      bio,
-      style: AppText.body().copyWith(
-        fontSize: tablet ? 13 : 11.5,
-        height: tablet ? 1.75 : 1.6,
-      ),
-    );
-  }
-
-  Widget _buildArtworkCard(List<Artwork> artworks, BuildContext context) {
-    final artwork = artworks[_artworkIdx];
+  Widget _buildArtworkItem(Artwork artwork, BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(
         context,
         AppRouter.artworkDetails,
         arguments: artwork.id,
       ),
+      behavior: HitTestBehavior.opaque,
       child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(6),
+          border: Border(top: BorderSide(color: AppColors.hairline, width: 1)),
         ),
-        clipBehavior: Clip.hardEdge,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
             SizedBox(
-              height: 220,
-              width: double.infinity,
+              width: 72,
+              height: 72,
               child: artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty
                   ? CachedNetworkImage(
                       imageUrl: artwork.imageUrl!,
@@ -214,62 +165,40 @@ class _DetailsArtistPageState extends State<DetailsArtistPage> {
                     )
                   : Container(color: AppColors.bg2),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+            const SizedBox(width: 14),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                    artwork.localizedTitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
                     [
                       if (artwork.year != null) artwork.year!,
                       if (artwork.locationName != null) artwork.locationName!,
-                    ].join(' · ').toUpperCase(),
-                    style: AppText.label(color: AppColors.accent),
+                    ].join(' · '),
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.muted,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
-                  Text(artwork.localizedTitle,
-                      style: AppText.display(fontSize: 20)),
-                  const SizedBox(height: 4),
-                  if (artwork.locationName != null)
-                    Text(artwork.locationName!, style: AppText.caption()),
                 ],
               ),
             ),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right, size: 16, color: AppColors.faint),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDotsNav(int count) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _navArrow(false, count),
-        const SizedBox(width: 16),
-        _navArrow(true, count),
-      ],
-    );
-  }
-
-  Widget _navArrow(bool next, int count) {
-    return GestureDetector(
-      onTap: () => setState(() {
-        _artworkIdx = next
-            ? (_artworkIdx + 1) % count
-            : (_artworkIdx - 1 + count) % count;
-      }),
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(
-          next ? Icons.chevron_right : Icons.chevron_left,
-          size: 18,
-          color: AppColors.fg3,
         ),
       ),
     );
@@ -295,7 +224,7 @@ class _GlassButton extends StatelessWidget {
           border:
               Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
-        child: child,
+        child: Center(child: child),
       ),
     );
   }

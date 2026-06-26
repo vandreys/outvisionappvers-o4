@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ import 'package:outvisionxr/utils/app_theme.dart';
 import 'package:outvisionxr/widgets/shimmer_box.dart';
 import 'package:outvisionxr/utils/language_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ArtworkPage extends StatefulWidget {
   const ArtworkPage({super.key});
@@ -25,7 +24,6 @@ class _ArtworkPageState extends State<ArtworkPage> {
   Stream<List<Artwork>>? _artworkStream;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
-  bool _isGridView = true;
   Timer? _loadingTimer;
   bool _timedOut = false;
 
@@ -52,19 +50,6 @@ class _ArtworkPageState extends State<ArtworkPage> {
     super.initState();
     _searchController
         .addListener(() => setState(() => _query = _searchController.text));
-    _loadViewPref();
-  }
-
-  Future<void> _loadViewPref() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (mounted) setState(() => _isGridView = prefs.getBool('artwork_grid_view') ?? true);
-  }
-
-  Future<void> _toggleView() async {
-    final next = !_isGridView;
-    setState(() => _isGridView = next);
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('artwork_grid_view', next);
   }
 
   @override
@@ -85,62 +70,42 @@ class _ArtworkPageState extends State<ArtworkPage> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(22, 20, 22, 0),
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          t.gallery.tabArtwork,
-                          style: AppText.display(fontSize: Rsp.fs(context, 40)),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _toggleView,
-                        child: Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            color: AppColors.bg2,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.border),
-                          ),
-                          child: Icon(
-                            _isGridView
-                                ? Icons.view_list_outlined
-                                : Icons.grid_view_outlined,
-                            size: 16,
-                            color: AppColors.fg,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    t.gallery.tabArtwork,
+                    style: GoogleFonts.inter(
+                      fontSize: Rsp.fs(context, 40),
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.6,
+                      color: AppColors.ink,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.bg2,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(
+                        color: const Color(0xFF14110E).withValues(alpha: 0.18),
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       children: [
                         const SizedBox(width: 13),
-                        Icon(Icons.search, size: 14, color: AppColors.fg3),
+                        const Icon(Icons.search, size: 14, color: AppColors.muted),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
                             controller: _searchController,
                             style: GoogleFonts.inter(
-                                fontSize: 12, color: AppColors.fg),
+                                fontSize: 12, color: AppColors.ink),
                             decoration: InputDecoration(
                               hintText: t.gallery.search,
                               hintStyle: GoogleFonts.inter(
-                                  fontSize: 12, color: AppColors.fg3),
+                                  fontSize: 12, color: AppColors.muted),
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -163,7 +128,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     !snapshot.hasData) {
                   if (_timedOut) return _buildError();
-                  return _isGridView ? _buildShimmerGrid() : _buildShimmerList();
+                  return _buildShimmerGrid();
                 }
                 if (snapshot.hasError) return _buildError();
                 if (snapshot.hasData) _loadingTimer?.cancel();
@@ -186,16 +151,16 @@ class _ArtworkPageState extends State<ArtworkPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 12),
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                       child: Text(
-                        '${artworks.length} ${artworks.length == 1 ? t.gallery.artworkSingular : t.gallery.artworkPlural}',
+                        '${artworks.length} ${artworks.length == 1 ? t.gallery.artworkSingular : t.gallery.artworkPlural}'.toUpperCase(),
                         style: AppText.label(),
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    Divider(height: 1, color: AppColors.hairline),
                     Expanded(
-                      child: _isGridView
-                          ? _buildGrid(artworks)
-                          : _buildList(artworks),
+                      child: _buildEditorialGrid(artworks),
                     ),
                   ],
                 );
@@ -211,194 +176,117 @@ class _ArtworkPageState extends State<ArtworkPage> {
   }
 
   Widget _buildShimmerGrid() {
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 20,
-        childAspectRatio: 0.65,
-      ),
-      itemCount: 6,
-      itemBuilder: (_, __) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const AspectRatio(
-            aspectRatio: 1.0,
-            child: ShimmerBox(borderRadius: BorderRadius.zero),
-          ),
-          const SizedBox(height: 8),
-          ShimmerBox(height: 14, borderRadius: BorderRadius.circular(3)),
-          const SizedBox(height: 4),
-          ShimmerBox(height: 11, width: 80, borderRadius: BorderRadius.circular(3)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildShimmerList() {
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
-      itemCount: 6,
-      itemBuilder: (_, __) => Padding(
-        padding: const EdgeInsets.only(bottom: 18),
-        child: Row(
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+      children: const [
+        // Two full-width shimmer items
+        ShimmerBox(height: 300, borderRadius: BorderRadius.zero),
+        SizedBox(height: 12),
+        ShimmerBox(height: 22, width: 200, borderRadius: BorderRadius.zero),
+        SizedBox(height: 26),
+        ShimmerBox(height: 300, borderRadius: BorderRadius.zero),
+        SizedBox(height: 12),
+        ShimmerBox(height: 22, width: 200, borderRadius: BorderRadius.zero),
+        SizedBox(height: 26),
+        // 2-col grid shimmer
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ShimmerBox(width: 68, height: 68, borderRadius: BorderRadius.circular(4)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShimmerBox(height: 15, borderRadius: BorderRadius.circular(3)),
-                  const SizedBox(height: 6),
-                  ShimmerBox(height: 11, width: 120, borderRadius: BorderRadius.circular(3)),
-                ],
-              ),
-            ),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              ShimmerBox(height: 188, borderRadius: BorderRadius.zero),
+              SizedBox(height: 8),
+              ShimmerBox(height: 16, borderRadius: BorderRadius.zero),
+            ])),
+            SizedBox(width: 18),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              ShimmerBox(height: 188, borderRadius: BorderRadius.zero),
+              SizedBox(height: 8),
+              ShimmerBox(height: 16, borderRadius: BorderRadius.zero),
+            ])),
           ],
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildGrid(List<Artwork> artworks) {
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 20,
-        childAspectRatio: 0.65,
-      ),
+  Widget _buildEditorialGrid(List<Artwork> artworks) {
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
       itemCount: artworks.length,
-      itemBuilder: (context, index) => FadeSlideIn(
-        index: index,
-        child: _buildGridItem(artworks[index]),
+      separatorBuilder: (_, __) => Divider(height: 1, color: AppColors.hairline),
+      itemBuilder: (_, i) => FadeSlideIn(
+        index: i,
+        child: _buildFeaturedItem(artworks[i]),
       ),
     );
   }
 
-  Widget _buildGridItem(Artwork artwork) {
+  Widget _buildFeaturedItem(Artwork artwork) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(
         context,
         AppRouter.artworkDetails,
         arguments: artwork.id,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 1.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.zero,
-              child: SizedBox.expand(
-                child: artwork.imageUrl != null &&
-                        artwork.imageUrl!.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: artwork.imageUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => const ShimmerBox(),
-                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
-                      )
-                    : Container(color: AppColors.bg2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            artwork.localizedTitle,
-            style: AppText.display(fontSize: 14),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 3),
-          Text(
-            artwork.displayArtist,
-            style: AppText.caption(),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildList(List<Artwork> artworks) {
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
-      itemCount: artworks.length,
-      itemBuilder: (context, index) => FadeSlideIn(
-        index: index,
-        child: _buildListItem(artworks[index]),
-      ),
-    );
-  }
-
-  Widget _buildListItem(Artwork artwork) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRouter.artworkDetails,
-        arguments: artwork.id,
-      ),
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 18),
-        margin: const EdgeInsets.only(bottom: 18),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
-        ),
-        child: Row(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: SizedBox(
-                width: 68,
-                height: 68,
-                child: artwork.imageUrl != null &&
-                        artwork.imageUrl!.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: artwork.imageUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => const ShimmerBox(),
-                        errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
-                      )
-                    : Container(color: AppColors.bg2),
-              ),
+            SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: artwork.imageUrl != null && artwork.imageUrl!.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: artwork.imageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (_, __) => const ShimmerBox(),
+                      errorWidget: (_, __, ___) => Container(color: AppColors.bg2),
+                    )
+                  : Container(color: AppColors.bg2),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Expanded(
+                  child: Text(
                     artwork.localizedTitle,
                     style: GoogleFonts.inter(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.fg,
-                      height: 1.15,
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                ),
+                if (artwork.year != null && artwork.year!.isNotEmpty) ...[
+                  const SizedBox(width: 12),
                   Text(
-                    artwork.displayArtist.isNotEmpty
-                        ? artwork.displayArtist
-                        : t.gallery.unknownArtist,
-                    style: AppText.caption(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    artwork.year!,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppColors.muted,
+                    ),
                   ),
                 ],
-              ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Icon(Icons.chevron_right, size: 16, color: AppColors.fg3),
+            if (artwork.displayArtist.isNotEmpty) ...[
+              const SizedBox(height: 3),
+              Text(
+                artwork.displayArtist,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppColors.muted,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ],
         ),
       ),
@@ -410,7 +298,7 @@ class _ArtworkPageState extends State<ArtworkPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.wifi_off_rounded, size: 40, color: AppColors.fg3),
+          const Icon(Icons.wifi_off_rounded, size: 40, color: AppColors.muted),
           const SizedBox(height: 12),
           Text(t.ar.errorTitle, style: AppText.caption()),
           const SizedBox(height: 12),
@@ -419,16 +307,14 @@ class _ArtworkPageState extends State<ArtworkPage> {
             child: Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.fg,
-                borderRadius: BorderRadius.circular(6),
-              ),
+              color: AppColors.ink,
               child: Text(
-                t.ar.tryAgain,
+                t.ar.tryAgain.toUpperCase(),
                 style: GoogleFonts.inter(
                     fontSize: 12,
                     color: Colors.white,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1.0),
               ),
             ),
           ),
