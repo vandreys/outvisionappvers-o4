@@ -21,7 +21,7 @@ class LimiaresPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 240,
+            expandedHeight: Rsp.isTablet(context) ? 420 : 240,
             pinned: false,
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.light,

@@ -753,7 +753,7 @@ class _ArtworkTapCardState extends State<_ArtworkTapCard>
           Stack(
             children: [
               SizedBox(
-                height: 160,
+                height: Rsp.isTablet(context) ? 300 : 160,
                 width: double.infinity,
                 child: imageUrl.isNotEmpty
                     ? CachedNetworkImage(

@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 453 (151 per locale)
 ///
-/// Built on 2026-05-13 at 06:21 UTC
+/// Built on 2026-06-26 at 10:51 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -273,7 +273,7 @@ class _StringsAboutEn {
 	String get featureArtistsTitle => 'Artists';
 	String get featureArtistsDesc => 'Discover the career and work of the participating artists.';
 	String get devByLabel => 'DEVELOPED BY';
-	String get studioText => 'OutVision XR is a creative studio and ecosystem of digital experiences focused on the world of art and culture. We develop apps and digital products that transform the way people experience art. In partnership with museums, galleries, and international biennials, we create immersive experiences in virtual and augmented reality, turning spectators into active participants of living, interactive narratives.';
+	String get studioText => 'We are an experience design studio working with immersive technologies. We develop apps and digital products that transform the way people experience art.';
 }
 
 // Path: howToUse
@@ -572,7 +572,7 @@ class _StringsAboutEs implements _StringsAboutEn {
 	@override String get featureArtistsTitle => 'Artistas';
 	@override String get featureArtistsDesc => 'Conoce la trayectoria y la obra de los artistas participantes.';
 	@override String get devByLabel => 'DESARROLLADO POR';
-	@override String get studioText => 'OutVision XR es un estudio creativo y ecosistema de experiencias digitales orientado al universo del arte y la cultura. Desarrollamos aplicaciones y productos digitales que transforman la manera en que las personas vivencian el arte. En asociación con museos, galerías y bienales internacionales, creamos experiencias inmersivas en realidad virtual y aumentada, convirtiendo espectadores en participantes activos de narrativas vivas e interactivas.';
+	@override String get studioText => 'Somos un estudio de diseño de experiencias que trabaja con tecnologías inmersivas. Desarrollamos aplicaciones y productos digitales que transforman la manera en que las personas vivencian el arte.';
 }
 
 // Path: howToUse
@@ -871,7 +871,7 @@ class _StringsAboutPt implements _StringsAboutEn {
 	@override String get featureArtistsTitle => 'Artistas';
 	@override String get featureArtistsDesc => 'Conheça a trajetória e a obra dos artistas participantes.';
 	@override String get devByLabel => 'DESENVOLVIDO POR';
-	@override String get studioText => 'A OutVision XR é um estúdio criativo e ecossistema de experiências digitais voltado ao universo da arte e da cultura. Desenvolvemos aplicativos e produtos digitais que transformam a maneira como as pessoas vivenciam a arte. Em parceria com museus, galerias e bienais internacionais, criamos experiências imersivas em realidade virtual e aumentada, convertendo espectadores em participantes ativos de narrativas vivas e interativas.';
+	@override String get studioText => 'Somos um estúdio de design de experiências que trabalha com tecnologias imersivas. Desenvolvemos aplicativos e produtos digitais que transformam a maneira como as pessoas vivenciam a arte.';
 }
 
 // Path: howToUse
@@ -1104,7 +1104,7 @@ extension on Translations {
 			case 'about.featureArtistsTitle': return 'Artists';
 			case 'about.featureArtistsDesc': return 'Discover the career and work of the participating artists.';
 			case 'about.devByLabel': return 'DEVELOPED BY';
-			case 'about.studioText': return 'OutVision XR is a creative studio and ecosystem of digital experiences focused on the world of art and culture. We develop apps and digital products that transform the way people experience art. In partnership with museums, galleries, and international biennials, we create immersive experiences in virtual and augmented reality, turning spectators into active participants of living, interactive narratives.';
+			case 'about.studioText': return 'We are an experience design studio working with immersive technologies. We develop apps and digital products that transform the way people experience art.';
 			case 'howToUse.skip': return 'Skip';
 			case 'howToUse.next': return 'Next';
 			case 'howToUse.done': return 'Got it';
@@ -1263,7 +1263,7 @@ extension on _StringsEs {
 			case 'about.featureArtistsTitle': return 'Artistas';
 			case 'about.featureArtistsDesc': return 'Conoce la trayectoria y la obra de los artistas participantes.';
 			case 'about.devByLabel': return 'DESARROLLADO POR';
-			case 'about.studioText': return 'OutVision XR es un estudio creativo y ecosistema de experiencias digitales orientado al universo del arte y la cultura. Desarrollamos aplicaciones y productos digitales que transforman la manera en que las personas vivencian el arte. En asociación con museos, galerías y bienales internacionales, creamos experiencias inmersivas en realidad virtual y aumentada, convirtiendo espectadores en participantes activos de narrativas vivas e interactivas.';
+			case 'about.studioText': return 'Somos un estudio de diseño de experiencias que trabaja con tecnologías inmersivas. Desarrollamos aplicaciones y productos digitales que transforman la manera en que las personas vivencian el arte.';
 			case 'howToUse.skip': return 'Omitir';
 			case 'howToUse.next': return 'Siguiente';
 			case 'howToUse.done': return 'Entendido';
@@ -1422,7 +1422,7 @@ extension on _StringsPt {
 			case 'about.featureArtistsTitle': return 'Artistas';
 			case 'about.featureArtistsDesc': return 'Conheça a trajetória e a obra dos artistas participantes.';
 			case 'about.devByLabel': return 'DESENVOLVIDO POR';
-			case 'about.studioText': return 'A OutVision XR é um estúdio criativo e ecossistema de experiências digitais voltado ao universo da arte e da cultura. Desenvolvemos aplicativos e produtos digitais que transformam a maneira como as pessoas vivenciam a arte. Em parceria com museus, galerias e bienais internacionais, criamos experiências imersivas em realidade virtual e aumentada, convertendo espectadores em participantes ativos de narrativas vivas e interativas.';
+			case 'about.studioText': return 'Somos um estúdio de design de experiências que trabalha com tecnologias imersivas. Desenvolvemos aplicativos e produtos digitais que transformam a maneira como as pessoas vivenciam a arte.';
 			case 'howToUse.skip': return 'Pular';
 			case 'howToUse.next': return 'Próximo';
 			case 'howToUse.done': return 'Entendi';
