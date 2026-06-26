@@ -14,6 +14,17 @@ import 'package:outvisionxr/pages/settings/settings_howtouse.dart';
 import 'package:outvisionxr/pages/settings/settings_limiares.dart';
 import 'package:outvisionxr/pages/splash_screen.dart';
 
+PageRouteBuilder<T> _fadeRoute<T>({required Widget page}) {
+  return PageRouteBuilder<T>(
+    transitionDuration: const Duration(milliseconds: 220),
+    pageBuilder: (_, __, ___) => page,
+    transitionsBuilder: (_, animation, __, child) => FadeTransition(
+      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+      child: child,
+    ),
+  );
+}
+
 PageRouteBuilder<T> _fadeSlideRoute<T>({required Widget page}) {
   return PageRouteBuilder<T>(
     transitionDuration: const Duration(milliseconds: 340),
@@ -56,13 +67,13 @@ class AppRouter {
 
       case explore:
         final artworkId = route.arguments as String?;
-        return MaterialPageRoute(builder: (_) => ExplorePage(initialArtworkId: artworkId));
+        return _fadeRoute(page: ExplorePage(initialArtworkId: artworkId));
 
       case artwork:
-        return MaterialPageRoute(builder: (_) => const ArtworkPage());
+        return _fadeRoute(page: const ArtworkPage());
 
       case artists:
-        return MaterialPageRoute(builder: (_) => const ArtistsPage());
+        return _fadeRoute(page: const ArtistsPage());
 
       case settings:
         return PageRouteBuilder(
