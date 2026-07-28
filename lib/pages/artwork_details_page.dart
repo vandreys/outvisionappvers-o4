@@ -296,22 +296,6 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage>
                 )
               : Container(color: AppColors.bg2),
         ),
-        // Gradient
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 156,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [AppColors.bg, AppColors.bg.withValues(alpha: 0)],
-              ),
-            ),
-          ),
-        ),
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),

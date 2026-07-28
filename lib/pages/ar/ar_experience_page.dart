@@ -39,6 +39,11 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
   Timer? _arInitTimer;
   Map<String, dynamic>? _resolvedArParams;
 
+  // Captura de foto — disponível apenas no modo vídeo AR, que é o único
+  // renderizado pela view nativa deste app.
+  MethodChannel? _arChannel;
+  bool _capturing = false;
+
   Artwork get _artwork => widget.artwork;
 
   @override
@@ -136,6 +141,7 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
 
   // Called by UiKitView once the native view is ready; subscribe to event channel.
   void _onPlatformViewCreated(int viewId) {
+    _arChannel = MethodChannel('outvisionxr/ar_view_$viewId');
     _eventSub = EventChannel('outvisionxr/ar_view_events_$viewId')
         .receiveBroadcastStream()
         .listen(
@@ -159,6 +165,34 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
         _errorMessage = event['message'] as String?;
       });
     }
+  }
+
+  Future<void> _capturePhoto() async {
+    final channel = _arChannel;
+    if (_capturing || channel == null) return;
+
+    setState(() => _capturing = true);
+    String message;
+    try {
+      await channel.invokeMethod<String>('capturePhoto');
+      message = t.ar.photoSaved;
+    } on PlatformException catch (e) {
+      message = e.code == 'PERMISSION_DENIED'
+          ? t.ar.photoPermissionDenied
+          : t.ar.photoFailed;
+    } catch (_) {
+      message = t.ar.photoFailed;
+    }
+
+    if (!mounted) return;
+    setState(() => _capturing = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   // Android: launch Google Scene Viewer
@@ -338,6 +372,19 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
                 onPressed: () => Navigator.pop(context),
               ),
             ),
+            // Obturador — só após a cena estar renderizando
+            if (!_arInitFailed && _status == _ArStatus.ready)
+              Positioned(
+                bottom: MediaQuery.of(context).padding.bottom + 32,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: _ShutterButton(
+                    busy: _capturing,
+                    onPressed: _capturePhoto,
+                  ),
+                ),
+              ),
           ],
         ),
       );
@@ -377,6 +424,22 @@ class _ARExperiencePageState extends State<ARExperiencePage> {
           // iOS status overlay — RepaintBoundary isolates repaints from AR camera
           if (Platform.isIOS && _hasModel && _status != _ArStatus.ready)
             RepaintBoundary(child: _buildIosStatusOverlay()),
+
+          // Obturador nas obras com modelo 3D. Só no iOS: no Android essas
+          // obras abrem no Google Scene Viewer, um app externo sobre o qual
+          // não temos controle de UI nem acesso ao frame renderizado.
+          if (Platform.isIOS && _hasModel && _status == _ArStatus.ready)
+            Positioned(
+              bottom: MediaQuery.of(context).padding.bottom + 32,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _ShutterButton(
+                  busy: _capturing,
+                  onPressed: _capturePhoto,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -532,6 +595,51 @@ class _GlassmorphicButton extends StatelessWidget {
             padding: EdgeInsets.zero,
             icon: Icon(icon, color: Colors.white, size: 24),
             onPressed: onPressed,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Shutter — solid ring, no BackdropFilter over the live camera
+class _ShutterButton extends StatelessWidget {
+  final bool busy;
+  final VoidCallback onPressed;
+
+  const _ShutterButton({required this.busy, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: t.ar.takePhoto,
+      child: GestureDetector(
+        onTap: busy ? null : onPressed,
+        child: Container(
+          width: 72,
+          height: 72,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white.withValues(alpha: 0.18),
+            border: Border.all(color: Colors.white, width: 3),
+          ),
+          child: Center(
+            child: busy
+                ? const SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2.5, color: Colors.white),
+                  )
+                : Container(
+                    width: 54,
+                    height: 54,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  ),
           ),
         ),
       ),

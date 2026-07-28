@@ -29,6 +29,10 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Este app precisa da câmera para a experiência de Realidade Aumentada.</string>
 
+	<!-- Photos (save AR captures to the gallery) -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Este app precisa de acesso para salvar suas fotos da Realidade Aumentada na galeria.</string>
+
 	<!-- Location (required for map + nearby artwork detection) -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Este app precisa da localização para mostrar obras próximas na Bienal.</string>

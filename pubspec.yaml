@@ -2,7 +2,7 @@ name: outvisionxr
 description: "Bienal de Curitiba — experiências de Realidade Aumentada com obras da exposição."
 publish_to: 'none'
 
-version: 1.0.2+3
+version: 1.0.4+8
 
 environment:
   sdk: ^3.2.0

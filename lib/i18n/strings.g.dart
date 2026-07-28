@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 3
-/// Strings: 453 (151 per locale)
+/// Strings: 465 (155 per locale)
 ///
-/// Built on 2026-06-26 at 10:51 UTC
+/// Built on 2026-07-28 at 02:30 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -422,6 +422,10 @@ class _StringsArEn {
 	String get unsupported => 'Augmented Reality not supported on this platform';
 	String get openAr => 'Open AR';
 	String get modelUnavailable => '3D model not available\nfor this artwork.';
+	String get takePhoto => 'Take photo';
+	String get photoSaved => 'Photo saved to your gallery';
+	String get photoFailed => 'Could not save the photo';
+	String get photoPermissionDenied => 'Allow gallery access to save the photo';
 }
 
 // Path: <root>
@@ -721,6 +725,10 @@ class _StringsArEs implements _StringsArEn {
 	@override String get unsupported => 'Realidad Aumentada no compatible en esta plataforma';
 	@override String get openAr => 'Abrir RA';
 	@override String get modelUnavailable => 'Modelo 3D no disponible\npara esta obra.';
+	@override String get takePhoto => 'Tomar foto';
+	@override String get photoSaved => 'Foto guardada en la galería';
+	@override String get photoFailed => 'No se pudo guardar la foto';
+	@override String get photoPermissionDenied => 'Permite el acceso a la galería para guardar la foto';
 }
 
 // Path: <root>
@@ -1020,6 +1028,10 @@ class _StringsArPt implements _StringsArEn {
 	@override String get unsupported => 'Realidade Aumentada não suportada nesta plataforma';
 	@override String get openAr => 'Abrir AR';
 	@override String get modelUnavailable => 'Modelo 3D não disponível\npara esta obra.';
+	@override String get takePhoto => 'Tirar foto';
+	@override String get photoSaved => 'Foto salva na galeria';
+	@override String get photoFailed => 'Não foi possível salvar a foto';
+	@override String get photoPermissionDenied => 'Permita o acesso à galeria para salvar a foto';
 }
 
 /// Flat map(s) containing all translations.
@@ -1179,6 +1191,10 @@ extension on Translations {
 			case 'ar.unsupported': return 'Augmented Reality not supported on this platform';
 			case 'ar.openAr': return 'Open AR';
 			case 'ar.modelUnavailable': return '3D model not available\nfor this artwork.';
+			case 'ar.takePhoto': return 'Take photo';
+			case 'ar.photoSaved': return 'Photo saved to your gallery';
+			case 'ar.photoFailed': return 'Could not save the photo';
+			case 'ar.photoPermissionDenied': return 'Allow gallery access to save the photo';
 			default: return null;
 		}
 	}
@@ -1338,6 +1354,10 @@ extension on _StringsEs {
 			case 'ar.unsupported': return 'Realidad Aumentada no compatible en esta plataforma';
 			case 'ar.openAr': return 'Abrir RA';
 			case 'ar.modelUnavailable': return 'Modelo 3D no disponible\npara esta obra.';
+			case 'ar.takePhoto': return 'Tomar foto';
+			case 'ar.photoSaved': return 'Foto guardada en la galería';
+			case 'ar.photoFailed': return 'No se pudo guardar la foto';
+			case 'ar.photoPermissionDenied': return 'Permite el acceso a la galería para guardar la foto';
 			default: return null;
 		}
 	}
@@ -1497,6 +1517,10 @@ extension on _StringsPt {
 			case 'ar.unsupported': return 'Realidade Aumentada não suportada nesta plataforma';
 			case 'ar.openAr': return 'Abrir AR';
 			case 'ar.modelUnavailable': return 'Modelo 3D não disponível\npara esta obra.';
+			case 'ar.takePhoto': return 'Tirar foto';
+			case 'ar.photoSaved': return 'Foto salva na galeria';
+			case 'ar.photoFailed': return 'Não foi possível salvar a foto';
+			case 'ar.photoPermissionDenied': return 'Permita o acesso à galeria para salvar a foto';
 			default: return null;
 		}
 	}

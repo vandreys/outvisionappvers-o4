@@ -48,10 +48,13 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   // Controle para ocultar o mapa ao abrir AR (evita conflito de GPU)
   bool _isArActive = false;
 
-  // Gate / Obra ativa
-  ArtworkPoint? _activeArtwork;
-  bool _gateOpen = false;
-  DateTime? _enteredRadiusAt;
+  // Gate / Obras dentro do raio
+  final Set<String> _nearbyIds = <String>{};          // no raio, com dwell cumprido
+  final Map<String, DateTime> _enteredRadiusAt = {};  // início da permanência, por obra
+  final Set<String> _dismissedIds = <String>{};       // dispensadas até sair do raio
+  String? _autoArtworkId;   // obra sugerida pelo gate
+  bool _userPinned = false; // seleção veio de toque → o gate não sobrescreve
+
   List<ArtworkPoint> _artworkPoints = []; // Lista processada para o mapa
   List<Artwork> _rawArtworks = []; // Lista de models vinda do Service
 
@@ -65,6 +68,9 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   static const int _minDwellSeconds = 3;
   static const double _entryRadiusMeters = 150;
   static const double _exitRadiusMeters = 155;
+  // Margem mínima para trocar a obra sugerida. Sem ela, duas obras no mesmo
+  // raio se revezam a cada leitura do GPS e o card fica alternando sozinho.
+  static const double _switchMarginMeters = 30;
 
   @override
   void initState() {
@@ -327,75 +333,103 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   void _updateArrivalGate(Position p) {
     if (_artworkPoints.isEmpty) return;
 
-    ArtworkPoint nearest = _artworkPoints.first;
-    double minDist = double.infinity;
-
-    for (final a in _artworkPoints) {
-      final d = Geolocator.distanceBetween(p.latitude, p.longitude, a.lat, a.lng);
-      if (d < minDist) {
-        minDist = d;
-        nearest = a;
-      }
-    }
-
     final now = DateTime.now();
+    final distances = <String, double>{
+      for (final a in _artworkPoints)
+        a.id: Geolocator.distanceBetween(p.latitude, p.longitude, a.lat, a.lng),
+    };
 
-    if (!_gateOpen) {
-      if (minDist <= _entryRadiusMeters) {
-        _enteredRadiusAt ??= now;
-        final secondsInside = now.difference(_enteredRadiusAt!).inSeconds;
-
-        if (secondsInside >= _minDwellSeconds) {
-          // OTIMIZAÇÃO: Só chama setState se o gate ainda não estava aberto ou se a obra mudou
-          if (_gateOpen && _activeArtwork?.id == nearest.id) return;
-
-          Artwork? fullArtworkModel;
-          try {
-            fullArtworkModel = _rawArtworks.firstWhere((raw) => raw.id == nearest.id);
-          } catch (e) {
-            fullArtworkModel = null;
-          }
-
-          if (fullArtworkModel != null) {
-            setState(() {
-              _gateOpen = true;
-              _activeArtwork = nearest;
-              // Unifica com o card de toque
-              _selectedArtworkId = nearest.id;
-              _selectedArtworkData = {
-                'id': fullArtworkModel!.id,
-                'name': nearest.title,
-                'artist': fullArtworkModel.displayArtist,
-                'imageUrl': fullArtworkModel.imageUrl ?? '',
-                'locationName': fullArtworkModel.locationName ?? '',
-                'lat': nearest.lat,
-                'lng': nearest.lng,
-              };
-            });
-            _updateMarkers();
-          }
+    // 1) Cada obra entra e sai do raio de forma independente — várias podem
+    //    estar próximas ao mesmo tempo.
+    var nearbyChanged = false;
+    for (final a in _artworkPoints) {
+      final d = distances[a.id]!;
+      if (_nearbyIds.contains(a.id)) {
+        if (d >= _exitRadiusMeters) {
+          _nearbyIds.remove(a.id);
+          _enteredRadiusAt.remove(a.id);
+          _dismissedIds.remove(a.id); // sair do raio rearma a obra
+          nearbyChanged = true;
+        }
+      } else if (d <= _entryRadiusMeters) {
+        final since = _enteredRadiusAt[a.id] ??= now;
+        if (now.difference(since).inSeconds >= _minDwellSeconds) {
+          _nearbyIds.add(a.id);
+          nearbyChanged = true;
         }
       } else {
-        _enteredRadiusAt = null;
+        _enteredRadiusAt.remove(a.id);
       }
-      return;
     }
 
-    // Gate aberto: fecha com histerese
-    if (minDist >= _exitRadiusMeters) {
-      // OTIMIZAÇÃO: Só chama setState se o gate estava aberto
-      if (!_gateOpen) return;
+    // 2) Sugere uma obra entre as que estão no raio, mantendo a atual enquanto
+    //    ela continuar próxima: só troca se outra estiver claramente mais perto.
+    final candidates =
+        _nearbyIds.where((id) => !_dismissedIds.contains(id)).toList()
+          ..sort((a, b) => distances[a]!.compareTo(distances[b]!));
 
-      setState(() {
-        _gateOpen = false;
-        _activeArtwork = null;
-        _enteredRadiusAt = null;
-
-        _selectedArtworkId = null;
-        _selectedArtworkData = null;
-      });
-      _updateMarkers();
+    String? suggested;
+    if (candidates.isNotEmpty) {
+      final closest = candidates.first;
+      final current = _autoArtworkId;
+      final keepCurrent = current != null &&
+          candidates.contains(current) &&
+          distances[closest]! > distances[current]! - _switchMarginMeters;
+      suggested = keepCurrent ? current : closest;
     }
+    _autoArtworkId = suggested;
+
+    // 3) O gate só mexe no card quando o usuário não escolheu uma obra na mão.
+    if (!_userPinned) {
+      if (suggested != null) {
+        if (_selectedArtworkId != suggested) {
+          _selectArtwork(suggested, pinned: false);
+          return;
+        }
+      } else if (_selectedArtworkId != null) {
+        setState(() {
+          _selectedArtworkId = null;
+          _selectedArtworkData = null;
+        });
+        _updateMarkers();
+        return;
+      }
+    }
+
+    // Reflete no card a mudança de "obras aqui" (contador / botão de AR).
+    if (nearbyChanged && mounted) setState(() {});
+  }
+
+  void _selectArtwork(String id,
+      {required bool pinned, bool moveCamera = false}) {
+    final point = _artworkPoints.where((p) => p.id == id).firstOrNull;
+    if (point == null) return;
+    final raw = _rawArtworks.where((a) => a.id == id).firstOrNull;
+
+    setState(() {
+      _userPinned = pinned;
+      _selectedArtworkId = id;
+      _selectedArtworkData = {
+        'id': id,
+        'name': point.title,
+        'artist': raw?.displayArtist ?? '',
+        'imageUrl': raw?.imageUrl ?? '',
+        'locationName': raw?.locationName ?? '',
+        'lat': point.lat,
+        'lng': point.lng,
+      };
+    });
+    _updateMarkers();
+    if (moveCamera) _moveCameraToPosition(LatLng(point.lat, point.lng));
+  }
+
+  // Alterna entre as obras que dividem o mesmo raio, sob comando do usuário.
+  void _cycleNearby() {
+    final ids = _nearbyIds.toList()..sort();
+    if (ids.length < 2) return;
+    final next = ids[(ids.indexOf(_selectedArtworkId ?? '') + 1) % ids.length];
+    _dismissedIds.remove(next);
+    _selectArtwork(next, pinned: true, moveCamera: true);
   }
 
   Future<void> _moveCameraToPosition(LatLng position) async {
@@ -421,34 +455,28 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   void _onMarkerTapped(ArtworkPoint point) {
-    final raw = _rawArtworks.where((a) => a.id == point.id).firstOrNull;
-    setState(() {
-      _selectedArtworkId = point.id;
-      _selectedArtworkData = {
-        'id': point.id,
-        'name': point.title,
-        'artist': raw?.displayArtist ?? '',
-        'imageUrl': raw?.imageUrl ?? '',
-        'locationName': raw?.locationName ?? '',
-        'lat': point.lat,
-        'lng': point.lng,
-      };
-    });
-    _updateMarkers();
-    _moveCameraToPosition(LatLng(point.lat, point.lng));
+    _dismissedIds.remove(point.id);
+    _selectArtwork(point.id, pinned: true, moveCamera: true);
   }
 
   Widget _buildBottomCard() {
     if (_selectedArtworkData != null) {
+      final id = _selectedArtworkData!['id'] as String;
+      final nearby = _nearbyIds.toList()..sort();
       return _ArtworkTapCard(
-        key: ValueKey('card_${_selectedArtworkData!['id']}'),
+        key: ValueKey('card_$id'),
         data: _selectedArtworkData!,
-        isNearby: _gateOpen && _activeArtwork?.id == _selectedArtworkData!['id'],
+        isNearby: _nearbyIds.contains(id),
+        nearbyCount: nearby.length,
+        nearbyIndex: nearby.indexOf(id),
+        onCycle: nearby.length > 1 ? _cycleNearby : null,
         onClose: () {
           setState(() {
-            _gateOpen = false;
-            _activeArtwork = null;
-            _enteredRadiusAt = null;
+            // Fechar dispensa todas as obras do raio atual: sem isso o gate
+            // reabre o card sozinho na leitura seguinte do GPS.
+            _dismissedIds.addAll(_nearbyIds);
+            _autoArtworkId = null;
+            _userPinned = false;
             _selectedArtworkId = null;
             _selectedArtworkData = null;
           });
@@ -491,16 +519,14 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
   }
 
   Future<void> _openArViewNow() async {
-    final point = _activeArtwork;
-    if (point == null) return;
+    // Abre sempre a obra que está no card — inclusive quando o usuário trocou
+    // manualmente entre duas obras do mesmo raio.
+    final id = _selectedArtworkId;
+    if (id == null || !_nearbyIds.contains(id)) return;
 
     // Busca o objeto Artwork completo (com URL do modelo 3D) na lista carregada
-    Artwork? artworkModel;
-    try {
-      artworkModel = _rawArtworks.firstWhere((a) => a.id == point.id);
-    } catch (_) {
-      return; // Segurança: Se não encontrar a obra na lista, não abre
-    }
+    final artworkModel = _rawArtworks.where((a) => a.id == id).firstOrNull;
+    if (artworkModel == null) return;
 
     // 1. Oculta o mapa para liberar recursos da GPU (SurfaceView)
     setState(() {
@@ -514,16 +540,11 @@ class _ExplorePageState extends State<ExplorePage> with TickerProviderStateMixin
 
     await Navigator.pushNamed(context, AppRouter.ar, arguments: artworkModel);
 
-    // 2. Ao voltar da experiência AR, reexibe o mapa e reseta o estado do gate.
+    // 2. Ao voltar da experiência AR, reexibe o mapa. O estado do gate é
+    //    preservado: zerá-lo aqui fazia o card reabrir sozinho logo em seguida.
     if (mounted) {
       _controller = Completer<GoogleMapController>();
-      setState(() {
-        _isArActive = false;
-        _gateOpen = false;
-        _activeArtwork = null;
-        _enteredRadiusAt = null;
-
-      });
+      setState(() => _isArActive = false);
     }
   }
 
@@ -657,6 +678,10 @@ class _ArtworkTapCard extends StatefulWidget {
   final VoidCallback onClose;
   final bool isNearby;
   final VoidCallback onOpenAr;
+  // Quantas obras dividem o raio atual e qual delas está em tela.
+  final int nearbyCount;
+  final int nearbyIndex;
+  final VoidCallback? onCycle;
 
   const _ArtworkTapCard({
     super.key,
@@ -664,6 +689,9 @@ class _ArtworkTapCard extends StatefulWidget {
     required this.onClose,
     required this.isNearby,
     required this.onOpenAr,
+    this.nearbyCount = 0,
+    this.nearbyIndex = -1,
+    this.onCycle,
   });
 
   @override
@@ -793,6 +821,38 @@ class _ArtworkTapCardState extends State<_ArtworkTapCard>
                   ),
                 ),
               ),
+              // Seletor: aparece quando há mais de uma obra no mesmo raio
+              if (widget.onCycle != null && widget.nearbyIndex >= 0)
+                Positioned(
+                  bottom: 10, right: 10,
+                  child: GestureDetector(
+                    onTap: widget.onCycle,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.55),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.swap_horiz,
+                              size: 14, color: Colors.white),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${widget.nearbyIndex + 1}/${widget.nearbyCount}',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               // Close button
               Positioned(
                 top: 10, right: 10,

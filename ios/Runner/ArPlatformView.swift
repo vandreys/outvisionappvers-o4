@@ -3,6 +3,7 @@ import UIKit
 import ARKit
 import AVFoundation
 import CoreLocation
+import Photos
 import SceneKit
 
 class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
@@ -12,6 +13,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
 
     private let arView: ARSCNView
     private let eventChannel: FlutterEventChannel
+    private let methodChannel: FlutterMethodChannel
     private var eventSink: FlutterEventSink?
     private let locationManager = CLLocationManager()
     private let viewId: Int64
@@ -54,8 +56,19 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
             name: "outvisionxr/ar_view_events_\(viewId)",
             binaryMessenger: messenger
         )
+        methodChannel = FlutterMethodChannel(
+            name: "outvisionxr/ar_view_\(viewId)",
+            binaryMessenger: messenger
+        )
 
         super.init()
+
+        methodChannel.setMethodCallHandler { [weak self] call, result in
+            switch call.method {
+            case "capturePhoto": self?.capturePhoto(result: result)
+            default: result(FlutterMethodNotImplemented)
+            }
+        }
 
         arView.delegate = self
         arView.session.delegate = self
@@ -248,6 +261,49 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
         }
     }
 
+    // MARK: - Captura de foto
+
+    private func capturePhoto(result: @escaping FlutterResult) {
+        guard modelPlaced else {
+            result(FlutterError(code: "NOT_READY",
+                                message: "A cena AR ainda não está pronta",
+                                details: nil))
+            return
+        }
+
+        // snapshot() combina o feed da câmera com o conteúdo da cena e só pode
+        // ser chamado na main thread.
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let image = self.arView.snapshot()
+
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                guard status == .authorized || status == .limited else {
+                    DispatchQueue.main.async {
+                        result(FlutterError(code: "PERMISSION_DENIED",
+                                            message: "Sem permissão para salvar na galeria",
+                                            details: nil))
+                    }
+                    return
+                }
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetChangeRequest.creationRequestForAsset(from: image)
+                }) { success, error in
+                    DispatchQueue.main.async {
+                        if success {
+                            result("saved")
+                        } else {
+                            result(FlutterError(
+                                code: "SAVE_FAILED",
+                                message: error?.localizedDescription ?? "Falha ao salvar",
+                                details: nil))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: - Place Artwork
 
     private func placeArtwork(userLocation: CLLocation) {
@@ -392,6 +448,7 @@ class ArPlatformView: NSObject, FlutterPlatformView, FlutterStreamHandler,
 
     deinit {
         NSLog("\(TAG): deinit")
+        methodChannel.setMethodCallHandler(nil)
         arView.session.pause()
         locationManager.stopUpdatingLocation()
         avPlayer?.pause()

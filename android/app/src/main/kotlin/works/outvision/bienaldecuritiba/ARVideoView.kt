@@ -1,6 +1,7 @@
 package works.outvision.bienaldecuritiba
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.opengl.GLES11Ext
 import android.opengl.GLES20
@@ -16,10 +17,12 @@ import com.google.ar.core.*
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
+import java.util.concurrent.Executors
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -62,6 +65,13 @@ class ARVideoView(
     private var eventSink: EventChannel.EventSink? = null
     private var readySent = false
 
+    // Photo capture — the GL thread reads the framebuffer, a worker encodes/saves
+    private var surfaceW = 0
+    private var surfaceH = 0
+    @Volatile private var captureRequested = false
+    private var pendingCapture: MethodChannel.Result? = null
+    private val ioExecutor = Executors.newSingleThreadExecutor()
+
     // Scratch matrices
     private val viewMat   = FloatArray(16)
     private val projMat   = FloatArray(16)
@@ -98,6 +108,13 @@ class ARVideoView(
                     eventSink = null
                 }
             })
+        MethodChannel(messenger, "outvisionxr/ar_view_$viewId")
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "capturePhoto" -> requestCapture(result)
+                    else -> result.notImplemented()
+                }
+            }
         initSession()
         glView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
@@ -166,10 +183,28 @@ class ARVideoView(
 
     override fun onSurfaceChanged(gl: GL10?, w: Int, h: Int) {
         GLES20.glViewport(0, 0, w, h)
+        surfaceW = w
+        surfaceH = h
         session?.setDisplayGeometry(Surface.ROTATION_0, w, h)
     }
 
     override fun onDrawFrame(gl: GL10?) {
+        renderFrame()
+        // Lê o framebuffer só depois que a cena inteira já foi desenhada, para
+        // a foto sair com a câmera e o vídeo juntos.
+        if (captureRequested) {
+            captureRequested = false
+            val bitmap = try {
+                readPixelsToBitmap()
+            } catch (e: Exception) {
+                android.util.Log.e("ARVideoView", "glReadPixels failed: $e")
+                null
+            }
+            deliverCapture(bitmap)
+        }
+    }
+
+    private fun renderFrame() {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
         val sess = session?.takeIf { isSessionResumed } ?: return
 
@@ -223,6 +258,73 @@ class ARVideoView(
 
         drawVideoQuad()
     }
+
+    // ── Captura de foto ───────────────────────────────────────────────────
+
+    private fun requestCapture(result: MethodChannel.Result) {
+        if (pendingCapture != null) {
+            result.error("BUSY", "Uma captura já está em andamento", null)
+            return
+        }
+        if (!isSessionResumed || surfaceW <= 0 || surfaceH <= 0) {
+            result.error("NOT_READY", "A cena AR ainda não está pronta", null)
+            return
+        }
+        pendingCapture = result
+        captureRequested = true
+        glView.requestRender()
+    }
+
+    // Roda na thread GL.
+    private fun readPixelsToBitmap(): Bitmap? {
+        val w = surfaceW
+        val h = surfaceH
+        if (w <= 0 || h <= 0) return null
+
+        val buf = ByteBuffer.allocateDirect(w * h * 4).order(ByteOrder.nativeOrder())
+        GLES20.glReadPixels(0, 0, w, h, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buf)
+        buf.rewind()
+
+        val raw = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        raw.copyPixelsFromBuffer(buf)
+
+        // A origem do OpenGL é embaixo à esquerda e a do Bitmap em cima: inverte.
+        val flip = android.graphics.Matrix().apply { preScale(1f, -1f) }
+        val out = Bitmap.createBitmap(raw, 0, 0, w, h, flip, false)
+        if (out !== raw) raw.recycle()
+        return out
+    }
+
+    private fun deliverCapture(bitmap: Bitmap?) {
+        val result = pendingCapture ?: return
+        if (bitmap == null) {
+            pendingCapture = null
+            activity.runOnUiThread {
+                result.error("CAPTURE_FAILED", "Não foi possível ler o quadro", null)
+            }
+            return
+        }
+        // Encoding e I/O fora da thread GL para não travar o render.
+        ioExecutor.execute {
+            var uri: String? = null
+            var error: Exception? = null
+            try {
+                uri = saveToGallery(bitmap)
+            } catch (e: Exception) {
+                android.util.Log.e("ARVideoView", "Save failed: $e")
+                error = e
+            } finally {
+                bitmap.recycle()
+            }
+            activity.runOnUiThread {
+                pendingCapture = null
+                if (uri != null) result.success(uri)
+                else result.error("SAVE_FAILED", error?.message ?: "Falha ao salvar", null)
+            }
+        }
+    }
+
+    private fun saveToGallery(bitmap: Bitmap): String = GallerySaver.save(activity, bitmap)
 
     // ── Draw calls ────────────────────────────────────────────────────────
 
@@ -388,6 +490,9 @@ class ARVideoView(
     override fun getView(): View = glView
 
     override fun dispose() {
+        pendingCapture?.error("DISPOSED", "A view AR foi fechada", null)
+        pendingCapture = null
+        ioExecutor.shutdown()
         activity.runOnUiThread {
             player?.release(); player = null
         }
